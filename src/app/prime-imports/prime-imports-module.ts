@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card'
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [],
@@ -12,12 +13,14 @@ import { CardModule } from 'primeng/card'
     CommonModule,
     ButtonModule,
     InputTextModule,
-    CardModule
+    CardModule,
+    TableModule
   ],
   exports: [
     ButtonModule,
     InputTextModule,
-    CardModule
+    CardModule,
+    TableModule
   ]
 })
 export class PrimeImportsModule {}

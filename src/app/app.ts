@@ -4,6 +4,7 @@ import { PrimeImportsModule } from './prime-imports/prime-imports-module';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, PrimeImportsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
