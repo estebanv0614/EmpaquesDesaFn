@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { Home } from './features/home/home';
 import { Layout } from './layout/layout/layout';
+import { Login } from './features/auth/pages/login/login';
 
 export const routes: Routes = [
   {
@@ -18,5 +19,9 @@ export const routes: Routes = [
         component: Home
       }
     ]
+  },
+  {
+    path: 'login',
+    component: Login
   }
 ];

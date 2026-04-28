@@ -2,3 +2,16 @@
 
 @import 'tailwindcss';
 @import "primeicons/primeicons.css";
+
+/* Usamos :root para definir los colores de forma estándar */
+:root {
+  --color-brand-start: #d8ead8;
+  --color-brand-end: #a272cc;
+}
+
+body {
+  background: linear-gradient(135deg, var(--color-brand-start) 0%, var(--color-brand-end) 100%) !important;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
+}
