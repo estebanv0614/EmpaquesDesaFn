@@ -1,0 +1,65 @@
+<!-- person-form.html -->
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '450px' }"
+  [header]="isEditMode ? 'Editar persona' : 'Nueva persona'"
+  (onHide)="closeDialog(false)"
+>
+  <form [formGroup]="form" (ngSubmit)="onSave()" class="flex flex-col gap-4">
+
+    <div class="flex flex-col gap-1">
+      <label for="tipoDocumento">Tipo de documento</label>
+      <p-select
+        inputId="tipoDocumento"
+        formControlName="tipoDocumento"
+        [options]="tiposDocumento()"
+        optionLabel="name"
+        placeholder="Selecciona..."
+        [showClear]="true"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+            <input pInputText autocomplete="off" id="documentNumber" formControlName="documentNumber" class="w-full"/>
+            <label for="documentNumber">Número de documento</label>
+        </p-floatlabel>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+            <input pInputText autocomplete="off" id="name" formControlName="name" class="w-full"/>
+            <label for="name">Nombre</label>
+        </p-floatlabel>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+            <input pInputText autocomplete="off" id="phone" formControlName="phone" class="w-full"/>
+            <label for="phone">Teléfono</label>
+        </p-floatlabel>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+            <input pInputText autocomplete="off" id="email" formControlName="email" class="w-full"/>
+            <label for="email">Email</label>
+        </p-floatlabel>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+            <input pInputText autocomplete="off" id="address" formControlName="address" class="w-full"/>
+            <label for="address">Dirección</label>
+        </p-floatlabel>
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" severity="secondary" (onClick)="closeDialog(false)" />
+    <p-button label="Guardar" (onClick)="onSave()" />
+  </ng-template>
+</p-dialog>

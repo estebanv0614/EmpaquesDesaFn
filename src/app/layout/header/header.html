@@ -9,7 +9,7 @@
       <nav aria-label="Global" class="hidden md:block">
         <ul class="flex items-center gap-6 text-sm">
           <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> About </a>
+            <a routerLink="/persons" class="text-gray-500 transition hover:text-gray-500/75"> About </a>
           </li>
 
           <li>
@@ -35,15 +35,40 @@
       </nav>
 
       <div class="flex items-center gap-4">
-        <div class="sm:flex sm:gap-4">
-          <a routerLink="ogin" class="block rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-green-600" href="#">Login</a>
+        <div class="flex items-center gap-4">
+          @if (auth.isLoggedIn()) {
+          <div class="flex items-center gap-3">
+            <span class="rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-white">
+              Bienvenido, <span class="font-semibold">{{ auth.username() }}</span>
+            </span>
+            <button (click)="logout()"
+              class="hidden rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 sm:block">
+              Cerrar sesión
+            </button>
+          </div>
+          } @else {
+          <div class="sm:flex sm:gap-4">
+            <a routerLink="login"
+              class="block rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-green-600">Login</a>
+            <a class="hidden rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 sm:block"
+              href="#">Register</a>
+          </div>
+          }
 
-          <a class="hidden rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 sm:block" href="#">Register</a>
+          <button class="block rounded-sm bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
+            <span class="sr-only">Toggle menu</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
         </div>
+
 
         <button class="block rounded-sm bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
           <span class="sr-only">Toggle menu</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
         </button>

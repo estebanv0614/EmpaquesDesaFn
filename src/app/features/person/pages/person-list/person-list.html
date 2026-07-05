@@ -1,0 +1,47 @@
+<!-- person-list.html -->
+<p-toast />
+<p-confirmdialog />
+
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Personas</h2>
+    <p-button label="Nueva persona" icon="pi pi-plus" (onClick)="openCreate()" />
+  </div>
+
+  <p-table [value]="persons()" [loading]="loading()" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Documento</th>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th>Dirección</th>
+        <th style="width: 120px">Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-person>
+      <tr>
+        <td>{{ person.tipoDocumento?.name }} - {{ person.documentNumber }}</td>
+        <td>{{ person.name }}</td>
+        <td>{{ person.phone }}</td>
+        <td>{{ person.email }}</td>
+        <td>{{ person.address }}</td>
+        <td>
+          <div class="flex gap-2">
+            <p-button icon="pi pi-pencil" severity="info" [text]="true" (onClick)="openEdit(person)" />
+            <p-button icon="pi pi-trash" severity="danger" [text]="true" (onClick)="confirmDelete(person)" />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center py-4">No hay personas registradas</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+@if (showForm) {
+  <app-person-from [person]="selectedPerson" (closed)="onFormClosed($event)" />
+}
