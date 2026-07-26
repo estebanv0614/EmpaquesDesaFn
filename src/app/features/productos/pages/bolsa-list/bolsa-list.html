@@ -1,0 +1,74 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Bolsas</h2>
+    <p-button label="Nueva bolsa" icon="pi pi-plus" (onClick)="openCreate()" />
+  </div>
+
+  <p-table
+    #dt
+    [value]="bolsas()"
+    [loading]="loading()"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [globalFilterFields]="['id', 'tipo']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex justify-end">
+        <p-iconfield iconPosition="left">
+          <p-inputicon class="pi pi-search" />
+          <input pInputText type="text" placeholder="Buscar por ID o tipo..."
+            (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+        </p-iconfield>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Ancho (cm)</th>
+        <th>Largo (cm)</th>
+        <th>Calibre</th>
+        <th>Precio base</th>
+        <th>Stock</th>
+        <th>Estado</th>
+        <th style="width: 120px">Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-bolsa>
+      <tr>
+        <td>{{ bolsa.id }}</td>
+        <td>{{ bolsa.tipo }}</td>
+        <td>{{ bolsa.anchoCm }}</td>
+        <td>{{ bolsa.largoCm }}</td>
+        <td>{{ bolsa.calibre }}</td>
+        <td>{{ bolsa.precioBase | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+        <td>{{ bolsa.stockActual }}</td>
+        <td>
+          <p-tag [value]="bolsa.estado?.name" [severity]="bolsa.estado?.name === 'ACTIVO' ? 'success' : 'secondary'" />
+        </td>
+        <td>
+          <div class="flex gap-2">
+            <p-button icon="pi pi-pencil" severity="info" [text]="true" (onClick)="openEdit(bolsa)" />
+            <p-button icon="pi pi-trash" severity="danger" [text]="true" (onClick)="confirmDelete(bolsa)" />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-4">No hay bolsas registradas</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+@if (showForm()) {
+  <app-bolsa-form [bolsa]="selectedBolsa()" (closed)="onFormClosed($event)" />
+}
+

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../constants/environment';
 import { Person } from '../../shared/models/person.model';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -31,4 +32,11 @@ export class PersonService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  search(email?: string, phone?: string): Observable<Person> {
+  let params = new HttpParams();
+  if (email) params = params.set('email', email);
+  if (phone) params = params.set('phone', phone);
+  return this.http.get<Person>(`${this.baseUrl}/search`, { params });
+}
 }

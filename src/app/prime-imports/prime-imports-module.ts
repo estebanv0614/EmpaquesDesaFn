@@ -15,7 +15,11 @@ import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
-
+import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
+import { ButtonDirective } from 'primeng/button';
+import { TextareaModule } from 'primeng/textarea';
+import { CarouselModule } from 'primeng/carousel';
 
 @NgModule({
   declarations: [],
@@ -33,7 +37,12 @@ import { SelectModule } from 'primeng/select';
     MessageModule,
     ConfirmDialogModule,
     DialogModule,
-    SelectModule
+    SelectModule,
+    TagModule,
+    TooltipModule,
+    ButtonDirective,
+    TextareaModule,
+    CarouselModule
   ],
   exports: [
     ButtonModule,
@@ -48,7 +57,12 @@ import { SelectModule } from 'primeng/select';
     MessageModule,
     ConfirmDialogModule,
     DialogModule,
-    SelectModule
+    SelectModule,
+    TagModule,
+    TooltipModule,
+    ButtonDirective,
+    TextareaModule,
+    CarouselModule
   ]
 })
 export class PrimeImportsModule {}

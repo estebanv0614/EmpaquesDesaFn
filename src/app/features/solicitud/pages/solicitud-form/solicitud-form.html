@@ -1,0 +1,83 @@
+<p-toast />
+
+<div class="max-w-2xl mx-auto p-6">
+    <h2 class="text-2xl font-semibold mb-2">Solicita tu cotización</h2>
+    <p class="text-gray-500 mb-6">Cuéntanos qué necesitas y te contactaremos pronto.</p>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <input pInputText autocomplete="off" id="name" formControlName="name" class="w-full"/>
+                <label for="name">Nombre *</label>
+            </p-floatlabel>
+            @if (isInvalid('name')) {
+            <small class="text-red-500">El nombre es obligatorio.</small>}
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <input pInputText autocomplete="off" id="phone" formControlName="phone" class="w-full"/>
+                    <label for="phone">Telefono</label>
+                </p-floatlabel>
+            </div>
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <input pInputText autocomplete="off" id="mail" formControlName="mail" class="w-full"/>
+                    <label for="mail">Email</label>
+                </p-floatlabel>
+                @if (isInvalid('email')) {<small class="text-red-500">Email inválido.</small>}
+            </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <input pInputText autocomplete="off" id="city" formControlName="city" class="w-full"/>
+                    <label for="city">Ciudad</label>
+                </p-floatlabel>
+            </div>
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <input pInputText autocomplete="off" id="address" formControlName="address" class="w-full"/>
+                    <label for="address">Direccion</label>
+                </p-floatlabel>
+            </div>
+        </div>
+        <hr class="my-2" />
+        <div class="flex justify-between items-center">
+            <h3 class="font-semibold">¿Qué necesitas?</h3>
+            <p-button label="Agregar producto" icon="pi pi-plus" [text]="true" (onClick)="agregarDetalle()" />
+        </div>
+
+        <div formArrayName="detalles" class="flex flex-col gap-4">
+            @for (detalle of detalles.controls; track $index) {
+            <div [formGroupName]="$index" class="border border-gray-300 rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="font-semibold text-gray-700"> Producto {{ $index + 1 }}</h4>
+                    @if (detalles.length > 1) {
+                    <p-button icon="pi pi-trash" severity="danger" [text]="true" (onClick)="eliminarDetalle($index)"></p-button>}
+                </div>
+                <div class="mb-4">
+                    <p-floatlabel variant="on">
+                        <input pInputText id="descripcionProducto{{$index}}" formControlName="descripcionProducto" class="w-full" autocomplete="off" placeholder="Ej: Bolsa franela impresa a 3 tintas">
+                        <label for="descripcionProducto{{$index}}">Descripción del producto * </label>
+                    </p-floatlabel>
+                        @if (isDetalleInvalid($index,'descripcionProducto')) {
+                        <small class="text-red-500">La descripción es obligatoria. </small>}
+                </div>
+                <div>
+                    <p-floatlabel variant="on">
+                        <input pInputText id="cantidadEstimada{{$index}}" formControlName="cantidadEstimada" class="w-full" autocomplete="off" placeholder="Ej: 5.000 unidades">
+                        <label for="cantidadEstimada{{$index}}">Cantidad estimada</label>
+                    </p-floatlabel>
+                </div>
+            </div>}
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <textarea pTextarea id="observacion" formControlName="observacion" rows="4" class="w-full"></textarea>
+                <label for="observacion">Observaciones</label>
+            </p-floatlabel>
+        </div>
+        <p-button label="Enviar solicitud" type="submit" styleClass="w-full mt-2" [loading]="enviando()" />
+    </form>
+</div>

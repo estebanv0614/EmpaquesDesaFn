@@ -1,0 +1,13 @@
+<!-- carousel.html -->
+<p-carousel [value]="banners()" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="5000"
+    [responsiveOptions]="responsiveOptions" styleClass="w-full">
+    <ng-template let-banner pTemplate="item">
+        <div class="relative h-[450px] w-full overflow-hidden rounded-xl">
+            <img [src]="banner.imagen" [alt]="banner.titulo" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end items-center text-center px-6 pb-10">
+                <h2 class="text-white text-3xl font-bold mb-2">{{ banner.titulo }}</h2>
+                <p class="text-white text-lg">{{ banner.descripcion }}</p>
+            </div>
+        </div>
+    </ng-template>
+</p-carousel>

@@ -1,0 +1,149 @@
+<!-- solicitud-convertir.html -->
+<p-toast />
+
+@if (!loading()) {
+  <div class="max-w-3xl mx-auto p-6">
+
+    @if (documentoCreado(); as doc) {
+      <!-- Tarjeta de confirmación -->
+      <div class="text-center border rounded-lg p-8">
+        <i class="pi pi-check-circle text-green-500" style="font-size: 3rem"></i>
+        <h2 class="text-2xl font-semibold mt-4 mb-2">¡Cotización creada con éxito!</h2>
+        <p class="text-gray-500 mb-6">Documento N° {{ doc.numeroFactura }}</p>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <p-button label="Descargar PDF" icon="pi pi-file-pdf" severity="help" (onClick)="descargarPdf()" />
+          <p-button label="Volver a solicitudes" icon="pi pi-arrow-left" [outlined]="true" (onClick)="volverASolicitudes()" />
+        </div>
+      </div>
+    } @else if (solicitud(); as s) {
+
+      <h2 class="text-2xl font-semibold mb-1">Convertir solicitud a cotización</h2>
+      <p class="text-gray-500 mb-6">Solicitud #{{ s.id }} — {{ s.name }}</p>
+
+      <!-- Sección Cliente -->
+      <div class="border rounded-lg p-4 mb-6">
+        <h3 class="font-semibold mb-3">Cliente</h3>
+
+        @if (buscandoCliente()) {
+          <p class="text-gray-500">Buscando cliente...</p>
+        } @else if (clienteEncontrado(); as c) {
+          <div class="bg-green-50 border border-green-200 rounded p-3 text-sm">
+            <p class="text-green-700 font-medium mb-1">✓ Cliente existente encontrado</p>
+            <p>{{ c.person.name }} — {{ c.person.email }} — {{ c.person.phone }}</p>
+          </div>
+        } @else {
+          <div class="bg-yellow-50 border border-yellow-200 rounded p-3 text-sm mb-3">
+            @if (personaEncontrada()) {
+              <p class="text-yellow-700">La persona ya existe, pero no tiene cliente asociado. Completa la empresa para crearlo.</p>
+            } @else {
+              <p class="text-yellow-700">No se encontró cliente. Completa los datos para crearlo.</p>
+            }
+          </div>
+
+          <form [formGroup]="clienteForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="flex flex-col gap-1">
+              <label>Tipo de documento</label>
+              <p-select formControlName="tipoDocumento" [options]="tiposDocumento()" optionLabel="name" placeholder="Selecciona..." />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label>Número de documento</label>
+              <input pInputText formControlName="documentNumber" class="w-full" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label>Nombre</label>
+              <input pInputText formControlName="name" class="w-full" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label>Teléfono</label>
+              <input pInputText formControlName="phone" class="w-full" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label>Email</label>
+              <input pInputText formControlName="email" class="w-full" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label>Dirección</label>
+              <input pInputText formControlName="address" class="w-full" />
+            </div>
+            <div class="flex flex-col gap-1 sm:col-span-2">
+              <label>Empresa</label>
+              <input pInputText formControlName="empresa" class="w-full" />
+            </div>
+          </form>
+        }
+      </div>
+
+      <!-- Formulario del documento -->
+      <form [formGroup]="form" class="flex flex-col gap-4">
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="flex flex-col gap-1">
+            <label>Número de Factura</label>
+            <input pInputText formControlName="numeroFactura" placeholder="A-006" class="w-full" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label>Tipo de documento</label>
+            <p-select formControlName="tipoDocumento" [options]="tiposDocumento()" optionLabel="name" placeholder="Selecciona..." />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label>Método de pago</label>
+            <p-select formControlName="metodoPago" [options]="metodosPago()" optionLabel="name" placeholder="Selecciona..." />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label>Estado del documento</label>
+          <p-select formControlName="estado" [options]="estados()" optionLabel="name" placeholder="Selecciona..." styleClass="w-full sm:w-64" />
+        </div>
+
+        <!-- Detalles -->
+        <h3 class="font-semibold mt-2">Productos</h3>
+        <div formArrayName="detalles" class="flex flex-col gap-3">
+          @for (grupo of detallesArray.controls; track $index) {
+            <div [formGroupName]="$index" class="border rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-2">
+                Pedido originalmente: "{{ grupo.get('descripcionOriginal')?.value }}" — {{ grupo.get('cantidadEstimadaOriginal')?.value }}
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div class="flex flex-col gap-1 sm:col-span-2">
+                  <label>Bolsa del catálogo</label>
+                  <p-select formControlName="bolsa" [options]="bolsas()" optionLabel="tipo"
+                    placeholder="Selecciona la bolsa real" (onChange)="onBolsaSeleccionada($index)" />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <label>Cantidad</label>
+                  <input pInputText type="number" formControlName="cantidad" class="w-full" />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <label>Precio unitario</label>
+                  <input pInputText type="number" formControlName="precioUnitarioSnapshot" class="w-full" />
+                </div>
+              </div>
+              <p class="text-right text-sm font-medium mt-2">
+                Subtotal: {{ subtotalLinea($index) | currency:'COP':'symbol-narrow':'1.0-0' }}
+              </p>
+            </div>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label>Observaciones</label>
+          <textarea pTextarea formControlName="observaciones" rows="3" class="w-full"></textarea>
+        </div>
+
+        <!-- Totales -->
+        <div class="border-t pt-3 flex flex-col items-end gap-1 text-sm">
+          <p>Subtotal: {{ subtotalGeneral() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+          <p>IVA (19%): {{ ivaCalculado() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+          <p class="font-bold text-lg">Total: {{ totalGeneral() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+        </div>
+
+        <p-button label="Generar cotización" (onClick)="guardar()" [loading]="guardando()" styleClass="w-full mt-2" />
+      </form>
+
+    }
+  </div>
+} @else {
+  <div class="p-6 text-center text-gray-500">Cargando solicitud...</div>
+}
