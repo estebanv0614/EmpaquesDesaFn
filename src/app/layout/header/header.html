@@ -1,5 +1,5 @@
-<header class="sticky top-0 z-50 bg-white shadow-md">
-  <div class="mx-auto flex h-16 max-w-7xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+<header class="sticky top-0 z-50" style="background-color: #FFFFFF;">
+  <div class="mx-auto flex h-24 max-w-7xl items-center gap-8 px-4 sm:px-6 lg:px-8 relative z-10">
     <a class="block text-teal-600" href="#">
       <span class="sr-only">Home</span>
       <img src="assets/images/logos.png" alt="logo" class="h-16 w-auto object-contain">
@@ -8,30 +8,43 @@
     <div class="flex flex-1 items-center justify-end md:justify-between">
       <nav aria-label="Global" class="hidden md:block">
         <ul class="flex items-center gap-6 text-sm">
+          @if (auth.isLoggedIn()) {
+          @if (auth.isCliente()) {
           <li>
-            <a class="text-black transition hover:text-green-800" href="#"><i class="pi pi-home"></i> Inicio</a>
+            <a routerLink="/mis-pedidos" class="text-black transition hover:text-green-800"> Mis Pedidos </a>
+          </li>
+          } @else {
+          <li>
+            <a routerLink="/solicitudes-cotizacion" class="text-black transition hover:text-green-800"><i
+                class="pi pi-phone"></i> Solicitudes</a>
           </li>
           <li>
-            <a routerLink="/solicitudes-cotizacion" class="text-black transition hover:text-green-800"><i class="pi pi-phone"></i> Solicitudes</a>
+            <a routerLink="/persons" class="text-black transition hover:text-green-800"> Personas </a>
           </li>
           <li>
-            <a routerLink="/persons" class="text-black transition hover:text-green-800"> About </a>
+            <a routerLink="/bolsas" class="text-black transition hover:text-green-800"> Bolsas </a>
           </li>
           <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> History </a>
+            <a routerLink="/pedidos" class="text-black transition hover:text-green-800"> Pedidos </a>
           </li>
+          }
+          } @else {
+          <li>
+            <a routerLink="/home" class="text-black transition hover:text-green-800"><i class="pi pi-home"></i>
+              Inicio</a>
+          </li>
+          <li>
+            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Catálogo </a>
+          </li>
+          <li>
+            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Acerca de nosotros </a>
+          </li>
+          <li>
+            <a routerLink="/solicitar-cotizacion" class="text-gray-500 transition hover:text-gray-500/75"> Solicitar
+              cotización </a>
+          </li>
+          }
 
-          <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Services </a>
-          </li>
-
-          <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Projects </a>
-          </li>
-
-          <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Blog </a>
-          </li>
         </ul>
       </nav>
 
@@ -64,7 +77,6 @@
             </svg>
           </button>
         </div>
-
 
         <button class="block rounded-sm bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
           <span class="sr-only">Toggle menu</span>

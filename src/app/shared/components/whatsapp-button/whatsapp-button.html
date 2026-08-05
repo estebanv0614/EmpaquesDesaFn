@@ -1,3 +1,54 @@
-<a [href]="whatsappUrl" target="_blank" rel="noopener noreferrer" class="whatsapp-fab" aria-label="Chatea por WhatsApp">
-    <img src="../../../../assets/images/whatsapp.png" alt="">
-</a>
+<div class="whatsapp-widget">
+
+    <!-- TARJETA DESPLEGABLE -->
+    @if (mostrarTarjeta()) {
+    <div class="whatsapp-card">
+        <div class="whatsapp-card-header">
+            <div class="whatsapp-card-avatar">
+                <i class="pi pi-whatsapp"></i>
+            </div>
+
+            <div class="whatsapp-card-header-text">
+                <h4 class="whatsapp-card-title">{{ nombreEmpresa }}</h4>
+                <p class="whatsapp-card-subtitle">{{ mensajeSaludo }}</p>
+            </div>
+        </div>
+
+        <div class="whatsapp-card-body">
+            <p class="whatsapp-card-info">{{ mensajeRespuesta }}</p>
+
+            <button class="whatsapp-card-item" (click)="abrirWhatsapp()">
+                <div class="whatsapp-card-item-icon-bg">
+                    <i class="pi pi-whatsapp"></i>
+                </div>
+
+                <div class="whatsapp-card-item-text">
+                    <span class="whatsapp-card-item-title">¡Escríbenos!</span>
+                    <span class="whatsapp-card-item-subtitle">Servicio al Cliente</span>
+                </div>
+
+                <i class="pi pi-whatsapp whatsapp-small-icon"></i>
+            </button>
+        </div>
+    </div>
+    }
+
+    <!-- TOOLTIP A LA IZQUIERDA -->
+    @if (!mostrarTarjeta() && mostrarTooltip()) {
+    <div class="whatsapp-launcher">
+        <button class="whatsapp-tooltip" (click)="toggleTarjeta()">
+            <span class="tooltip-title">¿Necesitas Ayuda?</span>
+            <span class="tooltip-sub">Escríbenos.</span>
+        </button>
+    </div>
+    }
+
+    <!-- BOTÓN FLOTANTE (FAB) -->
+    <button class="whatsapp-fab" [class.open]="mostrarTarjeta()" (click)="toggleTarjeta()" aria-label="WhatsApp">
+        <div class="icon-container">
+            <i class="pi pi-whatsapp whatsapp-icon" [class.hidden]="mostrarTarjeta()"></i>
+            <i class="pi pi-times close-icon" [class.active]="mostrarTarjeta()"></i>
+        </div>
+    </button>
+
+</div>

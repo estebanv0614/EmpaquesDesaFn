@@ -1,0 +1,59 @@
+:host ::ng-deep .hero-carousel{
+    width:100%;
+    background:#F7F3EB;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,.08); /* opcional */
+}
+
+:host ::ng-deep .hero-carousel .p-carousel-content,
+:host ::ng-deep .hero-carousel .p-carousel-container,
+:host ::ng-deep .hero-carousel .p-carousel-items-content,
+:host ::ng-deep .hero-carousel .p-carousel-item{
+    background:#F7F3EB;
+    border-radius:20px;
+}
+
+.hero-slide{
+    position:relative;
+    width:100%;
+    aspect-ratio:21/8;
+    overflow:hidden;
+    border-radius:20px;
+}
+
+.hero-img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+
+    image-rendering:auto;
+    backface-visibility:hidden;
+    transform:translateZ(0);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+  padding: clamp(16px, 4vw, 40px);
+}
+
+.hero-title {
+  color: black;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.hero-desc {
+  color: black;
+  font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}

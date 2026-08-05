@@ -1,13 +1,53 @@
-<!-- carousel.html -->
 <p-carousel [value]="banners()" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="5000"
-    [responsiveOptions]="responsiveOptions" styleClass="w-full">
+    [responsiveOptions]="responsiveOptions" styleClass="hero-carousel">
     <ng-template let-banner pTemplate="item">
-        <div class="relative h-[450px] w-full overflow-hidden rounded-xl">
-            <img [src]="banner.imagen" [alt]="banner.titulo" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end items-center text-center px-6 pb-10">
-                <h2 class="text-white text-3xl font-bold mb-2">{{ banner.titulo }}</h2>
-                <p class="text-white text-lg">{{ banner.descripcion }}</p>
+        <div class="hero-slide">
+            <img [src]="banner.imagen" [alt]="banner.titulo" class="hero-img" />
+            <div class="hero-overlay">
+                <h2 class="hero-title">{{ banner.titulo }}</h2>
+                <p class="hero-desc">{{ banner.descripcion }}</p>
             </div>
         </div>
     </ng-template>
 </p-carousel>
+
+<section>
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:items-center md:gap-8">
+            <div>
+                <div class="max-w-prose md:max-w-none">
+                    <h2 class="text-2xl font-semibold text-gray-900 sm:text-3xl">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    </h2>
+
+                    <p class="mt-4 text-pretty text-gray-700">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur doloremque saepe
+                        architecto maiores repudiandae amet perferendis repellendus, reprehenderit voluptas
+                        sequi.
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <div class="mt-8 mb-16">
+                    <p-carousel [value]="banners()" [numVisible]="1" [numScroll]="1" [circular]="true"
+                        [autoplayInterval]="5000" [responsiveOptions]="responsiveOptions" styleClass="w-full">
+                        <ng-template let-item pTemplate="item">
+                            <div class="relative h-72 w-full overflow-hidden rounded-xl border border-surface bg-gray-100 dark:bg-surface-900 flex items-center justify-center">
+                                <img [src]="item.imagen" [alt]="item.titulo" class="w-full h-full object-contain p-4" />
+
+                                <!-- Degradado inferior para legibilidad del texto -->
+                                <!-- <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end items-center text-center px-6 pb-5 pointer-events-none z-10">
+                                    <h2 class="text-white text-2xl font-bold mb-1 drop-shadow-md">{{ item.titulo }}</h2>
+                                    <p class="text-white/90 text-sm drop-shadow-md">{{ item.descripcion }}</p>
+                                </div> -->
+
+                            </div>
+                        </ng-template>
+                    </p-carousel>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

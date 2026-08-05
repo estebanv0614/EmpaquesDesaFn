@@ -58,6 +58,16 @@ export const routes: Routes = [
         path: 'form-bolsa',
         canActivate: [authGuard],
         loadComponent: () => import('./features/productos/pages/bolsa-form/bolsa-form').then(bf => bf.BolsaForm)
+      },
+      {
+        path: 'mis-pedidos',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/pedidos/pages/mis-pedidos/mi-pedido').then(mp => mp.MiPedidoList)
+      },
+      {
+        path: 'pedidos',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/pedidos/pages/pedido-list/pedido-list').then(m => m.PedidoList)
       }
     ],
   },

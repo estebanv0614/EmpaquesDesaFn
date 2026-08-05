@@ -50,21 +50,19 @@ export class Login implements OnInit {
     this.auth.login(username, password).subscribe({
       next: (response) => {
         console.log('Login OK', response);
-        // No hace falta el localStorage.setItem aquí, tu Auth service ya lo guarda
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Inicio de sesión correcto',
-        });
-        this.router.navigate(['/home']); // ahora sí lo usamos
+        this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Inicio de sesión correcto',});
+        //this.router.navigate(['/home']); // ahora sí lo usamos
+        setTimeout(() => {
+          if (this.auth.isCliente()) {
+            this.router.navigate(['/mis-pedidos']);
+          } else {
+            this.router.navigate(['/home']);
+          }
+        }, 1000);
       },
       error: (err) => {
         console.error('Login error', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: err.error?.message ?? 'Usuario o contraseña incorrectos',
-        });
+        this.messageService.add({severity: 'error', summary: 'Error', detail: err.error?.message ?? 'Usuario o contraseña incorrectos',});
       },
     });
   }

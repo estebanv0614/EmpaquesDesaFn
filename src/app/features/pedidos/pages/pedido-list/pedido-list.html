@@ -1,0 +1,88 @@
+<p-toast />
+
+<div class="p-4">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Pedidos</h2>
+        <p-button label="Actualizar" icon="pi pi-refresh" [text]="true" (onClick)="loadPedidos()" />
+    </div>
+
+    <p-table 
+        #dt 
+        [value]="pedidos()" 
+        [loading]="loading()" 
+        [paginator]="true" 
+        [rows]="10" 
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [tableStyle]="{ 'min-width': '50rem' }" 
+        [globalFilterFields]="['id', 'numeroPedido']">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-end">
+                <p-iconfield iconPosition="left">
+                    <p-inputicon class="pi pi-search" />
+                    <input pInputText type="text" placeholder="Buscar por ID o Pedido..."
+                        (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+                </p-iconfield>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>N° Pedido</th>
+                <th>Cliente</th>
+                <th>Solicitud de pedido</th>
+                <th>Total</th>
+                <th>Entrega</th>
+                <th>Estado</th>
+                <th style="width: 260px">Cambiar estado</th>
+                <th style="width: 60px">Ver</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pedido>
+            <tr>
+                <td>{{ pedido.numeroPedido }}</td>
+                <td>{{ pedido.client?.person?.name || pedido.client?.empresa || '-' }}</td>
+                <td>{{ pedido.fechaPedido | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ pedido.total | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                <td>{{ pedido.fechaEntregaEstimada | date: 'dd/MM/yyyy'}}</td>  
+                <td>
+                    <p-tag [value]="pedido.estado.name" [severity]="severityEstado(pedido.estado.name)" />
+                </td>
+                <td>
+                    <p-select [ngModel]="pedido.estado" [options]="estados()" optionLabel="name"
+                        (onChange)="cambiarEstado(pedido, $event.value)" appendTo="body" styleClass="w-full" />
+                </td>
+                <td>
+                    <p-button icon="pi pi-eye" [text]="true" (onClick)="verDetalle(pedido)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="7" class="text-center py-4">No hay pedidos registrados</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="showDetalle" [modal]="true" [style]="{ width: '500px' }" header="Detalle del pedido"
+    (onHide)="cerrarDetalle()">
+    @if (selectedPedido(); as p) {
+    <div class="flex flex-col gap-3">
+        <div><span class="font-semibold">N° Pedido:</span> {{ p.numeroPedido }}</div>
+        <div><span class="font-semibold">Cliente:</span> {{ p.client?.person?.name || p.client?.empresa }}</div>
+        <div><span class="font-semibold">Vendedor:</span> {{ p.userVendedor?.username }}</div>
+        <div><span class="font-semibold">Estado:</span> {{ p.estado.name }}</div>
+        <div><span class="font-semibold">Total:</span> {{ p.total | currency:'COP':'symbol-narrow':'1.0-0' }}</div>
+        <div><span class="font-semibold">Entrega estimada:</span> {{ p.fechaEntregaEstimada | date: 'dd/MM/yyyy' }}
+        </div>
+        <div><span class="font-semibold">Observaciones:</span> {{ p.observacion || 'Ninguna' }}</div>
+        <hr />
+        <div class="font-semibold">Productos:</div>
+        <ul class="list-disc pl-5">
+            @for (detalle of p.detalles; track detalle.id) {
+            <li>{{ detalle.bolsa.tipo }} — {{ detalle.cantidad }} unidades — {{ detalle.subtotalLinea |
+                currency:'COP':'symbol-narrow':'1.0-0' }}</li>
+            }
+        </ul>
+    </div>
+    }
+</p-dialog>

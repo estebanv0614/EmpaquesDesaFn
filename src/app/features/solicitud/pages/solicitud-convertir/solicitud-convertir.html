@@ -109,7 +109,7 @@
                 <div class="flex flex-col gap-1 sm:col-span-2">
                   <label>Bolsa del catálogo</label>
                   <p-select formControlName="bolsa" [options]="bolsas()" optionLabel="tipo"
-                    placeholder="Selecciona la bolsa real" (onChange)="onBolsaSeleccionada($index)" />
+                    placeholder="Selecciona la bolsa real" [filter]="true" filterBy="tipo" (onChange)="onBolsaSeleccionada($index)" />
                 </div>
                 <div class="flex flex-col gap-1">
                   <label>Cantidad</label>
