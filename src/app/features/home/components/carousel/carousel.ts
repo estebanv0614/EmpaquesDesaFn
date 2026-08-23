@@ -31,22 +31,27 @@ export interface Banners {
 export class Carousel {
   banners = signal<Banner[]>([
     {
-      imagen: 'assets/images/foto4.png',
+      imagen: 'assets/images/foto1.png',
       titulo: 'Empaques que protegen tu producto',
       descripcion: 'Bolsas de alta calidad para tu negocio'
     },
     {
-      imagen: 'assets/images/aaaaaaaaa.png',
-      titulo: 'Impresión personalizada',
-      descripcion: 'Dale identidad a tu marca con nuestros diseños'
+      imagen: 'assets/images/foto2.png',
+      titulo: 'Calidad que inspira',
+      descripcion: 'Productos elaborados con dedicación y excelentes acabados'
     },
     {
-      imagen: 'assets/images/pruebasderx.png',
-      titulo: 'Entrega rápida y confiable',
-      descripcion: 'Plazos de 10 a 15 días hábiles'
+      imagen: 'assets/images/foto3.png',
+      titulo: 'Haz crecer tu marca',
+     descripcion: 'Dale visibilidad a tu negocio y llega a nuevos clientes'
     },
     {
-      imagen: 'assets/images/bolsa7.png',
+      imagen: 'assets/images/foto4.png',
+      titulo: 'Diseños a tu medida',
+      descripcion: 'Creamos soluciones pensadas especialmente para tus necesidades'
+    },
+     {
+      imagen: 'assets/images/foto5.png',
       titulo: 'Entrega rápida y confiable',
       descripcion: 'Plazos de 10 a 15 días hábiles'
     },
