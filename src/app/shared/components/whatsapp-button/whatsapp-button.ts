@@ -8,7 +8,7 @@ import { Component, OnInit, signal } from '@angular/core';
   styleUrl: './whatsapp-button.css',
 })
 export class WhatsappButton implements OnInit {
-  telefono = '573206956209';
+  telefono = '573108612970';
   nombreEmpresa = 'Empaques DESA Colombia';
   mensajeSaludo = '¡¡Hola!! Queremos hablar contigo, haz click aquí y contáctanos.';
   mensajeRespuesta = 'Nuestro equipo responde usualmente en pocos minutos.';

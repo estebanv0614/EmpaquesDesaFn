@@ -20,6 +20,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ButtonDirective } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { CarouselModule } from 'primeng/carousel';
+import { DatePickerModule } from 'primeng/datepicker';
+
 
 @NgModule({
   declarations: [],
@@ -42,7 +44,8 @@ import { CarouselModule } from 'primeng/carousel';
     TooltipModule,
     ButtonDirective,
     TextareaModule,
-    CarouselModule
+    CarouselModule,
+    DatePickerModule
   ],
   exports: [
     ButtonModule,
@@ -62,7 +65,8 @@ import { CarouselModule } from 'primeng/carousel';
     TooltipModule,
     ButtonDirective,
     TextareaModule,
-    CarouselModule
+    CarouselModule,
+    DatePickerModule
   ]
 })
 export class PrimeImportsModule {}

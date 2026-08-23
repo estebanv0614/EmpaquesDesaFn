@@ -1,16 +1,16 @@
 :host ::ng-deep .hero-carousel{
     width:100%;
-    background:#F7F3EB;
+    background:#f7f5f3;
     border-radius:20px;
     overflow:hidden;
-    box-shadow:0 8px 25px rgba(0,0,0,.08); /* opcional */
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
 }
 
 :host ::ng-deep .hero-carousel .p-carousel-content,
 :host ::ng-deep .hero-carousel .p-carousel-container,
 :host ::ng-deep .hero-carousel .p-carousel-items-content,
 :host ::ng-deep .hero-carousel .p-carousel-item{
-    background:#F7F3EB;
+    background:#fdfdfc;
     border-radius:20px;
 }
 

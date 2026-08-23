@@ -7,11 +7,12 @@ import { EstadoService } from '../../../../core/services/estado-service';
 import { Pedido } from '../../../../shared/models/pedido.model';
 import { Estado } from '../../../../shared/models/estado.model';
 import { FormsModule } from '@angular/forms';
+import { PedidoForm } from '../pedido-form/pedido-form';
 
 @Component({
   selector: 'app-pedido-list',
   standalone: true,
-  imports: [PrimeImportsModule, DatePipe, CurrencyPipe, FormsModule],
+  imports: [PrimeImportsModule, DatePipe, CurrencyPipe, FormsModule, PedidoForm],
   templateUrl: './pedido-list.html',
   styleUrl: './pedido-list.css',
 })
@@ -20,6 +21,7 @@ export class PedidoList implements OnInit {
   loading = signal(false);
   estados = signal<Estado[]>([]);
 
+  showForm = signal(false);
   showDetalle = signal(false);
   selectedPedido = signal<Pedido | null>(null);
 
@@ -35,6 +37,17 @@ export class PedidoList implements OnInit {
       next: (data) => this.estados.set(data),
       error: (err) => console.error(err),
     });
+  }
+
+  openCreate(): void {
+    this.showForm.set(true);
+  }
+
+  onFormClosed(saved: boolean): void {
+    this.showForm.set(false);
+    if (saved) {
+      this.loadPedidos();
+    }
   }
 
   loadPedidos(): void {
@@ -67,19 +80,24 @@ export class PedidoList implements OnInit {
   }
 
   cambiarEstado(pedido: Pedido, nuevoEstado: Estado): void {
-    if (pedido.estado.id === nuevoEstado.id) return;
+    if (pedido.estado?.id === nuevoEstado.id) return;
+
+    const estadoAnterior = pedido.estado;
+    pedido.estado = nuevoEstado;
+    const tagSeverity = this.severityEstado(nuevoEstado.name);
+    const toastSeverity = tagSeverity === 'danger' ? 'error' : tagSeverity;
 
     this.pedidoService.updateEstado(pedido.id, nuevoEstado.id).subscribe({
       next: () => {
         this.messageService.add({
-          severity: 'success',
+          severity: toastSeverity,
           summary: 'Actualizado',
           detail: `Pedido ${pedido.numeroPedido} → ${nuevoEstado.name}`,
         });
-        this.loadPedidos();
       },
       error: (err) => {
         console.error(err);
+        pedido.estado = estadoAnterior;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

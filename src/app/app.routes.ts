@@ -68,6 +68,11 @@ export const routes: Routes = [
         path: 'pedidos',
         canActivate: [authGuard],
         loadComponent: () => import('./features/pedidos/pages/pedido-list/pedido-list').then(m => m.PedidoList)
+      },
+      {
+        path: 'contacto',
+        canActivate: [authGuard],
+        loadComponent: () => import('./shared/components/contacto/contacto').then(co => co.Contacto)
       }
     ],
   },

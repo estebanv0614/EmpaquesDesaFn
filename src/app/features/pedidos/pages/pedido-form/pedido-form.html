@@ -1,0 +1,111 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '650px' }" header="Nuevo pedido"
+    (onHide)="closeDialog(false)">
+    <form [formGroup]="form" class="flex flex-col gap-4 mt-1">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <input pInputText id="numeroPedido" formControlName="numeroPedido" class="w-full" />
+                    <label for="phone">Número de pedido *</label>
+                </p-floatlabel>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <p-select formControlName="client" [options]="clientes()" optionLabel="empresa"
+                    [filter]="true" filterBy="empresa" appendTo="body"
+                    styleClass="w-full" />
+                    <label for="mail">Cliente *</label>
+                </p-floatlabel>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <p-select formControlName="estado" [options]="estados()" optionLabel="name" inputId="estado"
+                        styleClass="w-full" appendTo="body" />
+                    <label for="mail">Estado</label>
+                </p-floatlabel>
+            </div>
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <p-select formControlName="metodoPago" [options]="metodosPago()" optionLabel="name"
+                    appendTo="body" styleClass="w-full" />
+                    <label for="mail">Método de pago</label>
+                </p-floatlabel>
+            </div>
+            <div class="flex flex-col gap-1">
+                <p-floatlabel variant="on">
+                    <p-datepicker formControlName="fechaEntregaEstimada" dateFormat="dd/mm/yy" appendTo="body"
+                    styleClass="w-full" />
+                    <label>Entrega estimada</label>
+                </p-floatlabel>
+            </div>
+        </div>
+
+        <h2 class="font-semibold mt-2">Productos</h2>
+        <div formArrayName="detalles" class="flex flex-col gap-3">
+            @for (grupo of detallesArray.controls; track $index) {
+            <div [formGroupName]="$index" class="border rounded-lg p-3">
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-start">
+                    <div class="flex flex-col gap-1 sm:col-span-2">
+                        <p-floatlabel variant="on">
+                            <p-select formControlName="bolsa" [options]="bolsas()" optionLabel="tipo"
+                            [filter]="true" filterBy="tipo" appendTo="body"
+                            styleClass="w-full" (onChange)="onBolsaSeleccionada($index)" />
+                            <label>Bolsa</label>
+                        </p-floatlabel>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <p-floatlabel variant="on">
+                            <input pInputText type="number" formControlName="cantidad" class="w-full" />
+                            <label>Cantidad</label>
+                        </p-floatlabel>
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <div class="flex flex-col gap-1 flex-1">
+                            <p-floatlabel variant="on">
+                                <input pInputText type="number" formControlName="precioUnitarioVenta" class="w-full" />
+                                <label>Precio unitario</label>
+                            </p-floatlabel>
+                        </div>
+                        @if (detallesArray.length > 1) {
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                            (onClick)="eliminarDetalle($index)" />
+                        }
+                    </div>
+                </div>
+                <p class="text-right text-sm font-medium mt-2">
+                    Subtotal: {{ subtotalLinea($index) | currency:'COP':'symbol-narrow':'1.0-0' }}
+                </p>
+            </div>
+            }
+        </div>
+
+        <p-button label="Agregar producto" icon="pi pi-plus" [text]="true" (onClick)="agregarDetalle()"
+            styleClass="self-start" />
+
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <textarea pTextarea formControlName="observacion" rows="2" class="w-full"></textarea>
+                <label>Observaciones</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="border-t pt-3 flex flex-col items-end gap-1 text-sm">
+            <p>Subtotal: {{ subtotalGeneral() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+            <p>Impuestos (19%): {{ impuestosCalculados() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+            <p class="font-bold text-lg">Total: {{ totalGeneral() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+        </div>
+
+    </form>
+
+    <ng-template pTemplate="footer">
+        <div class="flex gap-3 w-full">
+            <p-button label="Cancelar" severity="secondary" size="large" styleClass="flex-1"
+                (onClick)="closeDialog(false)" />
+            <p-button label="Guardar" size="large" styleClass="flex-1" [loading]="guardando()" (onClick)="onSave()" />
+        </div>
+    </ng-template>
+</p-dialog>

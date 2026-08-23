@@ -25,4 +25,8 @@ export class PedidoService {
   updateEstado(id: number, idEstado: number): Observable<Pedido> {
     return this.http.patch<Pedido>(`${this.baseUrl}/${id}/estado`, { idEstado });
   }
+
+  create(pedido: any): Observable<Pedido> {
+    return this.http.post<Pedido>(this.baseUrl, pedido);
+  }
 }
