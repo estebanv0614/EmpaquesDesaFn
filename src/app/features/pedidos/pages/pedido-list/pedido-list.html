@@ -12,8 +12,29 @@
     <app-pedido-form (closed)="onFormClosed($event)" />
     }
 
-    <p-table #dt [value]="pedidos()" [loading]="loading()" [paginator]="true" [rows]="10"
-        [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }"
+    <div class="flex flex-wrap items-end gap-3 mb-4">
+        <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium">Desde</label>
+            <p-datepicker [(ngModel)]="fechaDesde" dateFormat="dd/mm/yy" [showIcon]="true" [showButtonBar]="true"
+                placeholder="dd/mm/aaaa" appendTo="body" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="text-sm font-medium">Hasta</label>
+            <p-datepicker [(ngModel)]="fechaHasta" dateFormat="dd/mm/yy" [showIcon]="true" [showButtonBar]="true"
+                placeholder="dd/mm/aaaa" appendTo="body" />
+        </div>
+        <p-button label="Limpiar filtro" icon="pi pi-filter-slash" severity="secondary" [text]="true"
+            (onClick)="limpiarFiltroFecha()" />
+    </div>
+
+    <p-table
+        #dt
+        [value]="pedidosFiltrados()"
+        [loading]="loading()" 
+        [paginator]="true" 
+        [rows]="10" 
+        [rowsPerPageOptions]="[5, 10, 20]"
+        [tableStyle]="{ 'min-width': '50rem' }" 
         [globalFilterFields]="['id', 'numeroPedido']">
         <ng-template pTemplate="caption">
             <div class="flex justify-end">
@@ -26,12 +47,12 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th>N° Pedido</th>
+                <th pSortableColumn="numeroPedido">N° Pedido <p-sortIcon field="numeroPedido" /></th>
                 <th>Cliente</th>
-                <th>Solicitud de pedido</th>
+                <th pSortableColumn="fechaPedido">Solicitud de pedido <p-sortIcon field="fechaPedido" /></th>
                 <th>Total</th>
-                <th>Entrega</th>
-                <th>Estado</th>
+                <th pSortableColumn="fechaEntregaEstimada">Entrega <p-sortIcon field="fechaEntregaEstimada" /></th>
+                <th style="width: 130px">Estado</th>
                 <th style="width: 260px">Cambiar estado</th>
                 <th style="width: 60px">Ver</th>
             </tr>
@@ -42,8 +63,8 @@
                 <td>{{ pedido.client?.person?.name || pedido.client?.empresa || '-' }}</td>
                 <td>{{ pedido.fechaPedido | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ pedido.total | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
-                <td>{{ pedido.fechaEntregaEstimada | date: 'dd/MM/yyyy'}}</td>
-                <td>
+                <td>{{ pedido.fechaEntregaEstimada | date: 'dd/MM/yyyy'}}</td>  
+                <td class="whitespace-nowrap">
                     <p-tag [value]="pedido.estado.name" [severity]="severityEstado(pedido.estado.name)" />
                 </td>
                 <td>

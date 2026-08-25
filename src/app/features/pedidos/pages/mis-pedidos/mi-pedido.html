@@ -16,11 +16,11 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th>N° Pedido</th>
-        <th>Fecha</th>
+        <th pSortableColumn="numeroPedido">N° Pedido <p-sortIcon field="numeroPedido" /></th>
+        <th pSortableColumn="fechaPedido">Fecha <p-sortIcon field="fechaPedido" /></th>
         <th>Entrega estimada</th>
         <th>Total</th>
-        <th>Estado</th>
+        <th style="width: 130px">Estado</th>
         <th style="width: 80px">Ver</th>
       </tr>
     </ng-template>
@@ -30,7 +30,7 @@
         <td>{{ pedido.fechaPedido | date: 'dd/MM/yyyy' }}</td>
         <td>{{ pedido.fechaEntregaEstimada | date: 'dd/MM/yyyy' }}</td>
         <td>{{ pedido.total | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
-        <td>
+        <td class="whitespace-nowrap">
           <p-tag [value]="pedido.estado.name" [severity]="severityEstado(pedido.estado.name)" />
         </td>
         <td>

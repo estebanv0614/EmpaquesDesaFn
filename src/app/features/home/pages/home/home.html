@@ -216,15 +216,45 @@
         <div>
             <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?auto=format&amp;fit=crop&amp;q=80&amp;w=1160"
                 alt="" class="aspect-video rounded-lg object-cover">
+    <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-2xl font-semibold text-gray-900 sm:text-3xl">Nuestras bolsas</h2>
+        <p class="hidden text-gray-700 sm:block">Elige la que necesites y solicita tu cotización</p>
+    </div>
+
+    @if (loadingBolsas()) {
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+        @for (i of [1, 2, 3]; track i) {
+        <div class="animate-pulse">
+            <div class="aspect-video rounded-lg bg-gray-200"></div>
+            <div class="mt-4 h-5 w-2/3 rounded bg-gray-200"></div>
+        </div>
+        }
+    </div>
+    } @else if (bolsasActivas().length === 0) {
+    <p class="text-gray-600">Por el momento no hay bolsas disponibles para mostrar.</p>
+    } @else {
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+        @for (bolsa of bolsasActivas(); track bolsa.id; let i = $index) {
+        <div class="cursor-pointer rounded-lg transition hover:shadow-lg" (click)="seleccionarBolsa(bolsa)">
+            <img [src]="imagenBolsa(i)" [alt]="bolsa.tipo"
+                class="aspect-video w-full rounded-lg border border-surface object-contain bg-gray-50 p-4">
 
             <div class="mt-4 flex items-center justify-between gap-4">
                 <div>
-                    <h3 class="text-lg/tight font-semibold text-gray-900">Eric Johnson</h3>
-
-                    <p class="mt-0.5 text-sm text-gray-700">Product Designer</p>
+                    <h3 class="text-lg/tight font-semibold text-gray-900">{{ bolsa.tipo }}</h3>
+                    <p class="mt-0.5 text-sm text-gray-700">
+                        {{ bolsa.anchoCm }}cm x {{ bolsa.largoCm }}cm — calibre {{ bolsa.calibre }}
+                    </p>
+                    <p class="mt-0.5 text-sm font-medium text-gray-900">
+                        Desde {{ bolsa.precioBase | currency:'COP':'symbol-narrow':'1.0-0' }}
+                    </p>
                 </div>
-                <button pButton (click)="irASolicitarCotizacion()" severity="help">Solicitar cotización</button>
+                <button pButton (click)="seleccionarBolsa(bolsa); $event.stopPropagation()" severity="help">
+                    Solicitar cotización
+                </button>
             </div>
         </div>
+        }
     </div>
+    }
 </div>

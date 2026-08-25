@@ -22,6 +22,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { CarouselModule } from 'primeng/carousel';
 import { DatePickerModule } from 'primeng/datepicker';
 
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [],
@@ -45,7 +46,8 @@ import { DatePickerModule } from 'primeng/datepicker';
     ButtonDirective,
     TextareaModule,
     CarouselModule,
-    DatePickerModule
+    DatePickerModule,
+    ProgressSpinnerModule
   ],
   exports: [
     ButtonModule,
@@ -66,7 +68,8 @@ import { DatePickerModule } from 'primeng/datepicker';
     ButtonDirective,
     TextareaModule,
     CarouselModule,
-    DatePickerModule
+    DatePickerModule,
+    ProgressSpinnerModule
   ]
 })
 export class PrimeImportsModule {}

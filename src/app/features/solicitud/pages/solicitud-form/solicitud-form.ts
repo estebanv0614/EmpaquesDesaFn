@@ -27,6 +27,10 @@ export class SolicitudForm {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) {
+    // Si venimos de "Solicitar cotización" en una bolsa del catálogo,
+    // se prellena el primer producto con la bolsa seleccionada.
+    const productoPreseleccionado = (history.state?.producto as string) || '';
+
     this.form = this.fb.group({
       name: ['', Validators.required],
       phone: [''],
@@ -34,16 +38,16 @@ export class SolicitudForm {
       city: [''],
       address: [''],
       observacion: [''],
-      detalles: this.fb.array([this.crearDetalle()])
+      detalles: this.fb.array([this.crearDetalle(productoPreseleccionado)])
     });
   }
   get detalles(): FormArray {
       return this.form.get('detalles') as FormArray;
     }
   
-  crearDetalle(): FormGroup{
+  crearDetalle(descripcionProducto: string = ''): FormGroup{
     return  this.fb.group({
-      descripcionProducto: ['', Validators.required],
+      descripcionProducto: [descripcionProducto, Validators.required],
       cantidadEstimada: ['']
     });
   }

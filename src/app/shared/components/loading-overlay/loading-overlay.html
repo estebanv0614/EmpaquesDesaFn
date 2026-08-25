@@ -1,0 +1,14 @@
+@if (loadingService.serverDown()) {
+<div class="server-down-overlay">
+  <div class="server-down-card">
+    <i class="pi pi-wifi server-down-icon"></i>
+    <h2>No pudimos conectar con el servidor</h2>
+    <p>Parece que el servidor está caído o no tienes conexión a internet. Intenta de nuevo mas tarde.</p>
+    <button pButton icon="pi pi-refresh" label="Reintentar" (click)="reintentar()"></button>
+  </div>
+</div>
+} @else if (loadingService.loading()) {
+<div class="loading-bar-wrapper">
+  <div class="loading-bar"></div>
+</div>
+}

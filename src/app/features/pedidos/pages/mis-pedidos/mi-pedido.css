@@ -1,0 +1,5 @@
+/* Evita que el texto del estado (ej. "Cancelado") se corte dentro del tag */
+:host ::ng-deep .p-tag {
+  white-space: nowrap;
+  overflow: visible;
+}

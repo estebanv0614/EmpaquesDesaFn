@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-module';
 import { MessageService } from 'primeng/api';
@@ -24,6 +24,36 @@ export class PedidoList implements OnInit {
   showForm = signal(false);
   showDetalle = signal(false);
   selectedPedido = signal<Pedido | null>(null);
+
+  // Filtro por rango de fechas (fecha del pedido)
+  fechaDesde = signal<Date | null>(null);
+  fechaHasta = signal<Date | null>(null);
+
+  pedidosFiltrados = computed(() => {
+    const desde = this.fechaDesde();
+    const hasta = this.fechaHasta();
+    if (!desde && !hasta) return this.pedidos();
+
+    return this.pedidos().filter((p) => {
+      const fecha = new Date(p.fechaPedido);
+      if (desde) {
+        const inicioDia = new Date(desde);
+        inicioDia.setHours(0, 0, 0, 0);
+        if (fecha < inicioDia) return false;
+      }
+      if (hasta) {
+        const finDia = new Date(hasta);
+        finDia.setHours(23, 59, 59, 999);
+        if (fecha > finDia) return false;
+      }
+      return true;
+    });
+  });
+
+  limpiarFiltroFecha(): void {
+    this.fechaDesde.set(null);
+    this.fechaHasta.set(null);
+  }
 
   constructor(
     private pedidoService: PedidoService,

@@ -1,0 +1,72 @@
+/* Barra  de carga en la parte superior mientras hay peticiones en curso */
+.loading-bar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 9999;
+  overflow: hidden;
+  background: transparent;
+}
+
+.loading-bar {
+  height: 100%;
+  width: 40%;
+  background: var(--p-primary-color, #7c3aed);
+  animation: loading-bar-slide 1.1s ease-in-out infinite;
+}
+
+@keyframes loading-bar-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(60%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+/* Pantalla completa cuando el backend esta caido */
+.server-down-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 15, 20, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 1.5rem;
+}
+
+.server-down-card {
+  max-width: 420px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.server-down-icon {
+  font-size: 2.5rem;
+  color: #dc2626;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+.server-down-card h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #111827;
+}
+
+.server-down-card p {
+  color: #4b5563;
+  margin: 0 0 1.25rem;
+}

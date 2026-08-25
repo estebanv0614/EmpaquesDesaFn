@@ -1,15 +1,16 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-module';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SolicitudCotizacionService } from '../../../../core/services/solicitud-cotizacion.service';
 import { SolicitudCotizacionResponse } from '../../../../shared/models/solicitud-cotizacion-request.model';
 import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-solicitud-list',
   standalone: true,
-  imports: [PrimeImportsModule, DatePipe],
+  imports: [PrimeImportsModule, DatePipe, FormsModule],
   templateUrl: './solicitud-list.html',
   styleUrl: './solicitud-list.css',
 })
@@ -19,6 +20,31 @@ export class SolicitudList implements OnInit {
 
   selectedSolicitud = signal<SolicitudCotizacionResponse | null>(null);
   showDetalle = signal(false);
+
+  // Filtro por rango de fechas
+  fechaDesde = signal<Date | null>(null);
+  fechaHasta = signal<Date | null>(null);
+
+  solicitudesFiltradas = computed(() => {
+    const desde = this.fechaDesde();
+    const hasta = this.fechaHasta();
+    if (!desde && !hasta) return this.solicitudes();
+
+    return this.solicitudes().filter((s) => {
+      const fecha = new Date(s.fechaSolicitud);
+      if (desde) {
+        const inicioDia = new Date(desde);
+        inicioDia.setHours(0, 0, 0, 0);
+        if (fecha < inicioDia) return false;
+      }
+      if (hasta) {
+        const finDia = new Date(hasta);
+        finDia.setHours(23, 59, 59, 999);
+        if (fecha > finDia) return false;
+      }
+      return true;
+    });
+  });
 
   readonly ESTADO_PENDIENTE = 2;
   readonly ESTADO_APROBADA = 3;
@@ -33,6 +59,11 @@ export class SolicitudList implements OnInit {
 
   irAConvertir(id: number): void {
     this.router.navigate(['/solicitudes-cotizacion', id, 'convertir']);
+  }
+
+  limpiarFiltroFecha(): void {
+    this.fechaDesde.set(null);
+    this.fechaHasta.set(null);
   }
 
   ngOnInit(): void {
