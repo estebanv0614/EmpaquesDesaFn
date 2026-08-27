@@ -21,8 +21,8 @@ import { ButtonDirective } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { CarouselModule } from 'primeng/carousel';
 import { DatePickerModule } from 'primeng/datepicker';
-
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { FieldsetModule } from 'primeng/fieldset';
 
 @NgModule({
   declarations: [],
@@ -47,7 +47,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     TextareaModule,
     CarouselModule,
     DatePickerModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    FieldsetModule
   ],
   exports: [
     ButtonModule,
@@ -69,7 +70,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     TextareaModule,
     CarouselModule,
     DatePickerModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    FieldsetModule
   ]
 })
 export class PrimeImportsModule {}
