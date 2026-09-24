@@ -20,7 +20,6 @@ export class PedidoList implements OnInit {
   pedidos = signal<Pedido[]>([]);
   loading = signal(false);
   estados = signal<Estado[]>([]);
-
   showForm = signal(false);
   showDetalle = signal(false);
   selectedPedido = signal<Pedido | null>(null);
@@ -66,6 +65,30 @@ export class PedidoList implements OnInit {
     this.estadoService.getAll().subscribe({
       next: (data) => this.estados.set(data),
       error: (err) => console.error(err),
+    });
+  }
+
+  marcarComoPagado(pedido: Pedido): void {
+    if (pedido.pagado) return; // ya está pagado, no hacer nada
+
+    this.pedidoService.marcarComoPagado(pedido.id).subscribe({
+      next: (actualizado) => {
+        pedido.pagado = actualizado.pagado;
+        pedido.fechaPago = actualizado.fechaPago;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Pago registrado',
+          detail: `Pedido ${pedido.numeroPedido} marcado como pagado`,
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo registrar el pago',
+        });
+      },
     });
   }
 

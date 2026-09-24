@@ -29,4 +29,8 @@ export class PedidoService {
   create(pedido: any): Observable<Pedido> {
     return this.http.post<Pedido>(this.baseUrl, pedido);
   }
+
+  marcarComoPagado(id: number): Observable<Pedido> {
+    return this.http.patch<Pedido>(`${this.baseUrl}/${id}/pagar`, {});
+}
 }

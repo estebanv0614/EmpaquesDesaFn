@@ -16,5 +16,6 @@ export interface SolicitudCotizacionResponse extends SolicitudCotizacionRequest 
     estado: {
         id: number;
         name: string;
-    }
+    };
+    documentoComercialId?: number | null;
 }

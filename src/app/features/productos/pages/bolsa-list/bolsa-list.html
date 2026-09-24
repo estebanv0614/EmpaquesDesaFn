@@ -7,16 +7,8 @@
     <p-button label="Nueva bolsa" icon="pi pi-plus" (onClick)="openCreate()" />
   </div>
 
-  <p-table
-    #dt
-    [value]="bolsas()"
-    [loading]="loading()"
-    [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [globalFilterFields]="['id', 'tipo']"
-  >
+  <p-table #dt [value]="bolsas()" [loading]="loading()" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
+    [tableStyle]="{ 'min-width': '50rem' }" [globalFilterFields]="['id', 'tipo']">
     <ng-template pTemplate="caption">
       <div class="flex justify-end">
         <p-iconfield iconPosition="left">
@@ -30,6 +22,9 @@
     <ng-template pTemplate="header">
       <tr>
         <th>ID</th>
+        <th>Foto</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
         <th>Tipo</th>
         <th>Ancho (cm)</th>
         <th>Largo (cm)</th>
@@ -43,6 +38,11 @@
     <ng-template pTemplate="body" let-bolsa>
       <tr>
         <td>{{ bolsa.id }}</td>
+        <td>
+          <img [src]="getImagen(bolsa)" alt="Imagen" class="w-12 h-12 object-cover rounded-md" />
+        </td>
+        <td>{{ bolsa.name }}</td>
+        <td>{{ bolsa.description }}</td>
         <td>{{ bolsa.tipo }}</td>
         <td>{{ bolsa.anchoCm }}</td>
         <td>{{ bolsa.largoCm }}</td>
@@ -69,6 +69,5 @@
 </div>
 
 @if (showForm()) {
-  <app-bolsa-form [bolsa]="selectedBolsa()" (closed)="onFormClosed($event)" />
+<app-bolsa-form [bolsa]="selectedBolsa()" (closed)="onFormClosed($event)" />
 }
-

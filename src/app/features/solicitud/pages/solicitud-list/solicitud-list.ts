@@ -3,6 +3,7 @@ import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-modu
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SolicitudCotizacionService } from '../../../../core/services/solicitud-cotizacion.service';
 import { SolicitudCotizacionResponse } from '../../../../shared/models/solicitud-cotizacion-request.model';
+import { DocumentoComercialService } from '../../../../core/services/documento-comercial-service';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -53,12 +54,33 @@ export class SolicitudList implements OnInit {
   constructor(
     private solicitudService: SolicitudCotizacionService,
     private confirmationService: ConfirmationService,
+    private documentoService: DocumentoComercialService,
     private messageService: MessageService,
     private router: Router,
   ) {}
 
-  irAConvertir(id: number): void {
-    this.router.navigate(['/solicitudes-cotizacion', id, 'convertir']);
+  irAConvertir(solicitud: SolicitudCotizacionResponse): void {
+    if(solicitud.documentoComercialId){
+      this.descargarPdf(solicitud.documentoComercialId);
+      return;
+    }
+    this.router.navigate(['/solicitudes-cotizacion', solicitud.id, 'convertir']);
+  }
+
+  descargarPdf(documentoId: number): void {
+    this.documentoService.descargarPdf(documentoId).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pude descargar el PDF',
+        });
+      },
+    });
   }
 
   limpiarFiltroFecha(): void {

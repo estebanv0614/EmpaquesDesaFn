@@ -9,7 +9,7 @@ import { Bolsa } from '../../../../shared/models/bolsa.model';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [PrimeImportsModule, Carousel, CurrencyPipe],
+  imports: [PrimeImportsModule, Carousel],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -17,18 +17,16 @@ export class Home implements OnInit {
   bolsas = signal<Bolsa[]>([]);
   loadingBolsas = signal(false);
 
-  // Se muestran solo las bolsas activas en el catálogo público
   bolsasActivas = computed(() =>
     this.bolsas().filter((b) => !b.estado || b.estado?.name === 'ACTIVO'),
   );
 
-  // Imágenes de respaldo mientras el backend no tenga foto por producto
   private readonly imagenesRespaldo = [
-    'assets/images/bolsa1.png',
-    'assets/images/bolsa2.png',
-    'assets/images/bolsa3.png',
-    'assets/images/bolsa6.png',
-    'assets/images/bolsaSinFondo.png',
+    'assets/images/foto1.png',
+    'assets/images/foto1.png',
+    'assets/images/foto1.png',
+    'assets/images/foto1.png',
+    'assets/images/foto1.png',
   ];
 
   constructor(
@@ -58,8 +56,6 @@ export class Home implements OnInit {
     this.router.navigate(['/solicitud-nueva']);
   }
 
-  // Al seleccionar una bolsa del catálogo, se envía a la solicitud de cotización
-  // con el producto ya prellenado.
   seleccionarBolsa(bolsa: Bolsa): void {
     this.router.navigate(['/solicitud-nueva'], {
       state: { producto: bolsa.tipo, bolsaId: bolsa.id },

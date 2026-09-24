@@ -299,7 +299,11 @@ export class SolicitudConvertir implements OnInit {
             subtotal: this.subtotalLinea(i),
           })),
         };
-        this.documentoService.create(payload).subscribe({
+
+        const solicitudId = this.solicitud()?.id;
+        if (!solicitudId) return;
+
+        this.solicitudService.convertir(solicitudId, payload).subscribe({
           next: (documentoCreado) => {
             this.guardando.set(false);
             this.documentoCreado.set(documentoCreado);
@@ -309,7 +313,19 @@ export class SolicitudConvertir implements OnInit {
               detail: 'El documento comercial se generó correctamente',
             });
           },
-          error: (err) => this.manejarError(err, 'No se pudo crear el documento comercial'),
+          error: (err) => {
+            if (err.status === 409) {
+              this.guardando.set(false);
+              this.messageService.add({
+                severity: 'warn',
+                summary: 'Ya convertida',
+                detail: 'Esta solicitud ya tiene una cotización generada',
+              });
+              this.router.navigate(['/solicitudes-cotizacion']);
+              return;
+            }
+            this.manejarError(err, 'No se pudo crear el documento comercial');
+          },
         });
       },
       error: (err) => this.manejarError(err, 'No se pudo obtener el usuario actual'),
@@ -318,6 +334,7 @@ export class SolicitudConvertir implements OnInit {
 
   descargarPdf(): void {
     const doc = this.documentoCreado();
+    console.log('numero del pdf', doc)
     if (!doc?.id) return;
 
     this.documentoService.descargarPdf(doc.id).subscribe({
