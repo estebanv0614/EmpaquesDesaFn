@@ -1,0 +1,8 @@
+<div class="p-3 flex gap-2">
+    <p-button label="Exportar semana" icon="pi pi-file-excel" severity="success" [text]="true"
+        (onClick)="exportar('semana')" [loading]="exportando()" />
+    <p-button label="Exportar mes" icon="pi pi-file-excel" severity="success" [text]="true" (onClick)="exportar('mes')"
+        [loading]="exportando()" />
+    <p-button label="Exportar año" icon="pi pi-file-excel" severity="success" [text]="true" (onClick)="exportar('anio')"
+        [loading]="exportando()" />
+</div>

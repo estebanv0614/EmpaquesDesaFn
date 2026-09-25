@@ -8,11 +8,21 @@ import { Pedido } from '../../../../shared/models/pedido.model';
 import { Estado } from '../../../../shared/models/estado.model';
 import { FormsModule } from '@angular/forms';
 import { PedidoForm } from '../pedido-form/pedido-form';
+import { ExportarButton } from '../../components/exportar-button/exportar-button';
+import { Estadistidas } from '../../components/estadistidas/estadistidas';
 
 @Component({
   selector: 'app-pedido-list',
   standalone: true,
-  imports: [PrimeImportsModule, DatePipe, CurrencyPipe, FormsModule, PedidoForm],
+  imports: [
+    PrimeImportsModule,
+    DatePipe,
+    CurrencyPipe,
+    FormsModule,
+    PedidoForm,
+    ExportarButton,
+    Estadistidas,
+  ],
   templateUrl: './pedido-list.html',
   styleUrl: './pedido-list.css',
 })
@@ -69,12 +79,13 @@ export class PedidoList implements OnInit {
   }
 
   marcarComoPagado(pedido: Pedido): void {
-    if (pedido.pagado) return; // ya está pagado, no hacer nada
+    if (pedido.pagado) return;
 
     this.pedidoService.marcarComoPagado(pedido.id).subscribe({
       next: (actualizado) => {
         pedido.pagado = actualizado.pagado;
         pedido.fechaPago = actualizado.fechaPago;
+        this.pedidoService.notificarActualizacion();
         this.messageService.add({
           severity: 'success',
           summary: 'Pago registrado',
@@ -100,6 +111,7 @@ export class PedidoList implements OnInit {
     this.showForm.set(false);
     if (saved) {
       this.loadPedidos();
+      this.pedidoService.notificarActualizacion();
     }
   }
 
@@ -142,6 +154,7 @@ export class PedidoList implements OnInit {
 
     this.pedidoService.updateEstado(pedido.id, nuevoEstado.id).subscribe({
       next: () => {
+        this.pedidoService.notificarActualizacion();
         this.messageService.add({
           severity: toastSeverity,
           summary: 'Actualizado',

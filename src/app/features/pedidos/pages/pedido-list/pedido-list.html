@@ -1,42 +1,56 @@
+<div class="p-4">
+    <app-estadistidas></app-estadistidas>
+</div>
+
 <p-toast />
 
 <div class="p-4">
-    <div class="flex justify-between items-center mb-4">
+    <div class="mb-4">
         <h2 class="text-xl font-semibold">Pedidos</h2>
-        <div class="flex items-center gap-2">
-            <p-button label="Create Pedido" icon="pi pi-plus" severity="success" (onClick)="openCreate()" />
-            <p-button label="Actualizar" icon="pi pi-refresh" [text]="true" (onClick)="loadPedidos()" />
-        </div>
     </div>
+
     @if (showForm()) {
     <app-pedido-form (closed)="onFormClosed($event)" />
     }
 
-    <div class="flex flex-wrap items-end gap-3 mb-4">
-        <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium">Desde</label>
-            <p-datepicker [(ngModel)]="fechaDesde" dateFormat="dd/mm/yy" [showIcon]="true" [showButtonBar]="true"
-                placeholder="dd/mm/aaaa" appendTo="body" />
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-4">
+        <div class="flex flex-wrap items-end gap-3">
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-medium">Desde</label>
+                <p-datepicker [(ngModel)]="fechaDesde" dateFormat="dd/mm/yy" [showIcon]="true" [showButtonBar]="true"
+                    placeholder="dd/mm/aaaa" appendTo="body" />
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-medium">Hasta</label>
+                <p-datepicker [(ngModel)]="fechaHasta" dateFormat="dd/mm/yy" [showIcon]="true" [showButtonBar]="true"
+                    placeholder="dd/mm/aaaa" appendTo="body" />
+            </div>
+            <p-button label="Limpiar filtro" icon="pi pi-filter-slash" severity="secondary" [text]="true"
+                (onClick)="limpiarFiltroFecha()" />
         </div>
-        <div class="flex flex-col gap-1">
-            <label class="text-sm font-medium">Hasta</label>
-            <p-datepicker [(ngModel)]="fechaHasta" dateFormat="dd/mm/yy" [showIcon]="true" [showButtonBar]="true"
-                placeholder="dd/mm/aaaa" appendTo="body" />
+        <div class="flex items-center gap-2">
+            <p-button label="Create Pedido" icon="pi pi-plus" severity="success" (onClick)="openCreate()" />
+            <p-button label="Actualizar" icon="pi pi-refresh" [text]="true" (onClick)="loadPedidos()" />
         </div>
-        <p-button label="Limpiar filtro" icon="pi pi-filter-slash" severity="secondary" [text]="true"
-            (onClick)="limpiarFiltroFecha()" />
     </div>
 
     <p-table #dt [value]="pedidosFiltrados()" [loading]="loading()" [paginator]="true" [rows]="10"
         [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }"
         [globalFilterFields]="['id', 'numeroPedido']">
         <ng-template pTemplate="caption">
-            <div class="flex justify-end">
-                <p-iconfield iconPosition="left">
-                    <p-inputicon class="pi pi-search" />
-                    <input pInputText type="text" placeholder="Buscar por ID o Pedido..."
-                        (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
-                </p-iconfield>
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center">
+                    <p-iconfield iconPosition="left">
+                        <p-inputicon class="pi pi-search" />
+                        <input pInputText type="text" placeholder="Buscar por ID o Pedido..."
+                            (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+                    </p-iconfield>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <app-exportar-button [fechaDesde]="fechaDesde()" />
+                </div>
+
             </div>
         </ng-template>
         <ng-template pTemplate="header">
@@ -95,7 +109,8 @@
         <div>
             <span class="font-semibold">Pago:</span>
             @if (p.pagado) {
-            <span class="text-green-600 font-medium"> Pagado{{ p.fechaPago ? ' el ' + ( p.fechaPago | date:'dd/MM/yyyy') :
+            <span class="text-green-600 font-medium"> Pagado{{ p.fechaPago ? ' el ' + ( p.fechaPago | date:'dd/MM/yyyy')
+                :
                 '' }}</span>
             } @else {
             <span class="text-amber-600 font-medium"> Pendiente de pago</span>

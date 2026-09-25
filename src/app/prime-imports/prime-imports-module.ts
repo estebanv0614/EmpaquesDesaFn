@@ -23,7 +23,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FieldsetModule } from 'primeng/fieldset';
-
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [],
@@ -49,7 +49,8 @@ import { FieldsetModule } from 'primeng/fieldset';
     CarouselModule,
     DatePickerModule,
     ProgressSpinnerModule,
-    FieldsetModule
+    FieldsetModule,
+    ChartModule
   ],
   exports: [
     ButtonModule,
@@ -72,7 +73,8 @@ import { FieldsetModule } from 'primeng/fieldset';
     CarouselModule,
     DatePickerModule,
     ProgressSpinnerModule,
-    FieldsetModule
+    FieldsetModule,
+    ChartModule
   ]
 })
 export class PrimeImportsModule {}
