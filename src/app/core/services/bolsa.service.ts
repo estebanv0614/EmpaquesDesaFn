@@ -18,15 +18,33 @@ export class BolsaService {
         return this.http.get<Bolsa>(`${this.baseUrl}/${id}`);
     }
 
-    create(bolsa: Bolsa): Observable<Bolsa> {
-        return this.http.post<Bolsa>(this.baseUrl, bolsa);
+    getPublicoCatalogo(): Observable<Bolsa[]> {
+        return this.http.get<Bolsa[]>(`${this.baseUrl}/catalogo`);
     }
 
-    update(id: number, bolsa: Bolsa): Observable<Bolsa> {
-        return this.http.put<Bolsa>(`${this.baseUrl}/${id}`, bolsa);
+    create(formData: FormData): Observable<Bolsa> {
+        return this.http.post<Bolsa>(this.baseUrl, formData);
+    }
+
+    update(id: number, formData: FormData): Observable<Bolsa> {
+        return this.http.put<Bolsa>(`${this.baseUrl}/${id}`, formData);
     }
 
     detele(id: number): Observable<void> {
         return this.http.delete<void>(`${this.baseUrl}/${id}`);
     }
+
+    getImagenUrl(imagenUrl?: string): string {
+    if (!imagenUrl) {
+        return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+                <rect width="100" height="100" fill="#f3f4f6"/>
+                <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9ca3af" font-family="sans-serif" font-size="10">
+                    Sin imagen
+                </text>
+            </svg>
+        `);
+    }
+    return `${environment.apiUrl}${imagenUrl}`;
+}
 }

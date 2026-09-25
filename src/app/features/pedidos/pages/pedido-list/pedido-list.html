@@ -27,14 +27,8 @@
             (onClick)="limpiarFiltroFecha()" />
     </div>
 
-    <p-table
-        #dt
-        [value]="pedidosFiltrados()"
-        [loading]="loading()" 
-        [paginator]="true" 
-        [rows]="10" 
-        [rowsPerPageOptions]="[5, 10, 20]"
-        [tableStyle]="{ 'min-width': '50rem' }" 
+    <p-table #dt [value]="pedidosFiltrados()" [loading]="loading()" [paginator]="true" [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }"
         [globalFilterFields]="['id', 'numeroPedido']">
         <ng-template pTemplate="caption">
             <div class="flex justify-end">
@@ -54,6 +48,7 @@
                 <th pSortableColumn="fechaEntregaEstimada">Entrega <p-sortIcon field="fechaEntregaEstimada" /></th>
                 <th style="width: 130px">Estado</th>
                 <th style="width: 260px">Cambiar estado</th>
+                <th style="width: 130px">Pago</th>
                 <th style="width: 60px">Ver</th>
             </tr>
         </ng-template>
@@ -63,13 +58,21 @@
                 <td>{{ pedido.client?.person?.name || pedido.client?.empresa || '-' }}</td>
                 <td>{{ pedido.fechaPedido | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ pedido.total | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
-                <td>{{ pedido.fechaEntregaEstimada | date: 'dd/MM/yyyy'}}</td>  
+                <td>{{ pedido.fechaEntregaEstimada | date: 'dd/MM/yyyy'}}</td>
                 <td class="whitespace-nowrap">
                     <p-tag [value]="pedido.estado.name" [severity]="severityEstado(pedido.estado.name)" />
                 </td>
                 <td>
                     <p-select [ngModel]="pedido.estado" [options]="estados()" optionLabel="name"
                         (onChange)="cambiarEstado(pedido, $event.value)" appendTo="body" styleClass="w-full" />
+                </td>
+                <td class="whitespace-nowrap">
+                    @if (pedido.pagado) {
+                    <p-tag value="PAGADO" severity="success" />
+                    } @else {
+                    <p-button label="Pendiente" size="small" severity="warn" [text]="true"
+                        (onClick)="marcarComoPagado(pedido)" />
+                    }
                 </td>
                 <td>
                     <p-button icon="pi pi-eye" [text]="true" (onClick)="verDetalle(pedido)" />
@@ -84,11 +87,20 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="showDetalle" [modal]="true" [style]="{ width: '500px' }" header="Detalle del pedido"
+<p-dialog [(visible)]="showDetalle" [modal]="true" [style]="{ width: '600px' }" header="Detalle del pedido"
     (onHide)="cerrarDetalle()">
     @if (selectedPedido(); as p) {
     <div class="flex flex-col gap-3">
         <div><span class="font-semibold">N° Pedido:</span> {{ p.numeroPedido }}</div>
+        <div>
+            <span class="font-semibold">Pago:</span>
+            @if (p.pagado) {
+            <span class="text-green-600 font-medium"> Pagado{{ p.fechaPago ? ' el ' + ( p.fechaPago | date:'dd/MM/yyyy') :
+                '' }}</span>
+            } @else {
+            <span class="text-amber-600 font-medium"> Pendiente de pago</span>
+            }
+        </div>
         <div><span class="font-semibold">Cliente:</span> {{ p.client.person.name || p.client.empresa }}</div>
         <div><span class="font-semibold">Vendedor:</span> {{ p.userVendedor.username }}</div>
         <div><span class="font-semibold">Estado:</span> {{ p.estado.name }}</div>
@@ -97,13 +109,31 @@
         </div>
         <div><span class="font-semibold">Observaciones:</span> {{ p.observacion || 'Ninguna' }}</div>
         <hr />
-        <div class="font-semibold">Productos:</div>
-        <ul class="list-disc pl-5">
-            @for (detalle of p.detalles; track detalle.id) {
-            <li>{{ detalle.bolsa.tipo }} — {{ detalle.cantidad }} unidades — {{ detalle.subtotalLinea |
-                currency:'COP':'symbol-narrow':'1.0-0' }}</li>
-            }
-        </ul>
+        <div class="font-semibold mb-1">Productos:</div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+                <thead>
+                    <tr class="text-left text-gray-500 border-b border-gray-200">
+                        <th class="py-2 pr-3">Producto</th>
+                        <th class="py-2 pr-3">Cantidad</th>
+                        <th class="py-2 pr-3">Precio unitario</th>
+                        <th class="py-2">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (detalle of p.detalles; track detalle.id) {
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2 pr-3">{{ detalle.bolsa.tipo }}</td>
+                        <td class="py-2 pr-3">{{ detalle.cantidad }}</td>
+                        <td class="py-2 pr-3">{{ detalle.precioUnitarioVenta | currency:'COP':'symbol-narrow':'1.0-0' }}
+                        </td>
+                        <td class="py-2 font-medium">{{ detalle.subtotalLinea | currency:'COP':'symbol-narrow':'1.0-0'
+                            }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
     }
 </p-dialog>

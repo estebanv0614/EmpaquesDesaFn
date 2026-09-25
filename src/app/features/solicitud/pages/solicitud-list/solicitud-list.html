@@ -57,10 +57,11 @@
               (onClick)="confirmarCambioEstado(solicitud, ESTADO_RECHAZADA, 'Rechazada')" pTooltip="Rechazar"
               tooltipPosition="left" />
             }
-            <!-- solicitud-list.html — agrega dentro de la columna Acciones, junto a los demás botones -->
             @if (solicitud.estado.id === ESTADO_APROBADA) {
-            <p-button icon="pi pi-file-pdf" severity="help" [text]="true" (onClick)="irAConvertir(solicitud.id)"
-              pTooltip="Convertir a cotización" tooltipPosition="left" />
+            <p-button [icon]="solicitud.documentoComercialId ? 'pi pi-download' : 'pi pi-file-pdf'" severity="help"
+              [text]="true" (onClick)="irAConvertir(solicitud)"
+              [pTooltip]="solicitud.documentoComercialId ? 'Descargar PDF' : 'Convertir a cotización'"
+              tooltipPosition="left" />
             }
           </div>
         </td>

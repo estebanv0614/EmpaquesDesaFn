@@ -1,6 +1,16 @@
 <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '450px' }"
     [header]="isEditMode ? 'Editar bolsa' : 'Nueva bolsa'" (onHide)="closeDialog(false)">
     <form [formGroup]="form" (ngSubmit)="onSave()" class="flex flex-col gap-4 mt-1">
+
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <input pInputText autocomplete="off" id="name" formControlName="name" class="w-full" />
+                <label for="name">Nombre *</label>
+            </p-floatlabel>
+            @if (isInvalid('name')) {
+            <small class="text-red-500">El tipo es obligatorio.</small>}
+        </div>
+
         <div class="flex flex-col gap-1">
             <p-floatlabel variant="on">
                 <input pInputText autocomplete="off" id="tipo" formControlName="tipo" class="w-full" />
@@ -13,13 +23,15 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <input pInputText type="number" autocomplete="off" id="anchoCm" formControlName="anchoCm" class="w-full"/>
+                    <input pInputText type="number" autocomplete="off" id="anchoCm" formControlName="anchoCm"
+                        class="w-full" />
                     <label for="phone">Ancho (cm)</label>
                 </p-floatlabel>
             </div>
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <input pInputText type="number" autocomplete="off" id="largoCm" formControlName="largoCm" class="w-full"/>
+                    <input pInputText type="number" autocomplete="off" id="largoCm" formControlName="largoCm"
+                        class="w-full" />
                     <label for="mail">Largo (cm)</label>
                 </p-floatlabel>
                 @if (isInvalid('largoCm')) {<small class="text-red-500">Largo (cm) inválido.</small>}
@@ -29,13 +41,15 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <input pInputText type="number" autocomplete="off" id="calibre" formControlName="calibre" class="w-full"/>
+                    <input pInputText type="number" autocomplete="off" id="calibre" formControlName="calibre"
+                        class="w-full" />
                     <label for="phone">Calibre</label>
                 </p-floatlabel>
             </div>
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <input pInputText type="number" autocomplete="off" id="precioBase" formControlName="precioBase" class="w-full"/>
+                    <input pInputText type="number" autocomplete="off" id="precioBase" formControlName="precioBase"
+                        class="w-full" />
                     <label for="mail">Precio base</label>
                 </p-floatlabel>
                 @if (isInvalid('precioBase')) {<small class="text-red-500">Precio base inválido.</small>}
@@ -45,16 +59,32 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <input pInputText type="number" autocomplete="off" id="stockActual" formControlName="stockActual" class="w-full"/>
+                    <input pInputText type="number" autocomplete="off" id="stockActual" formControlName="stockActual"
+                        class="w-full" />
                     <label for="phone">Stock actual</label>
                 </p-floatlabel>
             </div>
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <p-select formControlName="estado" [options]="estados()" optionLabel="name" inputId="estado" styleClass="w-full" appendTo="body" />
+                    <p-select formControlName="estado" [options]="estados()" optionLabel="name" inputId="estado"
+                        styleClass="w-full" appendTo="body" />
                     <label for="mail">Estado</label>
                 </p-floatlabel>
             </div>
+        </div>
+        <div class="flex flex-col gap-2">
+            <label class="text-sm text-gray-600">Imagen del producto</label>
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" class="w-full text-sm" />
+            @if (previewUrl) {
+            <img [src]="previewUrl" class="mt-2 h-32 w-full object-contain rounded-md border" />
+            }
+        </div>
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <textarea pInputTextarea autocomplete="off" id="description" formControlName="description" rows="3"
+                    class="w-full"></textarea>
+                <label for="description">Descripción</label>
+            </p-floatlabel>
         </div>
     </form>
 

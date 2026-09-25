@@ -25,6 +25,9 @@ export class BolsaForm {
   enviado = signal(false);
   enviando = signal(false);
 
+  archivoSeleccionado: File | null = null;
+  previewUrl: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     private bolsaService: BolsaService,
@@ -32,6 +35,8 @@ export class BolsaForm {
     private messageService: MessageService
   ) {
     this.form = this.fb.group({
+      name: ['', Validators.required],
+      description:[''],
       tipo: ['', Validators.required],
       anchoCm: [null, [Validators.required, Validators.min(0.01)]],
       largoCm: [null, [Validators.required, Validators.min(0.01)]],
@@ -51,6 +56,9 @@ export class BolsaForm {
     if (this.bolsa) {
       this.isEditMode = true;
       this.form.patchValue(this.bolsa);
+      if (this.bolsa.imagenUrl) {
+        this.previewUrl = this.bolsaService.getImagenUrl(this.bolsa.imagenUrl);
+      }
     }
   }
 
@@ -59,20 +67,52 @@ export class BolsaForm {
     return !!control?.invalid && (control.touched || this.enviando());
   }
 
+  onFileSelected(event: any): void {
+    const file: File | undefined = event.target?.files?.[0] ?? event.files?.[0];
+    if (file) {
+      this.archivoSeleccionado = file;
+      this.previewUrl = URL.createObjectURL(file);
+    }
+  }
+
+  private buildFormData(): FormData {
+    const value = this.form.value;
+    const formData = new FormData();
+
+    formData.append('name', value.name ?? '');
+    formData.append('description', value.description ?? '');
+    formData.append('tipo', value.tipo ?? '');
+    if (value.anchoCm != null) formData.append('anchoCm', value.anchoCm.toString());
+    if (value.largoCm != null) formData.append('largoCm', value.largoCm.toString());
+    if (value.calibre != null) formData.append('calibre', value.calibre.toString());
+    formData.append('precioBase', value.precioBase.toString());
+    if (value.stockActual != null) formData.append('stockActual', value.stockActual.toString());
+    formData.append('idEstado', value.estado?.id?.toString() ?? '');
+
+    if (this.archivoSeleccionado) {
+      formData.append('imagen', this.archivoSeleccionado);
+    }
+
+    return formData;
+  }
+
+
   onSave(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const payload: Bolsa = this.form.value;
+    this.enviando.set(true);
+    const formData = this.buildFormData();
 
     const request = this.isEditMode
-      ? this.bolsaService.update(this.bolsa!.id, payload)
-      : this.bolsaService.create(payload);
+      ? this.bolsaService.update(this.bolsa!.id!, formData)
+      : this.bolsaService.create(formData);
 
     request.subscribe({
       next: () => {
+        this.enviando.set(false);
         this.messageService.add({
           severity: 'success',
           summary: 'Éxito',
@@ -81,6 +121,7 @@ export class BolsaForm {
         this.closeDialog(true);
       },
       error: (err) => {
+        this.enviando.set(false);
         console.error(err);
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar' });
       },

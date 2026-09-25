@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { WhatsappService } from '../../../core/services/whatsapp.service';
 
 @Component({
   selector: 'app-whatsapp-button',
@@ -8,14 +9,15 @@ import { Component, OnInit, signal } from '@angular/core';
   styleUrl: './whatsapp-button.css',
 })
 export class WhatsappButton implements OnInit {
-  telefono = '573108612970';
+
   nombreEmpresa = 'Empaques DESA Colombia';
   mensajeSaludo = '¡¡Hola!! Queremos hablar contigo, haz click aquí y contáctanos.';
   mensajeRespuesta = 'Nuestro equipo responde usualmente en pocos minutos.';
-  mensajeWhatsapp = 'Hola, quiero más información sobre sus productos';
 
   mostrarTooltip = signal(false);
   mostrarTarjeta = signal(false);
+
+  constructor(private whatsappService: WhatsappService) {}
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -24,7 +26,7 @@ export class WhatsappButton implements OnInit {
   }
 
   get whatsappUrl(): string {
-    return `https://wa.me/${this.telefono}?text=${encodeURIComponent(this.mensajeWhatsapp)}`;
+    return this.whatsappService.whatsappUrl;
   }
 
   toggleTarjeta(): void {
@@ -42,6 +44,6 @@ export class WhatsappButton implements OnInit {
   }
 
   abrirWhatsapp(): void {
-    window.open(this.whatsappUrl, '_blank');
+    this.whatsappService.abrirWhatsapp();
   }
 }

@@ -4,6 +4,7 @@ import { Home } from './features/home/pages/home/home';
 import { Layout } from './layout/layout/layout';
 import { Login } from './features/auth/pages/login/login';
 import { authGuard } from './core/guards/auth-guard';
+import { convertirSolicitudGuard } from './convertir-solicitud-guard';
 
 export const routes: Routes = [
   {
@@ -42,8 +43,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'catalago',
+        //canActivate: [authGuard],
+        loadComponent: () => import('./features/home/components/catalogo/catalogo').then(cl => cl.Catalogo)
+      },
+      {
         path: 'solicitudes-cotizacion/:id/convertir',
-        canActivate: [authGuard],
+        canActivate: [authGuard, convertirSolicitudGuard],
         loadComponent: () =>
           import('./features/solicitud/pages/solicitud-convertir/solicitud-convertir').then(
             (m) => m.SolicitudConvertir,

@@ -24,13 +24,12 @@ export class BolsaList {
 
   filteredBolsa = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
-    if(!term) return this.bolsas();
+    if (!term) return this.bolsas();
 
-    return this.bolsas().filter(b => 
-      String(b.id).includes(term) || 
-      b.tipo?.toLowerCase().includes(term)
+    return this.bolsas().filter(
+      (b) => String(b.id).includes(term) || b.tipo?.toLowerCase().includes(term),
     );
-  })
+  });
 
   constructor(
     private bolsaService: BolsaService,
@@ -40,6 +39,10 @@ export class BolsaList {
 
   ngOnInit(): void {
     this.loadBolsas();
+  }
+
+  getImagen(bolsa: Bolsa): string {
+    return this.bolsaService.getImagenUrl(bolsa.imagenUrl);
   }
 
   loadBolsas(): void {
@@ -52,8 +55,12 @@ export class BolsaList {
       error: (err) => {
         console.error(err);
         this.loading.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar la lista de bolsas' });
-      }
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo cargar la lista de bolsas',
+        });
+      },
     });
   }
 
@@ -69,7 +76,7 @@ export class BolsaList {
 
   onFormClosed(saved: boolean): void {
     this.showForm.set(false);
-    if(saved) {
+    if (saved) {
       this.loadBolsas();
     }
   }
@@ -88,13 +95,21 @@ export class BolsaList {
   deleteBolsa(id: number): void {
     this.bolsaService.detele(id).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Eliminada', detail: 'Bolsa eliminada correctamente' });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Eliminada',
+          detail: 'Bolsa eliminada correctamente',
+        });
         this.loadBolsas();
       },
       error: (err) => {
         console.error(err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar' });
-      }
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar',
+        });
+      },
     });
   }
 }

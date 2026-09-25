@@ -1,151 +1,99 @@
-<div class="flex flex-column gap-3">
-    <h3 class="font-bold text-900 m-0 text-sm">¿NECESITAS AYUDA?</h3>
-    
-    <!-- Teléfono -->
-    <div class="flex align-items-start gap-2">
-        <i class="pi pi-phone text-base mt-1"></i>
-        <div class="flex flex-column">
-            <span class="font-semibold text-900 text-sm">Teléfono</span>
-            <span class="text-600 text-xs">+57 321 382 6385</span>
-        </div>
-    </div>
-
-    <!-- WhatsApp -->
-    <div class="flex align-items-start gap-2">
-        <i class="pi pi-whatsapp text-base mt-1"></i>
-        <div class="flex flex-column">
-            <span class="font-semibold text-900 text-sm">WhatsApp</span>
-            <span class="text-600 text-xs">+57 321 382 6385</span>
-            <span class="text-600 text-xs">+57 310 861 2970</span>
-        </div>
-    </div>
-
-    <!-- Correo -->
-    <div class="flex align-items-start gap-2">
-        <i class="pi pi-envelope text-base mt-1"></i>
-        <div class="flex flex-column">
-            <span class="font-semibold text-900 text-sm">Servicio y garantía</span>
-            <span class="text-600 text-xs">empaquesdesa@gmail.com</span>
-        </div>
-    </div>
-
-    <!-- Ubicación -->
-    <div class="flex align-items-start gap-2">
-        <i class="pi pi-map-marker text-base mt-1"></i>
-        <div class="flex flex-column">
-            <span class="font-semibold text-900 text-sm">Ubicación</span>
-            <span class="text-600 text-xs">Calle 34 sur 68i-99 Bogotá DC</span>
-        </div>
-<div class="w-full flex flex-col gap-6 mb-5">
-    <div class="w-full">
-        <p-card class="w-full pl-32">
-            <ng-template #header>
-                <div class="px-6 pt-5">
-                    <h1 class="font-bold text-xl m-0">Contacto</h1>
+<div class="flex flex-col items-center w-full">
+    <div class="w-full max-w-4xl flex flex-col gap-6 mb-5">
+        <div class="w-full">
+            <p-card class="w-full block shadow-md">
+                <ng-template #header>
+                    <div class="px-8 pt-6">
+                        <h1 class="font-bold text-2xl m-0">Contacto</h1>
+                    </div>
+                </ng-template>
+                <div class="px-4">
+                    <p class="text-lg">
+                        Escribanos por los canales oficiales de Empaques DESA.
+                    </p>
                 </div>
-            </ng-template>
-            <p class="m-0">
-                Escribanos por los canales oficiales de Empaques DESA.
-            </p>
-            <ng-template #footer>
-                <div>
-                    <span class="text-sm text-surface-500 dark:text-surface-400">
-                        Somos fabricantes directos de nuestros productos.
-                    </span>
+                <ng-template #footer>
+                    <div class="px-4 pb-4">
+                        <span class="text-base text-surface-500 dark:text-surface-400">
+                            Somos fabricantes directos de nuestros productos.
+                        </span>
+                    </div>
+                </ng-template>
+            </p-card>
+        </div>
+
+        <div class="w-full">
+            <p-card class="w-full block shadow-md" header="Canales directos">
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+
+                    <p-fieldset (click)="abrirWhatsapp1()" class="cursor-pointer transition-all hover:shadow-lg">
+                        <ng-template #header>
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-whatsapp text-xl text-green-500"></i>
+                                <span class="font-bold text-lg">WhatsApp</span>
+                            </div>
+                        </ng-template>
+                        <span class="font-bold text-base block">+57 321 382 6385</span>
+                    </p-fieldset>
+
+                    <p-fieldset (click)="abrirWhatsapp()" class="cursor-pointer transition-all hover:shadow-lg">
+                        <ng-template #header>
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-whatsapp text-xl text-green-500"></i>
+                                <span class="font-bold text-lg">WhatsApp</span>
+                            </div>
+                        </ng-template>
+                        <span class="font-bold text-base block">+57 310 861 2970</span>
+                    </p-fieldset>
                 </div>
-            </ng-template>
-        </p-card>
-    </div>
 
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8 mt-6">
+                    <p-fieldset>
+                        <ng-template #header>
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-phone text-xl text-green-500"></i>
+                                <span class="font-bold text-lg">Teléfono</span>
+                            </div>
+                        </ng-template>
+                        <span class="font-bold text-base block">+57 321 382 6385</span>
+                    </p-fieldset>
 
+                    <p-fieldset>
+                        <ng-template #header>
+                            <div class="flex items-center gap-2">
+                                <i class="pi pi-envelope text-xl text-red-500"></i>
+                                <span class="font-bold text-lg">Servicio y garantía</span>
+                            </div>
+                        </ng-template>
+                        <span class="font-bold text-base block">empaquesdesa@gmail.com</span>
+                    </p-fieldset>
+                </div>
+            </p-card>
+        </div>
 
-    <div class="w-full flex justify-center">
-        <p-card class="w-full pl-32" header="Canales directos">
-            <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8">
-                <p-fieldset>
-                    <ng-template #header>
-                        <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-whatsapp"></i>
-                            <span class="font-bold">WhatsApp</span>
-                        </div>
-                    </ng-template>
-                    <span class="font-bold">+57 321 382 6385</span>
-                </p-fieldset>
-                <p-fieldset>
-                    <ng-template #header>
-                        <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-whatsapp"></i>
-                            <span class="font-bold">WhatsApp</span>
-                        </div>
-                    </ng-template>
-                    <span class="font-bold">+57 310 861 2970</span>
-                </p-fieldset>
-            </div>
-            <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8">
-                <p-fieldset>
-                    <ng-template #header>
-                        <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-phone"></i>
-                            <span class="font-bold">Teléfono</span>
-                        </div>
-                    </ng-template>
-                    <span class="font-bold">+57 321 382 6385</span>
-                </p-fieldset>
-                <p-fieldset>
-                    <ng-template #header>
-                        <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-envelope"></i>
-                            <span class="font-bold">Servicio y garantía</span>
-                        </div>
-                    </ng-template>
-                    <span class="font-bold">empaquesdesa@gmail.com</span>
-                </p-fieldset>
-            </div>
-        </p-card>
-    </div>
-
-    <div class="w-full flex justify-center">
-        <p-card class="w-full max-w-3xl" header="Canales directos">
-            <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
-                <p-fieldset>
-                    <ng-template #header>
-                        <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-whatsapp"></i>
-                            <span class="font-bold">WhatsApp</span>
-                        </div>
-                    </ng-template>
-                    <span class="font-bold">+57 321 382 6385</span>
-                </p-fieldset>
-                <p-fieldset>
-                    <ng-template #header>
-                        <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-whatsapp"></i>
-                            <span class="font-bold">WhatsApp</span>
-                        </div>
-                    </ng-template>
-                    <span class="font-bold">+57 310 861 2970</span>
-                </p-fieldset>
-            </div>
-            <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 mt-4">
-                <p-fieldset>
-                    <ng-template #header>
-                        <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-phone"></i>
-                            <span class="font-bold">Teléfono</span>
-                        </div>
-                    </ng-template>
-                    <span class="font-bold">+57 321 382 6385</span>
-                </p-fieldset>
-                <p-fieldset>
-                    <ng-template #header>
-                        <div class="flex items-center gap-2 px-2">
-                            <i class="pi pi-envelope"></i>
-                            <span class="font-bold">Servicio y garantía</span>
-                        </div>
-                    </ng-template>
-                    <span class="font-bold">empaquesdesa@gmail.com</span>
-                </p-fieldset>
-            </div>
-        </p-card>
+        <div class="w-full">
+            <p-card class="w-full block shadow-md">
+                <ng-template #header>
+                    <div class="px-8 pt-6">
+                        <h1 class="font-bold text-2xl m-0">Sede Principal</h1>
+                    </div>
+                </ng-template>
+                <div class="px-4">
+                    <p class="text-lg">
+                        Calle 34 sur 68i-99 Bogotá D.C.
+                    </p>
+                </div>
+                <ng-template #footer>
+                    <div class="px-4 pt-6">
+                        <h6 class="font-bold text-2xl m-0">Horario de atención</h6>
+                    </div>
+                    <div class="px-4 pt-4">
+                        <span class="text-base text-surface-500 dark:text-surface-400">
+                            Lunes a viernes de 8:00 a 18:00 · Sábados de 9:00 a 14:00
+                        </span>
+                    </div>
+                </ng-template>
+            </p-card>
+        </div>
     </div>
 </div>
