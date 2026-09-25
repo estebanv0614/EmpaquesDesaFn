@@ -42,7 +42,6 @@ export class BolsaForm {
       largoCm: [null, [Validators.required, Validators.min(0.01)]],
       calibre: [null, [Validators.required, Validators.min(0.01)]],
       precioBase: [null, [Validators.required, Validators.min(0)]],
-      stockActual: [0, [Validators.min(0)]],
       estado: [null, Validators.required],
     });
   }
@@ -86,7 +85,6 @@ export class BolsaForm {
     if (value.largoCm != null) formData.append('largoCm', value.largoCm.toString());
     if (value.calibre != null) formData.append('calibre', value.calibre.toString());
     formData.append('precioBase', value.precioBase.toString());
-    if (value.stockActual != null) formData.append('stockActual', value.stockActual.toString());
     formData.append('idEstado', value.estado?.id?.toString() ?? '');
 
     if (this.archivoSeleccionado) {

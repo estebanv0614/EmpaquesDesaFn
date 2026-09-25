@@ -9,7 +9,6 @@ export interface Bolsa {
     largoCm: number;
     calibre: number;
     precioBase: number;
-    stockActual: number;
     imagenUrl?: string;
     estado: Estado
 }

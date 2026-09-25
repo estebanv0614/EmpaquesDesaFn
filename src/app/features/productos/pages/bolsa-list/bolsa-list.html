@@ -30,7 +30,6 @@
         <th>Largo (cm)</th>
         <th>Calibre</th>
         <th>Precio base</th>
-        <th>Stock</th>
         <th>Estado</th>
         <th style="width: 120px">Acciones</th>
       </tr>
@@ -48,7 +47,6 @@
         <td>{{ bolsa.largoCm }}</td>
         <td>{{ bolsa.calibre }}</td>
         <td>{{ bolsa.precioBase | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
-        <td>{{ bolsa.stockActual }}</td>
         <td>
           <p-tag [value]="bolsa.estado?.name" [severity]="bolsa.estado?.name === 'ACTIVO' ? 'success' : 'secondary'" />
         </td>
