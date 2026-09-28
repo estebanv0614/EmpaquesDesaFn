@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-module';
 import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService,  } from 'primeng/api';
 import { SolicitudCotizacionService } from '../../../../core/services/solicitud-cotizacion.service';
 import { SolicitudCotizacionRequest } from '../../../../shared/models/solicitud-cotizacion-request.model';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-solicitud-form',
@@ -25,10 +25,9 @@ export class SolicitudForm {
     private fb: FormBuilder,
     private solicitudService: SolicitudCotizacionService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
+    private router: Router
   ) {
-    // Si venimos de "Solicitar cotización" en una bolsa del catálogo,
-    // se prellena el primer producto con la bolsa seleccionada.
+
     const productoPreseleccionado = (history.state?.producto as string) || '';
 
     this.form = this.fb.group({
@@ -94,6 +93,9 @@ export class SolicitudForm {
         this.form.reset();
         this.detalles.clear();
         this.detalles.push(this.crearDetalle());
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 1500);
       },
       error: (err) => {
         console.error(err);

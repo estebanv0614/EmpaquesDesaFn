@@ -77,7 +77,7 @@ export const routes: Routes = [
       },
       {
         path: 'contacto',
-        canActivate: [authGuard],
+        //canActivate: [authGuard],
         loadComponent: () => import('./shared/components/contacto/contacto').then(co => co.Contacto)
       }
     ],
