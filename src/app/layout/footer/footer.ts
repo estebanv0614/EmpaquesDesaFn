@@ -9,6 +9,7 @@ import { RouterLink, Router } from "@angular/router";
   styleUrl: './footer.css',
 })
 export class Footer {
+
   constructor(
     public router: Router
   ) {}
