@@ -52,8 +52,8 @@ export class Carousel {
     },
      {
       imagen: 'assets/images/foto5.png',
-      titulo: 'Entrega rápida y confiable',
-      descripcion: 'Plazos de 10 a 15 días hábiles'
+      titulo: 'Tu proyecto, nuestra pasión',
+      descripcion: 'Convertimos tus ideas en productos únicos y profesionales'
     },
   ]);
 
