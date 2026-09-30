@@ -48,6 +48,15 @@ export const routes: Routes = [
         loadComponent: () => import('./features/home/components/catalogo/catalogo').then(cl => cl.Catalogo)
       },
       {
+        path: 'nosotros',
+        loadComponent: () => import('./layout/components/acerca-de-nosotros/acerca-de-nosotros').then(adn => adn.AcercaDeNosotros)
+      },
+      {
+        path: 'nuestro-equipo',
+        loadComponent: () =>
+        import('./layout/components/nuestro-equipo/nuestro-equipo').then((m) => m.NuestroEquipo),
+      },
+      {
         path: 'solicitudes-cotizacion/:id/convertir',
         canActivate: [authGuard, convertirSolicitudGuard],
         loadComponent: () =>
