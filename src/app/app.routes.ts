@@ -57,6 +57,16 @@ export const routes: Routes = [
         import('./layout/components/nuestro-equipo/nuestro-equipo').then((m) => m.NuestroEquipo),
       },
       {
+        path: 'resenas-clientes',
+        loadComponent: () =>
+        import('./layout/components/resenas-clientes/resenas-clientes').then((m) => m.ResenasClientes),
+      },
+      {
+       path: 'cotizaciones-mayoristas',
+       loadComponent: () =>
+      import('./layout/components/cotizaciones-mayoristas/cotizaciones-mayoristas').then((m) => m.CotizacionesMayoristas),
+      },       
+      {
         path: 'solicitudes-cotizacion/:id/convertir',
         canActivate: [authGuard, convertirSolicitudGuard],
         loadComponent: () =>
