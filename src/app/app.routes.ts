@@ -47,6 +47,7 @@ export const routes: Routes = [
         //canActivate: [authGuard],
         loadComponent: () => import('./features/home/components/catalogo/catalogo').then(cl => cl.Catalogo)
       },
+      // LAYOUT
       {
         path: 'nosotros',
         loadComponent: () => import('./layout/components/acerca-de-nosotros/acerca-de-nosotros').then(adn => adn.AcercaDeNosotros)
@@ -65,16 +66,36 @@ export const routes: Routes = [
        path: 'cotizaciones-mayoristas',
        loadComponent: () =>
       import('./layout/components/cotizaciones-mayoristas/cotizaciones-mayoristas').then((m) => m.CotizacionesMayoristas),
-      },       
+      },
+         {
+       path: 'preguntas-frecuentes',
+       loadComponent: () =>
+       import('./layout/components/preguntas-frecuentes/preguntas-frecuentes').then((m) => m.PreguntasFrecuentes),
+      }, 
+      {
+       path: 'accesibilidad',
+       loadComponent: () =>
+       import('./layout/components/accesibilidad/accesibilidad').then((m) => m.Accesibilidad),
+      },
+      {
+       path: 'politica-devoluciones',
+       loadComponent: () =>
+       import('./layout/components/politica-devoluciones/politica-devoluciones').then((m) => m.PoliticaDevoluciones),
+      },
+      {
+       path: 'politica-reembolsos',
+       loadComponent: () =>
+       import('./layout/components/politica-reembolsos/politica-reembolsos').then((m) => m.PoliticaReembolsos),
+      },  
       {
         path: 'solicitudes-cotizacion/:id/convertir',
         canActivate: [authGuard, convertirSolicitudGuard],
         loadComponent: () =>
-          import('./features/solicitud/pages/solicitud-convertir/solicitud-convertir').then(
+        import('./features/solicitud/pages/solicitud-convertir/solicitud-convertir').then(
             (m) => m.SolicitudConvertir,
           ),
-      },
-      {
+       },
+       {
         path: 'bolsas',
         canActivate: [authGuard],
         loadComponent: () => import('./features/productos/pages/bolsa-list/bolsa-list').then(b => b.BolsaList)
