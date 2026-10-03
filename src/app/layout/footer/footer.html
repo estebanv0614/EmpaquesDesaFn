@@ -84,8 +84,8 @@
         </p>
         <ul class="mt-6 font-semibold space-y-4 text-sm">
           <li><a routerLink="/contacto" class="text-black transition hover:text-gray-600">Contacto</a></li>
-          <li><a href="#" class="text-black transition hover:text-gray-600">Preguntas frecuentes</a></li>
-          <li><a href="#" class="text-black transition hover:text-gray-600">Chat en vivo</a></li>
+          <li><a routerLink="/preguntas-frecuentes" class="text-black transition hover:text-gray-600">Preguntas frecuentes</a></li>
+          <li><a (click)="chatService.open()" class="cursor-pointer text-black transition hover:text-gray-600">Chat en vivo</a>
         </ul>
       </div>
 
