@@ -1,0 +1,120 @@
+<section class="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
+
+  <div class="text-center">
+    <p class="text-sm font-semibold tracking-widest uppercase text-gray-600">¿Tienes dudas?</p>
+    <h1 class="mt-2 text-4xl font-bold text-black">preguntas frecuentes</h1>
+  </div>
+
+  <div class="mt-16 flex justify-center">
+    <p-accordion class="w-full">
+
+      <p-accordion-panel value="0">
+        <p-accordion-header>
+          <ng-template #toggleicon let-active="active">
+            @if (active) {
+              <i class="pi pi-minus"></i>
+            } @else {
+              <i class="pi pi-plus"></i>
+            }
+          </ng-template>
+          <span class="flex items-center gap-4">
+            <i class="pi pi-box text-yellow-500"></i>
+            <span class="font-medium">¿Cuál es el pedido mínimo?</span>
+          </span>
+        </p-accordion-header>
+        <p-accordion-content>
+          <p class="m-0 text-sm text-gray-600">
+            Para pedidos al detal no manejamos un mínimo. Para cotizaciones mayoristas,
+            el pedido mínimo es de 1.000 bolsas.
+          </p>
+        </p-accordion-content>
+      </p-accordion-panel>
+
+      <p-accordion-panel value="1">
+        <p-accordion-header>
+          <ng-template #toggleicon let-active="active">
+            @if (active) {
+              <i class="pi pi-minus"></i>
+            } @else {
+              <i class="pi pi-plus"></i>
+            }
+          </ng-template>
+          <span class="flex items-center gap-4">
+            <i class="pi pi-calendar text-blue-500"></i>
+            <span class="font-medium">¿Cuánto tarda mi pedido en llegar?</span>
+          </span>
+        </p-accordion-header>
+        <p-accordion-content>
+          <p class="m-0 text-sm text-gray-600">
+            Entre 1 y 15 días hábiles, dependiendo de la cantidad solicitada.
+          </p>
+        </p-accordion-content>
+      </p-accordion-panel>
+
+      <p-accordion-panel value="2">
+        <p-accordion-header>
+          <ng-template #toggleicon let-active="active">
+            @if (active) {
+              <i class="pi pi-minus"></i>
+            } @else {
+              <i class="pi pi-plus"></i>
+            }
+          </ng-template>
+          <span class="flex items-center gap-4">
+            <i class="pi pi-credit-card text-green-500"></i>
+            <span class="font-medium">¿Qué métodos de pago aceptan?</span>
+          </span>
+        </p-accordion-header>
+        <p-accordion-content>
+          <p class="m-0 text-sm text-gray-600">
+            Aceptamos transferencia bancaria y pago en efectivo contra entrega.
+          </p>
+        </p-accordion-content>
+      </p-accordion-panel>
+
+      <p-accordion-panel value="3">
+        <p-accordion-header>
+          <ng-template #toggleicon let-active="active">
+            @if (active) {
+              <i class="pi pi-minus"></i>
+            } @else {
+              <i class="pi pi-plus"></i>
+            }
+          </ng-template>
+          <span class="flex items-center gap-4">
+            <i class="pi pi-truck text-purple-500"></i>
+            <span class="font-medium">¿Hacen envíos fuera de Bogotá?</span>
+          </span>
+        </p-accordion-header>
+        <p-accordion-content>
+          <p class="m-0 text-sm text-gray-600">
+            Sí, realizamos envíos a nivel nacional mediante transportadora.
+          </p>
+        </p-accordion-content>
+      </p-accordion-panel>
+
+      <p-accordion-panel value="4">
+        <p-accordion-header>
+          <ng-template #toggleicon let-active="active">
+            @if (active) {
+              <i class="pi pi-minus"></i>
+            } @else {
+              <i class="pi pi-plus"></i>
+            }
+          </ng-template>
+          <span class="flex items-center gap-4">
+            <i class="pi pi-palette text-pink-500"></i>
+            <span class="font-medium">¿Puedo personalizar mis empaques?</span>
+          </span>
+        </p-accordion-header>
+        <p-accordion-content>
+          <p class="m-0 text-sm text-gray-600">
+            Sí, contáctanos y te contamos las opciones de personalización disponibles.
+          </p>
+        </p-accordion-content>
+      </p-accordion-panel>
+
+    </p-accordion>
+  </div>
+
+</section>
