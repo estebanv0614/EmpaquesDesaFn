@@ -1,0 +1,50 @@
+@if (chat.isOpen()) {
+  <div class="fixed bottom-24 right-6 z-50 flex 'h-[480px]' w-80 flex-col rounded-xl bg-white shadow-2xl sm:w-96">
+
+    <div class="flex items-center justify-between rounded-t-xl bg-purple-600 px-4 py-3 text-white">
+      <span class="font-semibold">Asistente Empaques Desa</span>
+      <button (click)="close()" class="text-white hover:text-gray-200" aria-label="Cerrar chat">
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+
+    <div class="flex-1 space-y-3 overflow-y-auto p-4">
+      @for (msg of messages; track $index) {
+        <div class="flex" [class.justify-end]="msg.from === 'user'">
+          <div
+            class="max-w-[75%] rounded-lg px-3 py-2 text-sm"
+            [class.bg-gray-100]="msg.from === 'bot'"
+            [class.text-gray-800]="msg.from === 'bot'"
+            [class.bg-purple-600]="msg.from === 'user'"
+            [class.text-white]="msg.from === 'user'"
+          >
+            {{ msg.text }}
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="border-t border-gray-200 p-3">
+      <p class="mb-2 text-xs font-semibold text-gray-500">Preguntas rápidas:</p>
+      <div class="flex flex-wrap gap-2">
+        @for (q of quickQuestions; track q.question) {
+          <button
+            (click)="ask(q)"
+            class="rounded-full border border-purple-300 px-3 py-1 text-xs text-purple-700 transition hover:bg-purple-50"
+          >
+            {{ q.question }}
+          </button>
+        }
+      </div>
+    </div>
+
+  </div>
+}
+
+<button
+  (click)="chat.toggle()"
+  class="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-purple-600 text-white shadow-lg transition hover:bg-purple-700"
+  aria-label="Abrir chat"
+>
+  <i class="pi pi-comments text-2xl"></i>
+</button>
