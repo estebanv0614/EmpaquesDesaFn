@@ -118,6 +118,31 @@ export const routes: Routes = [
       {
         path: 'contacto',
         loadComponent: () => import('./shared/components/contacto/contacto').then(co => co.Contacto)
+      },
+      {
+        path: 'gastos',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/gastos/pages/gastos-list/gastos-list').then(gt => gt.GastosList)
+      },
+      {
+        path: 'nomina',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/nomina/pages/nomina/nomina').then(nm => nm.Nomina)
+      },
+      {
+        path: 'empleado',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/empleado/pages/empleado-list/empleado-list').then(mpl => mpl.EmpleadoList)
+      },
+      {
+        path: 'material',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/gastos/pages/material-list/material-list').then(m => m.MaterialList)
+      },
+      {
+        path: 'ordenes-produccion',
+        canActivate: [authGuard],
+        loadChildren: () => import('./features/pedidos/components/orden-produccion-list/orden-produccion-list').then(od => od.OrdenProduccionList)
       }
     ],
   },

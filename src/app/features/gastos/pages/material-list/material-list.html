@@ -1,0 +1,39 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="p-4">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-x1 font-semibold">Materiales</h2>
+        <p-button label="Nuevo Material" icon="pi pi-plus" (onClick)="createMaterial()" />
+    </div>
+
+    <p-table [value]="materials()" [loading]="loading()" [paginator]="true" [rows]="5"
+        [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Unidad</th>
+                <th>Costo</th>
+                <th>Stock Actual</th>
+                <th style="width: 120px">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-material>
+            <tr>
+                <td>{{material.id}}</td>
+                <td>{{material.name}}</td>
+                <td>{{material.unidadMedida}}</td>
+                <td>{{material.costoUnitario}}</td>
+                <td>{{material.stockActual}}</td>
+                <td>
+                    <div class="flex gap-2">
+                        <p-button icon="pi pi-pencil" severity="info" [text]="true" (onClick)="editMaterial(material)" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                            (onClick)="confirmDelete(material)" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

@@ -1,0 +1,46 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Empleados</h2>
+    <p-button label="Nuevo empleado" icon="pi pi-plus" (onClick)="openCreate()" />
+  </div>
+
+  <p-table [value]="empleados()" [loading]="loading()" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '55rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Documento</th>
+        <th>Nombre</th>
+        <th>Cargo</th>
+        <th>Salario</th>
+        <th>Fecha ingreso</th>
+        <th style="width: 120px">Estado</th>
+        <th style="width: 100px">Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-e>
+      <tr>
+        <td>{{ e.person?.tipoDocumento?.name }} - {{ e.person?.documentNumber }}</td>
+        <td>{{ e.person?.name }}</td>
+        <td>{{ e.position }}</td>
+        <td>{{ e.salary | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+        <td>{{ e.fechaIngreso | date:'dd/MM/yyyy' }}</td>
+        <td><p-tag [value]="e.estado?.name" [severity]="e.estado?.name === 'ACTIVO' ? 'success' : 'secondary'" /></td>
+        <td>
+          <div class="flex gap-1">
+            <p-button icon="pi pi-pencil" [text]="true" severity="info" (onClick)="openEdit(e)" />
+            <p-button icon="pi pi-trash" [text]="true" severity="danger" (onClick)="confirmDelete(e)" />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr><td colspan="7" class="text-center py-4">No hay empleados registrados</td></tr>
+    </ng-template>
+  </p-table>
+</div>
+
+@if (showForm()) {
+  <app-empleado-form [empleado]="selected()" (closed)="onFormClosed($event)" />
+}

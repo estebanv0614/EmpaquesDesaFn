@@ -1,0 +1,106 @@
+<p-toast />
+
+<div class="p-4">
+    <div class="flex flex-wrap justify-between items-end gap-3 mb-4">
+        <h2 class="text-xl font-semibold">Nómina semanal</h2>
+        <div class="flex items-end gap-3">
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-medium">Semana de</label>
+                <p-datepicker [ngModel]="semana()" (ngModelChange)="cambiarSemana($event)" dateFormat="dd/mm/yy"
+                    [showIcon]="true" appendTo="body" />
+            </div>
+            <p-button label="Generar nómina" icon="pi pi-cog" (onClick)="generar()" [loading]="generando()" [disabled]="generando()" />
+        </div>
+    </div>
+
+    <p-table [value]="pagos()" [loading]="loading()" [tableStyle]="{ 'min-width': '60rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Empleado</th>
+                <th>Cargo</th>
+                <th>Salario base</th>
+                <th>Bonos</th>
+                <th>Deducciones</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th style="width: 190px">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-p>
+            <tr>
+                <td>{{ p.employee?.person?.name }}</td>
+                <td>{{ p.employee?.position }}</td>
+                <td>{{ p.salarioBase | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                <td>{{ p.bonificaciones | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                <td>{{ p.deducciones | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                <td class="font-medium">{{ p.totalPagar | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                <td>
+                    <p-tag [value]="p.pagado ? 'PAGADO' : 'PENDIENTE'" [severity]="p.pagado ? 'success' : 'warn'" />
+                </td>
+                <td>
+                    @if (!p.pagado) {
+                    <div class="flex gap-1">
+                        <p-button icon="pi pi-pencil" [text]="true" severity="info" (onClick)="abrirEditar(p)" />
+                        <p-button label="Pagar" size="small" (onClick)="abrirPagar(p)" />
+                    </div>
+                    } @else {
+                    <span class="text-sm text-gray-500">{{ p.fechaPago | date:'dd/MM/yyyy' }}</span>
+                    }
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="5" class="text-right font-semibold">Total de la semana</td>
+                <td colspan="3" class="font-semibold">
+                    {{ totalSemana() | currency:'COP':'symbol-narrow':'1.0-0' }}
+                    <span class="text-sm text-gray-500 ml-2">(pendiente: {{ totalPendiente() |
+                        currency:'COP':'symbol-narrow':'1.0-0' }})</span>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8" class="text-center py-4">Aún no se ha generado la nómina de esta semana</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="showEditar" [modal]="true" [style]="{ width: '400px' }" header="Ajustar nómina">
+    <div class="flex flex-col gap-4 mt-1">
+        <p-floatlabel variant="on">
+            <input pInputText type="number" [(ngModel)]="bonos" class="w-full" />
+            <label>Bonificaciones</label>
+        </p-floatlabel>
+        <p-floatlabel variant="on">
+            <input pInputText type="number" [(ngModel)]="deducciones" class="w-full" />
+            <label>Deducciones</label>
+        </p-floatlabel>
+        <p-floatlabel variant="on">
+            <textarea pInputTextarea [(ngModel)]="observacion" rows="2" class="w-full"></textarea>
+            <label>Observación</label>
+        </p-floatlabel>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" severity="secondary" (onClick)="showEditar = false" />
+        <p-button label="Guardar" (onClick)="guardarEdicion()" />
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="showPagar" [modal]="true" [style]="{ width: '420px' }" header="Registrar pago">
+    <div class="flex flex-col gap-4 mt-1">
+        <p-select [(ngModel)]="metodoSel" [options]="metodosPago()" optionLabel="name" placeholder="Método de pago"
+            styleClass="w-full" appendTo="body" />
+        <p-select [(ngModel)]="responsableSel" [options]="empleados()" optionLabel="position"
+            placeholder="Quién realiza el pago" styleClass="w-full" appendTo="body" />
+        <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">Comprobante de pago (opcional)</label>
+            <input type="file" accept="image/*" (change)="onFileComprobante($event)" class="text-sm" />
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button label="Cancelar" severity="secondary" (onClick)="showPagar = false" />
+        <p-button label="Confirmar pago" (onClick)="confirmarPago()" />
+    </ng-template>
+</p-dialog>

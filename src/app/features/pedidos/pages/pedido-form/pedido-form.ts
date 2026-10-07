@@ -50,7 +50,6 @@ export class PedidoForm implements OnInit {
     this.form = this.fb.group({
       numeroPedido: ['', Validators.required],
       client: [null, Validators.required],
-      estado: [null, Validators.required],
       metodoPago: [null],
       fechaEntregaEstimada: [null],
       observacion: [''],

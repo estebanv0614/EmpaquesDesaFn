@@ -4,6 +4,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { PersonService } from '../../../../core/services/person-service';
 import { Person } from '../../../../shared/models/person.model';
 import { PersonFrom } from '../person-from/person-from';
+import { EmpleadoList } from '../../../empleado/pages/empleado-list/empleado-list';
 
 
 @Component({
@@ -11,7 +12,8 @@ import { PersonFrom } from '../person-from/person-from';
   standalone: true,
   imports: [
     PrimeImportsModule, 
-    PersonFrom
+    PersonFrom,
+    EmpleadoList
   ],
   templateUrl: './person-list.html',
   styleUrl: './person-list.css',

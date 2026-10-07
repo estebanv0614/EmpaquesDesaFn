@@ -1,0 +1,67 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '500px' }" header="Nuevo gasto"
+    (onHide)="close(false)">
+    <form [formGroup]="form" class="flex flex-col gap-4 mt-1">
+
+        <p-floatlabel variant="on">
+            <p-select formControlName="tipoGasto" [options]="tiposGasto()" optionLabel="name" styleClass="w-full"
+                appendTo="body" />
+            <label>Tipo de gasto *</label>
+        </p-floatlabel>
+
+        @if (esCompraMaterial) {
+        <div class="grid grid-cols-2 gap-4">
+            <p-floatlabel variant="on">
+                <p-select formControlName="material" [options]="materiales()" optionLabel="name" styleClass="w-full"
+                    appendTo="body" />
+                <label>Material *</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on">
+                <input pInputText type="number" formControlName="cantidad" class="w-full" />
+                <label>Cantidad *</label>
+            </p-floatlabel>
+        </div>
+        }
+
+        <div class="grid grid-cols-2 gap-4">
+            <p-floatlabel variant="on">
+                <input pInputText type="number" formControlName="monto" class="w-full" />
+                <label>Monto *</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on">
+                <p-datepicker formControlName="fechaGasto" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"
+                    styleClass="w-full" />
+                <label>Fecha *</label>
+            </p-floatlabel>
+        </div>
+
+        <p-floatlabel variant="on">
+            <textarea pInputTextarea formControlName="descripcion" rows="2" class="w-full"></textarea>
+            <label>Descripción *</label>
+        </p-floatlabel>
+
+        <div class="grid grid-cols-2 gap-4">
+            <p-floatlabel variant="on">
+                <p-select formControlName="metodoPago" [options]="metodosPago()" optionLabel="name" styleClass="w-full"
+                    appendTo="body" />
+                <label>Método de pago *</label>
+            </p-floatlabel>
+            <p-floatlabel variant="on">
+                <p-select formControlName="empleado" [options]="empleados()" optionLabel="position" styleClass="w-full"
+                    appendTo="body" />
+                <label>Responsable *</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="text-sm text-gray-600">Comprobante (opcional)</label>
+            <input type="file" accept="image/*" (change)="onFile($event)" class="text-sm" />
+        </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-center gap-3 w-full">
+            <p-button label="Cancelar" severity="secondary" (onClick)="close(false)" />
+            <p-button label="Guardar" (onClick)="onSave()" [loading]="enviando()" />
+        </div>
+    </ng-template>
+</p-dialog>

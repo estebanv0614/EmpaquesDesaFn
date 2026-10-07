@@ -1,0 +1,101 @@
+<p-toast />
+
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Órdenes de producción</h2>
+    <p-button label="Actualizar" icon="pi pi-refresh" [text]="true" (onClick)="load()" />
+  </div>
+
+  <p-table [value]="ordenes()" [loading]="loading()" [paginator]="true" [rows]="10"
+    [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Orden</th>
+        <th>Bolsa</th>
+        <th>A producir</th>
+        <th>Producida</th>
+        <th>Merma</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Pedido</th>
+        <th>Estado</th>
+        <th style="width: 180px">Acción</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-o>
+      <tr>
+        <td>#{{ o.id }}</td>
+        <td>{{ o.detallePedido?.bolsa?.tipo }}</td>
+        <td>{{ o.cantidadProducir }}</td>
+        <td>{{ o.cantidadProducida }}</td>
+        <td>{{ o.cantidadMerma }}</td>
+        <td>{{ o.fechaProduccion | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ o.fechaFin | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ o.numeroPedido }}</td>
+        <td><p-tag [value]="o.estado?.name" [severity]="severity(o.estado?.name)" /></td>
+        <td>
+          @if (o.estado?.name === 'PENDIENTE') {
+          <p-button label="Iniciar" icon="pi pi-play" size="small" (onClick)="iniciar(o)" />
+          } @else if (o.estado?.name === 'EN_PRODUCCION') {
+          <p-button label="Finalizar" icon="pi pi-check" size="small" severity="success"
+            (onClick)="abrirFinalizar(o)" />
+          }
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr><td colspan="9" class="text-center py-4">No hay órdenes de producción</td></tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Material insuficiente -->
+<p-dialog [(visible)]="showFaltantes" [modal]="true" [style]="{ width: '550px' }" header="Material insuficiente">
+  <p class="mb-3">No se puede iniciar la orden. Falta material:</p>
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left border-b">
+        <th class="py-2">Material</th><th>Requerido</th><th>Disponible</th><th>Faltante</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (f of faltantes(); track f.idMaterial) {
+      <tr class="border-b">
+        <td class="py-2">{{ f.nombre }}</td>
+        <td>{{ f.requerido }}</td>
+        <td>{{ f.disponible }}</td>
+        <td class="text-red-600 font-medium">{{ f.faltante }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</p-dialog>
+
+<!-- Finalizar -->
+<p-dialog [(visible)]="showFinalizar" [modal]="true" [style]="{ width: '450px' }" header="Finalizar orden">
+  @if (ordenSeleccionada(); as o) {
+  <div class="flex flex-col gap-4 mt-1">
+    <p>Orden #{{ o.id }}: se pidieron <b>{{ o.cantidadProducida }}</b> bolsas.</p>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Cantidad producida</label>
+      <input pInputText type="number" [(ngModel)]="producida" class="w-full" />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Merma (desperdicio)</label>
+      <input pInputText type="number" [(ngModel)]="merma" class="w-full" />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium">Observación</label>
+      <textarea pTextarea [(ngModel)]="observacion" rows="2" class="w-full"></textarea>
+    </div>
+    <small class="text-gray-500">
+      Se descontará material por producida + merma ({{ producida + merma }} bolsas).
+    </small>
+  </div>
+  }
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" severity="secondary" (onClick)="showFinalizar.set(false)" />
+    <p-button label="Confirmar" [loading]="guardando()" (onClick)="confirmarFinalizar()" />
+  </ng-template>
+</p-dialog>

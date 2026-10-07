@@ -1,0 +1,60 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="p-4">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Gastos operativos</h2>
+        <p-button label="Nuevo gasto" icon="pi pi-plus" (onClick)="showForm.set(true)" />
+    </div>
+
+    <p-table [value]="gastos()" [loading]="loading()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50]"
+        [tableStyle]="{ 'min-width': '60rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Material</th>
+                <th>Monto</th>
+                <th>Método</th>
+                <th>Responsable</th>
+                <th>Comprobante</th>
+                <th style="width: 70px"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-g>
+            <tr>
+                <td>{{ g.fechaGasto | date:'dd/MM/yyyy' }}</td>
+                <td><p-tag [value]="g.tipoGasto?.name" severity="info" /></td>
+                <td>{{ g.descripcion }}</td>
+                <td>{{ g.material ? (g.material.name + ' x ' + g.cantidad) : '-' }}</td>
+                <td class="font-medium">{{ g.monto | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                <td>{{ g.metodoPago?.name }}</td>
+                <td>{{ g.adminResponsable?.person?.name }}</td>
+                <td>
+                    @if (evidencia(g); as url) {
+                    <a [href]="url" target="_blank" class="text-blue-600 underline">Ver</a>
+                    } @else { <span class="text-gray-400">-</span> }
+                </td>
+                <td>
+                    <p-button icon="pi pi-trash" severity="danger" [text]="true" (onClick)="confirmDelete(g)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="4" class="text-right font-semibold">Total</td>
+                <td colspan="5" class="font-semibold">{{ totalGastos() | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="9" class="text-center py-4">No hay gastos registrados</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+@if (showForm()) {
+<app-gastos-form (closed)="onFormClosed($event)" />
+}

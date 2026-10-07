@@ -1,0 +1,79 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '450px' }"
+  [header]="isEditMode ? 'Editar empleado' : 'Nuevo empleado'" (onHide)="close(false)">
+  <form [formGroup]="form" class="flex flex-col gap-4 mt-1">
+
+    <div class="flex items-end gap-2">
+      <p-floatlabel variant="on" class="flex-1">
+        <p-select formControlName="person" [options]="personas()" optionLabel="name" styleClass="w-full" appendTo="body" />
+        <label>Persona *</label>
+      </p-floatlabel>
+      @if (!isEditMode) {
+      <p-button icon="pi pi-user-plus" [text]="true" pTooltip="Crear persona nueva" (onClick)="abrirNuevaPersona()" />
+      }
+    </div>
+
+    <p-floatlabel variant="on">
+      <input pInputText formControlName="position" class="w-full" />
+      <label>Cargo *</label>
+    </p-floatlabel>
+
+    <div class="grid grid-cols-2 gap-4">
+      <p-floatlabel variant="on">
+        <input pInputText type="number" formControlName="salary" class="w-full" />
+        <label>Salario *</label>
+      </p-floatlabel>
+      <p-floatlabel variant="on">
+        <p-datepicker formControlName="fechaIngreso" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" styleClass="w-full" />
+        <label>Fecha de ingreso *</label>
+      </p-floatlabel>
+    </div>
+
+    <p-floatlabel variant="on">
+      <p-select formControlName="estado" [options]="estados()" optionLabel="name" styleClass="w-full" appendTo="body" />
+      <label>Estado *</label>
+    </p-floatlabel>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-center gap-3 w-full">
+      <p-button label="Cancelar" severity="secondary" (onClick)="close(false)" />
+      <p-button label="Guardar" (onClick)="onSave()" [loading]="enviando()" />
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="mostrarNuevaPersona" [modal]="true" [style]="{ width: '400px' }" header="Nueva persona">
+  <form [formGroup]="personaForm" class="flex flex-col gap-4 mt-1">
+    <p-floatlabel variant="on">
+      <p-select formControlName="tipoDocumento" [options]="tiposDocumento()" optionLabel="name" styleClass="w-full" appendTo="body" />
+      <label>Tipo de documento *</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input pInputText formControlName="documentNumber" class="w-full" />
+      <label>Número de documento *</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+      <input pInputText formControlName="name" class="w-full" />
+      <label>Nombre *</label>
+    </p-floatlabel>
+    <div class="grid grid-cols-2 gap-4">
+      <p-floatlabel variant="on">
+        <input pInputText formControlName="phone" class="w-full" />
+        <label>Teléfono</label>
+      </p-floatlabel>
+      <p-floatlabel variant="on">
+        <input pInputText formControlName="email" class="w-full" />
+        <label>Email</label>
+      </p-floatlabel>
+    </div>
+    <p-floatlabel variant="on">
+      <input pInputText formControlName="address" class="w-full" />
+      <label>Dirección</label>
+    </p-floatlabel>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" severity="secondary" (onClick)="mostrarNuevaPersona.set(false)" />
+    <p-button label="Crear persona" (onClick)="guardarNuevaPersona()" [loading]="creandoPersona()" />
+  </ng-template>
+</p-dialog>

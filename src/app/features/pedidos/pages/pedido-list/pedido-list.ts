@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { PedidoForm } from '../pedido-form/pedido-form';
 import { ExportarButton } from '../../components/exportar-button/exportar-button';
 import { Estadistidas } from '../../components/estadistidas/estadistidas';
+import { OrdenProduccionList } from '../../components/orden-produccion-list/orden-produccion-list';
 
 @Component({
   selector: 'app-pedido-list',
@@ -22,6 +23,7 @@ import { Estadistidas } from '../../components/estadistidas/estadistidas';
     PedidoForm,
     ExportarButton,
     Estadistidas,
+    OrdenProduccionList
   ],
   templateUrl: './pedido-list.html',
   styleUrl: './pedido-list.css',
@@ -58,6 +60,10 @@ export class PedidoList implements OnInit {
       return true;
     });
   });
+
+  estadosManuales = computed(() =>
+    this.estados().filter((e) => e.name === 'ENTREGADO' || e.name === 'CANCELADO'),
+  );
 
   limpiarFiltroFecha(): void {
     this.fechaDesde.set(null);
@@ -174,11 +180,20 @@ export class PedidoList implements OnInit {
   }
 
   severityEstado(nombreEstado: string): 'warn' | 'success' | 'danger' | 'info' | 'secondary' {
-    if (nombreEstado === 'PENDIENTE') return 'warn';
-    if (nombreEstado === 'EN PROCESO') return 'info';
-    if (nombreEstado === 'EN CAMINO') return 'info';
-    if (nombreEstado === 'ENTREGADO') return 'success';
-    if (nombreEstado === 'CANCELADO') return 'danger';
-    return 'secondary';
+    switch (nombreEstado) {
+      case 'PENDIENTE':
+        return 'warn';
+      case 'EN_PRODUCCION':
+        return 'info';
+      case 'FINALIZADA':
+        return 'success';
+      case 'ENTREGADO':
+        return 'success';
+      case 'CANCELADO':
+      case 'RECHAZADA':
+        return 'danger';
+      default:
+        return 'secondary';
+    }
   }
 }
