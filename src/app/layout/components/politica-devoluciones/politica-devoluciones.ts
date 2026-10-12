@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-politica-devoluciones',
-  imports: [],
+  standalone: true,
+  imports: [CardModule],
   templateUrl: './politica-devoluciones.html',
   styleUrl: './politica-devoluciones.css',
 })
