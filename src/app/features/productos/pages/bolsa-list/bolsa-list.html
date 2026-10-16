@@ -4,7 +4,8 @@
 <div class="p-4">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-semibold">Bolsas</h2>
-    <p-button label="Nueva bolsa" icon="pi pi-plus" (onClick)="openCreate()" />
+    <p-button label="Nueva bolsa" icon="pi pi-plus" (onClick)="openCreate()"
+      [style]="{ 'background-color': '#16a34a', 'border-color': '#16a34a', 'color': '#ffffff' }" />
   </div>
 
   <p-table #dt [value]="bolsas()" [loading]="loading()" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
@@ -20,7 +21,7 @@
     </ng-template>
 
     <ng-template pTemplate="header">
-      <tr>
+      <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
         <th>ID</th>
         <th>Foto</th>
         <th>Nombre</th>

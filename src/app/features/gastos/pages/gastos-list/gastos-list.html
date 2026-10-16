@@ -4,13 +4,14 @@
 <div class="p-4">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Gastos operativos</h2>
-        <p-button label="Nuevo gasto" icon="pi pi-plus" (onClick)="showForm.set(true)" />
+        <p-button label="Nuevo gasto" icon="pi pi-plus" (onClick)="showForm.set(true)"
+            [style]="{ 'background-color': '#16a34a', 'border-color': '#16a34a', 'color': '#ffffff' }" />
     </div>
 
     <p-table [value]="gastos()" [loading]="loading()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 50]"
         [tableStyle]="{ 'min-width': '60rem' }">
         <ng-template pTemplate="header">
-            <tr>
+            <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
                 <th>Fecha</th>
                 <th>Tipo</th>
                 <th>Descripción</th>

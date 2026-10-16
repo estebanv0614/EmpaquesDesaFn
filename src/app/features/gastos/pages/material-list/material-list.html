@@ -4,13 +4,14 @@
 <div class="p-4">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-x1 font-semibold">Materiales</h2>
-        <p-button label="Nuevo Material" icon="pi pi-plus" (onClick)="createMaterial()" />
+        <p-button label="Nuevo Material" icon="pi pi-plus" (onClick)="createMaterial()"
+            [style]="{ 'background-color': '#16a34a', 'border-color': '#16a34a', 'color': '#ffffff' }" />
     </div>
 
     <p-table [value]="materials()" [loading]="loading()" [paginator]="true" [rows]="5"
         [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header">
-            <tr>
+            <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
                 <th>Id</th>
                 <th>Nombre</th>
                 <th>Unidad</th>
@@ -28,7 +29,8 @@
                 <td>{{material.stockActual}}</td>
                 <td>
                     <div class="flex gap-2">
-                        <p-button icon="pi pi-pencil" severity="info" [text]="true" (onClick)="editMaterial(material)" />
+                        <p-button icon="pi pi-pencil" severity="info" [text]="true"
+                            (onClick)="editMaterial(material)" />
                         <p-button icon="pi pi-trash" severity="danger" [text]="true"
                             (onClick)="confirmDelete(material)" />
                     </div>

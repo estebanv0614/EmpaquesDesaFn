@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -17,5 +16,9 @@ export class DocumentoComercialService {
 
   descargarPdf(id: number): Observable<Blob> {
     return this.http.get(`${this.baseUrl}/${id}/pdf`, { responseType: 'blob' });
+  }
+
+  getById(id: number): Observable<DocumentoComercial> {
+    return this.http.get<DocumentoComercial>(`${this.baseUrl}/${id}`);
   }
 }

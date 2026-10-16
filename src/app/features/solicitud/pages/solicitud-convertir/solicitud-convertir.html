@@ -45,33 +45,53 @@
 
     <form [formGroup]="clienteForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div class="flex flex-col gap-1">
-        <label>Tipo de documento</label>
-        <p-select formControlName="tipoDocumento" [options]="tiposDocumento()" optionLabel="name"
-          placeholder="Selecciona..." />
+        <p-floatlabel variant="on">
+          <p-select formControlName="tipoDocumento" [options]="tipoDocumentoPersona()" optionLabel="name"
+            inputId="tipoDocumento" styleClass="w-full" appendTo="body" />
+          <label>Tipo de documento</label>
+        </p-floatlabel>
       </div>
+
       <div class="flex flex-col gap-1">
-        <label>Número de documento</label>
-        <input pInputText formControlName="documentNumber" class="w-full" />
+        <p-floatlabel variant="on">
+          <input pInputText formControlName="documentNumber" class="w-full" />
+          <label>Número de documento</label>
+        </p-floatlabel>
       </div>
+
       <div class="flex flex-col gap-1">
-        <label>Nombre</label>
-        <input pInputText formControlName="name" class="w-full" />
+        <p-floatlabel variant="on">
+          <input pInputText formControlName="name" class="w-full" />
+          <label>Nombre</label>
+        </p-floatlabel>
       </div>
+
       <div class="flex flex-col gap-1">
-        <label>Teléfono</label>
-        <input pInputText formControlName="phone" class="w-full" />
+        <p-floatlabel variant="on">
+          <input pInputText formControlName="phone" class="w-full" />
+          <label>Teléfono</label>
+        </p-floatlabel>
       </div>
+
       <div class="flex flex-col gap-1">
-        <label>Email</label>
-        <input pInputText formControlName="email" class="w-full" />
+        <p-floatlabel variant="on">
+          <input pInputText formControlName="email" class="w-full" />
+          <label>Email</label>
+        </p-floatlabel>
       </div>
+
       <div class="flex flex-col gap-1">
-        <label>Dirección</label>
-        <input pInputText formControlName="address" class="w-full" />
+        <p-floatlabel variant="on">
+          <input pInputText formControlName="address" class="w-full" />
+          <label>Dirección</label>
+        </p-floatlabel>
       </div>
+
       <div class="flex flex-col gap-1 sm:col-span-2">
-        <label>Empresa</label>
-        <input pInputText formControlName="empresa" class="w-full" />
+        <p-floatlabel variant="on">
+          <input pInputText formControlName="empresa" class="w-full" />
+          <label>Empresa</label>
+        </p-floatlabel>
       </div>
     </form>
     }
@@ -79,51 +99,73 @@
 
   <form [formGroup]="form" class="flex flex-col gap-4">
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="flex flex-col gap-1">
-        <label>Número de Factura</label>
-        <input pInputText formControlName="numeroFactura" placeholder="A-006" class="w-full" />
+        <p-floatlabel variant="on">
+          <input pInputText formControlName="numeroFactura" id="numeroFactura" autocomplete="off" placeholder="A-001"
+            class="w-full" />
+          <label>Número de Factura</label>
+        </p-floatlabel>
       </div>
+
       <div class="flex flex-col gap-1">
-        <label>Tipo de documento</label>
-        <p-select formControlName="tipoDocumento" [options]="tiposDocumento()" optionLabel="name"
-          placeholder="Selecciona..." />
-      </div>
-      <div class="flex flex-col gap-1">
-        <label>Método de pago</label>
-        <p-select formControlName="metodoPago" [options]="metodosPago()" optionLabel="name"
-          placeholder="Selecciona..." />
+        <p-floatlabel variant="on">
+          <p-select formControlName="responsable" [options]="usuarios()" optionLabel="person.name" inputId="responsable"
+            styleClass="w-full" appendTo="body" />
+          <label>Responsable</label>
+        </p-floatlabel>
       </div>
     </div>
 
-    <div class="flex flex-col gap-1">
-      <label>Estado del documento</label>
-      <p-select formControlName="estado" [options]="estados()" optionLabel="name" placeholder="Selecciona..."
-        styleClass="w-full sm:w-64" />
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+          <p-select formControlName="metodoPago" [options]="metodosPago()" optionLabel="name" inputId="metodoPago"
+            styleClass="w-full" appendTo="body" />
+          <label>Método de pago</label>
+        </p-floatlabel>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+          <p-select formControlName="estado" [options]="estadosDocumento()" optionLabel="name" inputId="estado"
+            styleClass="w-full" appendTo="body" />
+          <label>Estado del documento</label>
+        </p-floatlabel>
+      </div>
     </div>
 
     <h3 class="font-semibold mt-2">Productos</h3>
-    <div formArrayName="detalles" class="flex flex-col gap-3">
+    <div formArrayName="detalles" class="flex flex-col gap-4">
       @for (grupo of detallesArray.controls; track $index) {
       <div [formGroupName]="$index" class="border rounded-lg p-3">
         <p class="text-xs text-gray-500 mb-2">
           Pedido originalmente: "{{ grupo.get('descripcionOriginal')?.value }}" — {{
           grupo.get('cantidadEstimadaOriginal')?.value }}
         </p>
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-          <div class="flex flex-col gap-1 sm:col-span-2">
-            <label>Bolsa del catálogo</label>
-            <p-select formControlName="bolsa" [options]="bolsas()" optionLabel="tipo"
-              placeholder="Selecciona la bolsa real" [filter]="true" filterBy="tipo"
-              (onChange)="onBolsaSeleccionada($index)" />
-          </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="flex flex-col gap-1">
-            <label>Cantidad</label>
-            <input pInputText type="number" formControlName="cantidad" class="w-full" />
+            <p-floatlabel variant="on">
+              <p-select formControlName="bolsa" [options]="bolsas()" optionLabel="tipo" [filter]="true" filterBy="tipo"
+                styleClass="w-full" appendTo="body" (onChange)="onBolsaSeleccionada($index)" />
+              <label>Bolsa del catálogo</label>
+            </p-floatlabel>
           </div>
+
           <div class="flex flex-col gap-1">
-            <label>Precio unitario</label>
-            <input pInputText type="number" formControlName="precioUnitarioSnapshot" class="w-full" />
+            <p-floatlabel variant="on">
+              <input pInputText type="number" autocomplete="off" formControlName="cantidad" class="w-full" />
+              <label>Cantidad</label>
+            </p-floatlabel>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+              <input pInputText type="number" autocomplete="off" formControlName="precioUnitarioSnapshot"
+                class="w-full" />
+              <label>Precio unitario</label>
+            </p-floatlabel>
           </div>
         </div>
         <p class="text-right text-sm font-medium mt-2">
@@ -134,8 +176,10 @@
     </div>
 
     <div class="flex flex-col gap-1">
-      <label>Observaciones</label>
-      <textarea pTextarea formControlName="observaciones" rows="3" class="w-full"></textarea>
+      <p-floatlabel variant="on">
+        <textarea pTextarea formControlName="observaciones" rows="3" class="w-full"></textarea>
+        <label>Observaciones</label>
+      </p-floatlabel>
     </div>
 
     <!-- Totales -->

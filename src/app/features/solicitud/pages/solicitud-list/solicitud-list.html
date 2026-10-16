@@ -1,4 +1,3 @@
-<!-- solicitud-list.html -->
 <p-toast />
 <p-confirmdialog />
 
@@ -25,12 +24,14 @@
 
   <p-table [value]="solicitudesFiltradas()" [loading]="loading()" [paginator]="true" [rows]="5"
     [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
+
     <ng-template pTemplate="header">
-      <tr>
+      <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
         <th pSortableColumn="fechaSolicitud">Fecha <p-sortIcon field="fechaSolicitud" /></th>
         <th>Nombre</th>
         <th>Teléfono</th>
         <th>Email</th>
+        <th>Responsable</th>
         <th style="width: 130px">Estado</th>
         <th style="width: 160px">Acciones</th>
       </tr>
@@ -41,6 +42,7 @@
         <td>{{ solicitud.name }}</td>
         <td>{{ solicitud.phone || '-' }}</td>
         <td>{{ solicitud.mail || '-' }}</td>
+        <td>{{ solicitud.documentoComercialId ? (responsables()[solicitud.documentoComercialId] || '...') : '-' }} </td>
         <td class="whitespace-nowrap">
           <p-tag [value]="solicitud.estado.name" [severity]="severityEstado(solicitud.estado.id)" />
         </td>

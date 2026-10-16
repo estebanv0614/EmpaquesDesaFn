@@ -4,13 +4,14 @@
 <div class="p-4">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-semibold">Personas</h2>
-    <p-button label="Nueva persona" icon="pi pi-plus" (onClick)="openCreate()" />
+    <p-button label="Nueva persona" icon="pi pi-plus" (onClick)="openCreate()"
+      [style]="{ 'background-color': '#16a34a', 'border-color': '#16a34a', 'color': '#ffffff' }" />
   </div>
 
   <p-table [value]="persons()" [loading]="loading()" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
     [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
-      <tr>
+      <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
         <th>Documento</th>
         <th>Nombre</th>
         <th>Teléfono</th>

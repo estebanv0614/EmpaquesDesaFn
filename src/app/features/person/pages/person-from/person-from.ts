@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, signal  } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal, computed   } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-module';
 import { MessageService } from 'primeng/api';
@@ -22,6 +22,12 @@ export class PersonFrom implements OnInit {
   form: FormGroup;
   tiposDocumento = signal<TipoDocumento[]>([]);
   isEditMode = false;
+
+  private readonly TIPOS_COMERCIALES = ['COTIZACION', 'FACTURA'];
+
+  tipoDocumentoPersona = computed(() =>
+    this.tiposDocumento().filter((t) => !this.TIPOS_COMERCIALES.includes(t.name.toUpperCase())),
+  );
 
   constructor(
     private fb: FormBuilder,

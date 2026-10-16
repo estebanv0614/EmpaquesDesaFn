@@ -25,4 +25,8 @@ export class UserService {
   getMe(): Observable<CurrentUser> {
     return this.http.get<CurrentUser>(`${this.baseUrl}/me`);
   }
+
+  getAll(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl);
+  }
 }

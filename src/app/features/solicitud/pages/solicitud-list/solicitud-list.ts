@@ -21,8 +21,8 @@ export class SolicitudList implements OnInit {
 
   selectedSolicitud = signal<SolicitudCotizacionResponse | null>(null);
   showDetalle = signal(false);
+  responsables = signal<Record<number, string>>({});
 
-  // Filtro por rango de fechas
   fechaDesde = signal<Date | null>(null);
   fechaHasta = signal<Date | null>(null);
 
@@ -60,7 +60,7 @@ export class SolicitudList implements OnInit {
   ) {}
 
   irAConvertir(solicitud: SolicitudCotizacionResponse): void {
-    if(solicitud.documentoComercialId){
+    if (solicitud.documentoComercialId) {
       this.descargarPdf(solicitud.documentoComercialId);
       return;
     }
@@ -98,6 +98,7 @@ export class SolicitudList implements OnInit {
       next: (date) => {
         this.solicitudes.set(date);
         this.loading.set(false);
+        this.cargarResponsables(date);
       },
       error: (err) => {
         console.error(err);
@@ -109,6 +110,22 @@ export class SolicitudList implements OnInit {
         });
       },
     });
+  }
+
+  private cargarResponsables(lista: SolicitudCotizacionResponse[]): void {
+    lista
+      .filter((s) => s.documentoComercialId)
+      .forEach((s) => {
+        const id = s.documentoComercialId!;
+        if (this.responsables()[id]) return; // ya cargado
+        this.documentoService.getById(id).subscribe({
+          next: (doc: any) => {
+            const nombre = doc.user?.person?.name || doc.user?.username || '-';
+            this.responsables.update((m) => ({ ...m, [id]: nombre }));
+          },
+          error: (err) => console.error(err),
+        });
+      });
   }
 
   verDetalle(solicitud: SolicitudCotizacionResponse): void {

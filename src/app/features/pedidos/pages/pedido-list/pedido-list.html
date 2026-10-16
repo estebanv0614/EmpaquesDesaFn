@@ -29,7 +29,8 @@
                 (onClick)="limpiarFiltroFecha()" />
         </div>
         <div class="flex items-center gap-2">
-            <p-button label="Create Pedido" icon="pi pi-plus" severity="success" (onClick)="openCreate()" />
+            <p-button label="Nuevo Pedido" icon="pi pi-plus" (onClick)="openCreate()"
+                [style]="{ 'background-color': '#16a34a', 'border-color': '#16a34a', 'color': '#ffffff' }" />
             <p-button label="Actualizar" icon="pi pi-refresh" [text]="true" (onClick)="loadPedidos()" />
         </div>
     </div>
@@ -54,7 +55,7 @@
             </div>
         </ng-template>
         <ng-template pTemplate="header">
-            <tr>
+            <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
                 <th pSortableColumn="numeroPedido">N° Pedido <p-sortIcon field="numeroPedido" /></th>
                 <th>Cliente</th>
                 <th pSortableColumn="fechaPedido">Solicitud de pedido <p-sortIcon field="fechaPedido" /></th>

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -45,6 +45,22 @@ export class SolicitudConvertir implements OnInit {
   tiposDocumento = signal<TipoDocumento[]>([]);
   metodosPago = signal<MetodoPago[]>([]);
   estados = signal<Estado[]>([]);
+  usuarios = signal<any[]>([]);
+
+  private readonly TIPOS_COMERCIALES = ['COTIZACION', 'FACTURA'];
+  private readonly ESTADO_DOCUMENTO = ['APROBADA', 'RECHAZADA']
+
+  tipoDocumentoPersona = computed(() =>
+    this.tiposDocumento().filter((t) => !this.TIPOS_COMERCIALES.includes(t.name.toUpperCase())),
+  );
+
+  tipoCotizacion = computed(
+    () => this.tiposDocumento().find((t) => t.name.toUpperCase() === 'COTIZACION') ?? null,
+  );
+
+  estadosDocumento = computed(() =>
+  this.estados().filter((e) => this.ESTADO_DOCUMENTO.includes(e.name.toUpperCase())),
+);
 
   form: FormGroup;
   clienteForm: FormGroup;
@@ -68,7 +84,7 @@ export class SolicitudConvertir implements OnInit {
   ) {
     this.form = this.fb.group({
       numeroFactura: ['', Validators.required],
-      tipoDocumento: [null, Validators.required],
+      responsable: [null, Validators.required],
       metodoPago: [null, Validators.required],
       estado: [null, Validators.required],
       observaciones: [''],
@@ -98,6 +114,14 @@ export class SolicitudConvertir implements OnInit {
     this.tipoDocumentoService.getAll().subscribe((data) => this.tiposDocumento.set(data));
     this.metodoPagoService.getAll().subscribe((data) => this.metodosPago.set(data));
     this.estadoService.getAll().subscribe((data) => this.estados.set(data));
+
+    this.userService.getAll().subscribe((lista: any[]) => {
+      this.usuarios.set(lista);
+      this.userService.getMe().subscribe((me: any) => {
+        const actual = lista.find((u) => u.id === me.id) ?? null;
+        this.form.patchValue({ responsable: actual });
+      });
+    });
 
     this.solicitudService.getById(id).subscribe({
       next: (data) => {
@@ -224,6 +248,16 @@ export class SolicitudConvertir implements OnInit {
       return;
     }
 
+    if (!this.tipoCotizacion()) {
+      this.guardando.set(false);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Falta configuración',
+        detail: 'No existe el tipo de documento COTIZACION en la base de datos',
+      });
+      return;
+    }
+
     const clienteExistente = this.clienteEncontrado();
     if (clienteExistente) {
       this.crearDocumento(clienteExistente);
@@ -277,64 +311,62 @@ export class SolicitudConvertir implements OnInit {
   }
 
   private crearDocumento(cliente: Client): void {
-    this.userService.getMe().subscribe({
-      next: (user) => {
-        const payload: DocumentoComercial = {
-          numeroFactura: this.form.value.numeroFactura,
-          tipoDocumento: this.form.value.tipoDocumento,
-          client: cliente,
-          user: { id: user.id },
-          fechaEmision: new Date().toISOString(),
-          subtotal: this.subtotalGeneral(),
-          iva: this.ivaCalculado(),
-          total: this.totalGeneral(),
-          metodoPago: this.form.value.metodoPago,
-          estado: this.form.value.estado,
-          referenciaCotizacionId: this.solicitud()?.id,
-          observaciones: this.form.value.observaciones,
-          detalles: this.detallesArray.controls.map((grupo, i) => ({
-            bolsa: grupo.get('bolsa')?.value,
-            cantidad: grupo.get('cantidad')?.value,
-            precioUnitarioSnapshot: grupo.get('precioUnitarioSnapshot')?.value,
-            subtotal: this.subtotalLinea(i),
-          })),
-        };
+    const solicitudId = this.solicitud()?.id;
+    if (!solicitudId) {
+      this.guardando.set(false);
+      return;
+    }
 
-        const solicitudId = this.solicitud()?.id;
-        if (!solicitudId) return;
+    const payload: DocumentoComercial = {
+      numeroFactura: this.form.value.numeroFactura,
+      tipoDocumento: this.tipoCotizacion()!,
+      client: cliente,
+      user: { id: this.form.value.responsable.id },
+      fechaEmision: new Date().toISOString(),
+      subtotal: this.subtotalGeneral(),
+      iva: this.ivaCalculado(),
+      total: this.totalGeneral(),
+      metodoPago: this.form.value.metodoPago,
+      estado: this.form.value.estado,
+      referenciaCotizacionId: solicitudId,
+      observaciones: this.form.value.observaciones,
+      detalles: this.detallesArray.controls.map((grupo, i) => ({
+        bolsa: grupo.get('bolsa')?.value,
+        cantidad: grupo.get('cantidad')?.value,
+        precioUnitarioSnapshot: grupo.get('precioUnitarioSnapshot')?.value,
+        subtotal: this.subtotalLinea(i),
+      })),
+    };
 
-        this.solicitudService.convertir(solicitudId, payload).subscribe({
-          next: (documentoCreado) => {
-            this.guardando.set(false);
-            this.documentoCreado.set(documentoCreado);
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Cotización creada',
-              detail: 'El documento comercial se generó correctamente',
-            });
-          },
-          error: (err) => {
-            if (err.status === 409) {
-              this.guardando.set(false);
-              this.messageService.add({
-                severity: 'warn',
-                summary: 'Ya convertida',
-                detail: 'Esta solicitud ya tiene una cotización generada',
-              });
-              this.router.navigate(['/solicitudes-cotizacion']);
-              return;
-            }
-            this.manejarError(err, 'No se pudo crear el documento comercial');
-          },
+    this.solicitudService.convertir(solicitudId, payload).subscribe({
+      next: (documentoCreado) => {
+        this.guardando.set(false);
+        this.documentoCreado.set(documentoCreado);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Cotización creada',
+          detail: 'El documento comercial se generó correctamente',
         });
       },
-      error: (err) => this.manejarError(err, 'No se pudo obtener el usuario actual'),
+      error: (err) => {
+        if (err.status === 409) {
+          this.guardando.set(false);
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Ya convertida',
+            detail: 'Esta solicitud ya tiene una cotización generada',
+          });
+          this.router.navigate(['/solicitudes-cotizacion']);
+          return;
+        }
+        this.manejarError(err, 'No se pudo crear el documento comercial');
+      },
     });
   }
 
   descargarPdf(): void {
     const doc = this.documentoCreado();
-    console.log('numero del pdf', doc)
+    console.log('numero del pdf', doc);
     if (!doc?.id) return;
 
     this.documentoService.descargarPdf(doc.id).subscribe({

@@ -9,7 +9,7 @@
   <p-table [value]="ordenes()" [loading]="loading()" [paginator]="true" [rows]="10"
     [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
-      <tr>
+      <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
         <th>Orden</th>
         <th>Bolsa</th>
         <th>A producir</th>

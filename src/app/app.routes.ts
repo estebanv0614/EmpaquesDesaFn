@@ -86,7 +86,7 @@ export const routes: Routes = [
        path: 'politica-reembolsos',
        loadComponent: () =>
        import('./layout/components/politica-reembolsos/politica-reembolsos').then((m) => m.PoliticaReembolsos),
-      },  
+      },
       {
         path: 'solicitudes-cotizacion/:id/convertir',
         canActivate: [authGuard, convertirSolicitudGuard],

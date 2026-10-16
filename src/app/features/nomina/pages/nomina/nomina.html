@@ -9,13 +9,15 @@
                 <p-datepicker [ngModel]="semana()" (ngModelChange)="cambiarSemana($event)" dateFormat="dd/mm/yy"
                     [showIcon]="true" appendTo="body" />
             </div>
-            <p-button label="Generar nómina" icon="pi pi-cog" (onClick)="generar()" [loading]="generando()" [disabled]="generando()" />
+            <p-button label="Generar nómina" icon="pi pi-cog" (onClick)="generar()" [loading]="generando()"
+                [disabled]="generando()"
+                [style]="{ 'background-color': '#16a34a', 'border-color': '#16a34a', 'color': '#ffffff' }" />
         </div>
     </div>
 
     <p-table [value]="pagos()" [loading]="loading()" [tableStyle]="{ 'min-width': '60rem' }">
         <ng-template pTemplate="header">
-            <tr>
+            <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
                 <th>Empleado</th>
                 <th>Cargo</th>
                 <th>Salario base</th>
