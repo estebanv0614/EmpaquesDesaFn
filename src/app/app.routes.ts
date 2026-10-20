@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { Home } from './features/home/pages/home/home';
 import { Layout } from './layout/layout/layout';
 import { Login } from './features/auth/pages/login/login';
-import { authGuard } from './core/guards/auth-guard';
+import { authGuard, adminGuard } from './core/guards/auth-guard';
 import { convertirSolicitudGuard } from './convertir-solicitud-guard';
 
 export const routes: Routes = [
@@ -22,13 +22,13 @@ export const routes: Routes = [
       },
       {
         path: 'persons',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/person/pages/person-list/person-list').then((m) => m.PersonList),
       },
       {
         path: 'solicitudes-cotizacion',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/solicitud/pages/solicitud-list/solicitud-list').then(
             (s) => s.SolicitudList,
@@ -89,7 +89,7 @@ export const routes: Routes = [
       },
       {
         path: 'solicitudes-cotizacion/:id/convertir',
-        canActivate: [authGuard, convertirSolicitudGuard],
+        canActivate: [adminGuard, convertirSolicitudGuard],
         loadComponent: () =>
         import('./features/solicitud/pages/solicitud-convertir/solicitud-convertir').then(
             (m) => m.SolicitudConvertir,
@@ -97,12 +97,12 @@ export const routes: Routes = [
        },
        {
         path: 'bolsas',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadComponent: () => import('./features/productos/pages/bolsa-list/bolsa-list').then(b => b.BolsaList)
       },
       {
         path: 'form-bolsa',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadComponent: () => import('./features/productos/pages/bolsa-form/bolsa-form').then(bf => bf.BolsaForm)
       },
       {
@@ -112,8 +112,13 @@ export const routes: Routes = [
       },
       {
         path: 'pedidos',
-        canActivate: [authGuard],
+        canActivate: [adminGuard],
         loadComponent: () => import('./features/pedidos/pages/pedido-list/pedido-list').then(m => m.PedidoList)
+      },
+      {
+        path: 'dashboard',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(d => d.Dashboard)
       },
       {
         path: 'contacto',

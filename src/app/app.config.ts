@@ -7,6 +7,7 @@ import Aura from '@primeuix/themes/aura';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
 import { loadingInterceptor } from './core/interceptors/loading-interceptor';
+import { authErrorInterceptor } from './core/interceptors/auth-error-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +16,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
     ),
-    provideHttpClient(withInterceptors([authInterceptor, loadingInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, authErrorInterceptor, loadingInterceptor])),
     providePrimeNG({
       theme: {
         preset: Aura,

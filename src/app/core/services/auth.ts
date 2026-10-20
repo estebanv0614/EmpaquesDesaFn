@@ -46,8 +46,25 @@ export class Auth {
     this.roles.set([]);
   }
 
+  /** Devuelve el token solo si existe y NO ha vencido */
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    const token = localStorage.getItem(this.tokenKey);
+    if (!token || this.isExpired(token)) {
+      return null;
+    }
+    return token;
+  }
+
+  /**
+   * Revisa si la sesión sigue vigente. Si el token venció, cierra la sesión
+   * (borra token, usuario y roles) para que la app no crea que sigue logueada.
+   */
+  sessionValid(): boolean {
+    const token = localStorage.getItem(this.tokenKey);
+    if (token && this.isExpired(token)) {
+      this.logout();
+    }
+    return this.isLoggedIn();
   }
 
   isCliente(): boolean {
@@ -59,6 +76,19 @@ export class Auth {
   }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    const token = localStorage.getItem(this.tokenKey);
+    return !!token && !this.isExpired(token);
+  }
+
+  /** Lee el campo "exp" (segundos) del JWT. Si no se puede leer, NO se considera vencido. */
+  private isExpired(token: string): boolean {
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      const exp = JSON.parse(json).exp;
+      return typeof exp === 'number' && exp * 1000 <= Date.now();
+    } catch {
+      return false;
+    }
   }
 }
