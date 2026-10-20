@@ -13,10 +13,12 @@
         <ng-template pTemplate="header">
             <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
                 <th>Id</th>
-                <th>Nombre</th>
+                <th>Material</th>
                 <th>Unidad</th>
-                <th>Costo</th>
+                <th>Categoria</th>
                 <th>Stock Actual</th>
+                <th>Stock Minimo</th>
+                <th>Alerta</th>
                 <th style="width: 120px">Acciones</th>
             </tr>
         </ng-template>
@@ -25,8 +27,12 @@
                 <td>{{material.id}}</td>
                 <td>{{material.name}}</td>
                 <td>{{material.unidadMedida}}</td>
-                <td>{{material.costoUnitario}}</td>
+                <td>{{material.categoria}}</td>
                 <td>{{material.stockActual}}</td>
+                <td>{{material.stockMinimo}}</td>
+                <td>@if (material.stockActual
+                    < material.stockMinimo) { <p-tag value="Bajo" severity="danger" />
+                    }
                 <td>
                     <div class="flex gap-2">
                         <p-button icon="pi pi-pencil" severity="info" [text]="true"
@@ -39,3 +45,6 @@
         </ng-template>
     </p-table>
 </div>
+@if (showForm) {
+<app-material-form [material]="selectedMaterial" (closed)="onFormClosed($event)" />
+}

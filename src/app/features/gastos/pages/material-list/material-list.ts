@@ -3,12 +3,13 @@ import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-modu
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MaterialService } from '../../../../core/services/material.service';
 import { Material } from '../../../../shared/models/material.model';
+import { MaterialForm } from '../material-form/material-form';
 
 
 @Component({
   selector: 'app-material-list',
   standalone: true,
-  imports: [PrimeImportsModule],
+  imports: [PrimeImportsModule, MaterialForm],
   templateUrl: './material-list.html',
   styleUrl: './material-list.css',
 })

@@ -2,6 +2,7 @@ export interface Material {
   id: number;
   name: string;
   unidadMedida: string;
-  costoUnitario: number;
+  categoria: string;
+  stockMinimo: number;
   stockActual: number;
 }

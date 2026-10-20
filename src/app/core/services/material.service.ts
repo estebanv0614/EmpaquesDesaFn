@@ -25,4 +25,8 @@ export class MaterialService {
     delete(id: number): Observable<void>{
         return this.http.delete<void>(`${this.baseUrl}/${id}`);
     }
+
+    update(id: number, material: Material): Observable<Material> {
+        return this.http.put<Material>(`${this.baseUrl}/${id}`, material);
+    }
 }
