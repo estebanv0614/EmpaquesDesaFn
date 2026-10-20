@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink, Router } from "@angular/router";
-import { ChatWidgetService } from '../../shared/services/chat-widget';
+import { RouterLink, Router } from '@angular/router';
+import { ChatService } from '../../core/services/chat.service';
 
 @Component({
   selector: 'app-footer',
@@ -10,9 +10,7 @@ import { ChatWidgetService } from '../../shared/services/chat-widget';
   styleUrl: './footer.css',
 })
 export class Footer {
-  chatService = inject(ChatWidgetService);
+  chatService = inject(ChatService);
 
-  constructor(
-    public router: Router
-  ) {}
+  constructor(public router: Router) {}
 }
