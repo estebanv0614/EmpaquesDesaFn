@@ -4,12 +4,13 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { MaterialService } from '../../../../core/services/material.service';
 import { Material } from '../../../../shared/models/material.model';
 import { MaterialForm } from '../material-form/material-form';
+import { MovimientoList } from '../../components/movimiento-list/movimiento-list';
 
 
 @Component({
   selector: 'app-material-list',
   standalone: true,
-  imports: [PrimeImportsModule, MaterialForm],
+  imports: [PrimeImportsModule, MaterialForm, MovimientoList],
   templateUrl: './material-list.html',
   styleUrl: './material-list.css',
 })

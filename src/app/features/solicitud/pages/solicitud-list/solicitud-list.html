@@ -4,7 +4,6 @@
 <div class="p-4">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-semibold">Solicitudes de cotización</h2>
-    <p-button label="Actualizar" icon="pi pi-refresh" [text]="true" (onClick)="loadSolicitudes()" />
   </div>
 
   <div class="flex flex-wrap items-end gap-3 mb-4">
@@ -20,6 +19,10 @@
     </div>
     <p-button label="Limpiar filtro" icon="pi pi-filter-slash" severity="secondary" [text]="true"
       (onClick)="limpiarFiltroFecha()" />
+
+    <div class="ml-auto flex items-center gap-2">
+      <p-button label="Actualizar" icon="pi pi-refresh" [text]="true" (onClick)="loadSolicitudes()" />
+    </div>
   </div>
 
   <p-table [value]="solicitudesFiltradas()" [loading]="loading()" [paginator]="true" [rows]="5"
@@ -77,7 +80,6 @@
   </p-table>
 </div>
 
-<!-- Modal de detalle -->
 <p-dialog [visible]="showDetalle()" (visibleChange)="showDetalle.set($event)" [modal]="true"
   [style]="{ width: '500px' }" header="Detalle de la solicitud" (onHide)="cerrarDetalle()">
   @if (selectedSolicitud(); as s) {

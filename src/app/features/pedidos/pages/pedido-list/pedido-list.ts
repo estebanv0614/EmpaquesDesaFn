@@ -23,7 +23,7 @@ import { OrdenProduccionList } from '../../components/orden-produccion-list/orde
     PedidoForm,
     ExportarButton,
     Estadistidas,
-    OrdenProduccionList
+    OrdenProduccionList,
   ],
   templateUrl: './pedido-list.html',
   styleUrl: './pedido-list.css',
@@ -36,9 +36,11 @@ export class PedidoList implements OnInit {
   showDetalle = signal(false);
   selectedPedido = signal<Pedido | null>(null);
 
-  // Filtro por rango de fechas (fecha del pedido)
   fechaDesde = signal<Date | null>(null);
   fechaHasta = signal<Date | null>(null);
+  totalPedidos = computed(() =>
+    this.pedidosFiltrados().reduce((acc, p) => acc + (p.total || 0), 0),
+  );
 
   pedidosFiltrados = computed(() => {
     const desde = this.fechaDesde();
@@ -64,6 +66,35 @@ export class PedidoList implements OnInit {
   estadosManuales = computed(() =>
     this.estados().filter((e) => e.name === 'ENTREGADO' || e.name === 'CANCELADO'),
   );
+
+  estadoPorNombre(nombre: string): Estado | undefined {
+    return this.estados().find((e) => e.name === nombre);
+  }
+
+  marcarComoEntregado(pedido: Pedido): void {
+    if (pedido.entregado) return;
+
+    this.pedidoService.marcarComoEntregado(pedido.id).subscribe({
+      next: (actualizado) => {
+        pedido.entregado = actualizado.entregado;
+        pedido.fechaEntrega = actualizado.fechaEntrega;
+        this.pedidoService.notificarActualizacion();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Entrega registrada',
+          detail: `Pedido ${pedido.numeroPedido} marcado como entregado`,
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo registrar la entrega',
+        });
+      },
+    });
+  }
 
   limpiarFiltroFecha(): void {
     this.fechaDesde.set(null);

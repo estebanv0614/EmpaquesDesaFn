@@ -15,48 +15,48 @@
           </li>
           } @else {
           <li>
+            <a routerLink="/dashboard" class="text-black transition hover:text-green-800" class="pi pi-chart-line">
+              Dashboard </a>
+          </li>
+          <li>
             <a routerLink="/solicitudes-cotizacion" class="text-black transition hover:text-green-800"><i
-                class="pi pi-phone"></i> Solicitudes</a>
+                class="pi pi-file-pdf"></i> Solicitudes</a>
           </li>
           <li>
-            <a routerLink="/persons" class="text-black transition hover:text-green-800"> Personas </a>
+            <a routerLink="/persons" class="text-black transition hover:text-green-800" class="pi pi-users"> Personas
+            </a>
           </li>
           <li>
-            <a routerLink="/bolsas" class="text-black transition hover:text-green-800"> Bolsas </a>
+            <a routerLink="/bolsas" class="text-black transition hover:text-green-800" class="pi pi-book"> Catálogo </a>
           </li>
           <li>
-            <a routerLink="/pedidos" class="text-black transition hover:text-green-800"> Pedidos </a>
+            <a routerLink="/pedidos" class="text-black transition hover:text-green-800" class="pi pi-shopping-cart">
+              Pedidos </a>
           </li>
           <li>
-<<<<<<< Updated upstream
-            <a routerLink="/gastos" class="text-black transition hover:text-green-800"> Gastos </a>
+            <a routerLink="/gastos" class="text-black transition hover:text-green-800" class="pi pi-credit-card"> Gastos
+            </a>
           </li>
           <li>
-            <a routerLink="/nomina" class="text-black transition hover:text-green-800"> Nomina </a>
+            <a routerLink="/nomina" class="text-black transition hover:text-green-800" class="pi pi-money-bill"> Nomina
+            </a>
           </li>
           <li>
-            <a routerLink="/empleado" class="text-black transition hover:text-green-800"> Empleados </a>
-          </li>
-          <li>
-            <a routerLink="/material" class="text-black transition hover:text-green-800"> Material </a>
-=======
-            <a routerLink="/dashboard" class="text-black transition hover:text-green-800"> Dashboard </a>
->>>>>>> Stashed changes
+            <a routerLink="/material" class="text-black transition hover:text-green-800" class="pi pi-tags"> Material
+            </a>
           </li>
           }
           } @else {
           <li>
-            <a routerLink="/home" class="text-black transition hover:text-green-800"><i class="pi pi-home"></i>
-              Inicio</a>
+            <a routerLink="/home" class="text-black transition hover:text-green-800" class="pi pi-home"> Inicio</a>
           </li>
           <li>
-            <a routerLink="/catalago" class="text-gray-500 transition hover:text-gray-500/75">Catálogo</a>
+            <a routerLink="/catalago" class="text-gray-500 transition hover:text-gray-500/75" class="pi pi-book">
+              Catálogo</a>
           </li>
           <li>
-            <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Acerca de nosotros </a>
-          </li>
-          <li>
-            <a routerLink="/solicitar-cotizacion" class="text-gray-500 transition hover:text-gray-500/75"> Solicitar
+            <a routerLink="/solicitud-nueva" class="text-gray-500 transition hover:text-gray-500/75"
+              class="pi pi-file-edit"> Solicitar
               cotización </a>
           </li>
           }
@@ -68,20 +68,29 @@
         <div class="flex items-center gap-4">
           @if (auth.isLoggedIn()) {
           <div class="flex items-center gap-3">
-            <span class="rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-white">
-              Bienvenido, <span class="font-semibold">{{ auth.username() }}</span>
-            </span>
+            <button type="button"
+              class="inline-flex items-center gap-2 rounded-md bg-green-100 px-5 py-2.5 text-sm font-medium text-green-600
+         transition-colors hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
+              <i class="pi pi-user text-lg" style="text-shadow: 0 0 1px currentColor"></i>
+              <span class="font-semibold">{{ auth.username() }}</span>
+            </button>
+            <!-- <span class="inline-flex items-center gap-2 rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-white">
+              <i class="pi pi-user-circle"></i>
+              <span class="font-semibold">{{ auth.username() }}</span>
+            </span> -->
             <button (click)="logout()"
-              class="hidden rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 sm:block">
-              Cerrar sesión
+              class="hidden items-center gap-2 rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 sm:flex">
+              <i class="pi pi-sign-out"></i>
+              Salir
             </button>
           </div>
           } @else {
           <div class="sm:flex sm:gap-4">
             <a routerLink="login"
-              class="block rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-black-100 transition hover:bg-green-600">Login</a>
+              class="block rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-black-100 transition hover:bg-green-600">
+              <i class="pi pi-lock"></i> Login</a>
             <a class="hidden rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 sm:block"
-              href="#">Register</a>
+              href="#"><i class="pi pi-user-plus"></i> Register</a>
           </div>
           }
 

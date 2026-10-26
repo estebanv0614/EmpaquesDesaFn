@@ -1,0 +1,50 @@
+<p-toast />
+
+<div class="p-4">
+  <div class="flex flex-wrap justify-between items-end gap-3 mb-4">
+    <h2 class="text-xl font-semibold">Movimientos de inventario</h2>
+    <div class="flex items-end gap-3">
+      <p-floatlabel variant="on">
+        <p-select inputId="tipo" [ngModel]="tipoFiltro()" (ngModelChange)="tipoFiltro.set($event)" [options]="tipos"
+          optionLabel="label" optionValue="value" [showClear]="true" styleClass="w-full min-w-48" appendTo="body" />
+        <label for="tipo">Tipo de movimiento</label>
+      </p-floatlabel>
+      <p-button label="Actualizar" icon="pi pi-refresh" [text]="true" (onClick)="load()" />
+    </div>
+  </div>
+
+  <p-table [value]="movimientoFiltrado()" [loading]="loading()" [paginator]="true" [rows]="10"
+    [rowsPerPageOptions]="[10, 20, 50]" [tableStyle]="{ 'min-width': '60rem' }">
+    <ng-template pTemplate="header">
+      <tr style="--p-datatable-header-cell-background:#16a34a; --p-datatable-header-cell-color:#ffffff;">
+        <th>Fecha</th>
+        <th>Material</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Stock antes</th>
+        <th>Stock después</th>
+        <th>Costo unitario</th>
+        <th>Referencia</th>
+        <th>Responsable</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-m>
+      <tr>
+        <td>{{ m.fechaMovimiento | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ m.material?.name }}</td>
+        <td><p-tag [value]="m.tipoMovimiento" [severity]="severity(m.tipoMovimiento)" /></td>
+        <td>{{ m.cantidad }} {{ m.material?.unidadMedida }}</td>
+        <td>{{ m.stockAntes }}</td>
+        <td>{{ m.stockDespues }}</td>
+        <td>{{ m.costoUnitario != null ? (m.costoUnitario | currency:'COP':'symbol-narrow':'1.0-0') : '-' }}</td>
+        <td>{{ m.referencia || '-' }}</td>
+        <td>{{ m.user?.person?.name || m.user?.username || '-' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="9" class="text-center py-4">No hay movimientos registrados</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

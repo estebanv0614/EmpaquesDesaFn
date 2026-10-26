@@ -27,4 +27,6 @@ export interface Pedido {
   detalles: DetallePedido[];
   pagado: boolean;
   fechaPago?: string;
+  entregado?: boolean;
+  fechaEntrega?: string;
 }

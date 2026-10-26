@@ -145,6 +145,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/gastos/pages/material-list/material-list').then(m => m.MaterialList)
       },
       {
+        path: 'movimiento-inventario',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/gastos/components/movimiento-list/movimiento-list').then(mi => mi.MovimientoList)
+      },
+      {
         path: 'ordenes-produccion',
         canActivate: [authGuard],
         loadChildren: () => import('./features/pedidos/components/orden-produccion-list/orden-produccion-list').then(od => od.OrdenProduccionList)

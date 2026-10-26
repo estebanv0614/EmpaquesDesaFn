@@ -43,6 +43,10 @@ export class PedidoService {
     return this.http.patch<Pedido>(`${this.baseUrl}/${id}/pagar`, {});
   }
 
+  marcarComoEntregado(id: number): Observable<Pedido> {
+    return this.http.patch<Pedido>(`${this.baseUrl}/${id}/entregar`, {});
+  }
+
   exportarExcel(periodo: 'semana' | 'mes' | 'anio', fecha?: string): Observable<Blob> {
     let params = `periodo=${periodo}`;
     if (fecha) params += `&fecha=${fecha}`;

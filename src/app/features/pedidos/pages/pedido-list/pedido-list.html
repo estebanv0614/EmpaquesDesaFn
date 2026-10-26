@@ -61,8 +61,9 @@
                 <th pSortableColumn="fechaPedido">Solicitud de pedido <p-sortIcon field="fechaPedido" /></th>
                 <th>Total</th>
                 <th pSortableColumn="fechaEntregaEstimada">Entrega <p-sortIcon field="fechaEntregaEstimada" /></th>
-                <th style="width: 130px">Estado</th>
-                <th style="width: 260px">Cambiar estado</th>
+                <th style="width: 130px">Orden</th>
+                <th style="width: 150px">Cambiar estado</th>
+                <th style="width: 130px">Fecha Entrega</th>
                 <th style="width: 130px">Pago</th>
                 <th style="width: 60px">Ver</th>
             </tr>
@@ -77,10 +78,17 @@
                 <td class="whitespace-nowrap">
                     <p-tag [value]="pedido.estado.name" [severity]="severityEstado(pedido.estado.name)" />
                 </td>
-                <td>
-                    <p-select [ngModel]="pedido.estado" [options]="estadosManuales()" optionLabel="name"
-                        (onChange)="cambiarEstado(pedido, $event.value)" appendTo="body" styleClass="w-full" />
+                <td class="whitespace-nowrap">
+                    @if (pedido.entregado) {
+                    <p-tag value="ENTREGADO" severity="success" />
+                    } @else if (pedido.estado.name === 'FINALIZADA') {
+                    <p-button label="Pendiente" size="small" severity="warn" [text]="true"
+                        (onClick)="marcarComoEntregado(pedido)" />
+                    } @else {
+                    <span class="text-sm text-gray-500">-</span>
+                    }
                 </td>
+                <td>{{ pedido.fechaEntrega }}</td>
                 <td class="whitespace-nowrap">
                     @if (pedido.pagado) {
                     <p-tag value="PAGADO" severity="success" />
@@ -92,6 +100,13 @@
                 <td>
                     <p-button icon="pi pi-eye" [text]="true" (onClick)="verDetalle(pedido)" />
                 </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="3" class="text-right font-bold">Total</td>
+                <td class="font-bold">{{ totalPedidos() | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                <td colspan="5"></td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
