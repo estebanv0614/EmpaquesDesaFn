@@ -3,15 +3,9 @@ import { CommonModule } from '@angular/common';
 import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-module';
 import { PedidoService } from '../../../../core/services/pedido.service';
 import { Pedido } from '../../../../shared/models/pedido.model';
+import { GastoOperativoService } from '../../../../core/services/gasto-operativo.service';
+import { GastoOperativo } from '../../../../shared/models/gasto-operativo.model';
 
-/**
- * Dashboard financiero del mes.
- *
- * INGRESOS: salen de los pedidos (campos total, pagado, fechaPago y fechaPedido).
- * GASTOS:   empleados, materiales y otros. Todavía NO están conectados al backend:
- *           ver las señales "gastosEmpleados", "gastosMateriales" y "gastosOtros"
- *           y el método cargarGastos() más abajo.
- */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -28,11 +22,38 @@ export class Dashboard implements OnInit {
   /** Primer día del mes que se está mirando */
   mes = signal<Date>(this.inicioDeMes(new Date()));
 
-  // ---------- GASTOS (pendientes de conectar al backend) ----------
-  // null = "sin datos todavía". Cuando exista el endpoint, se asignan aquí los montos del mes.
-  gastosEmpleados = signal<number | null>(null);
-  gastosMateriales = signal<number | null>(null);
-  gastosOtros = signal<number | null>(null);
+  // ---------- GASTOS (vienen de /gastos-operativos) ----------
+  gastosOperativos = signal<GastoOperativo[]>([]);
+  gastosCargados = signal(false);
+
+  /** Gastos del mes seleccionado */
+  gastosDelMes = computed(() =>
+    this.gastosOperativos().filter((g) => this.mismoMes(this.parseFecha(g.fechaGasto), this.mes())),
+  );
+
+  /** Gastos con material asociado */
+  listaMateriales = computed(() => this.gastosDelMes().filter((g) => this.esMaterial(g)));
+
+  /** Gastos de nómina / salarios (y no de material) */
+  listaEmpleados = computed(() =>
+    this.gastosDelMes().filter((g) => !this.esMaterial(g) && this.esEmpleado(g)),
+  );
+
+  /** El resto de gastos */
+  listaOtros = computed(() =>
+    this.gastosDelMes().filter((g) => !this.esMaterial(g) && !this.esEmpleado(g)),
+  );
+
+  // null = "sin datos todavía" (aún no responde el backend)
+  gastosEmpleados = computed<number | null>(() =>
+    this.gastosCargados() ? this.sumarGastos(this.listaEmpleados()) : null,
+  );
+  gastosMateriales = computed<number | null>(() =>
+    this.gastosCargados() ? this.sumarGastos(this.listaMateriales()) : null,
+  );
+  gastosOtros = computed<number | null>(() =>
+    this.gastosCargados() ? this.sumarGastos(this.listaOtros()) : null,
+  );
 
   // ---------- Cálculos ----------
   etiquetaMes = computed(() => this.nombreMes(this.mes(), true));
@@ -147,7 +168,10 @@ export class Dashboard implements OnInit {
     plugins: { legend: { position: 'bottom' } },
   };
 
-  constructor(private pedidoService: PedidoService) {}
+  constructor(
+    private pedidoService: PedidoService,
+    private gastoService: GastoOperativoService,
+  ) {}
 
   ngOnInit(): void {
     this.cargar();
@@ -172,23 +196,24 @@ export class Dashboard implements OnInit {
     this.cargarGastos();
   }
 
-  /**
-   * PENDIENTE: conectar con el backend.
-   * Cuando existan los endpoints de gastos, pedir aquí los montos del mes seleccionado y hacer:
-   *   this.gastosEmpleados.set(montoEmpleados);
-   *   this.gastosMateriales.set(montoMateriales);
-   *   this.gastosOtros.set(montoOtros);
-   * Mientras no se llame, el dashboard muestra "Sin datos" en los gastos.
-   */
+  /** Trae todos los gastos operativos; el filtro por mes y la separación se hacen en los computed. */
   private cargarGastos(): void {
-    // Intencionalmente vacío por ahora.
+    this.gastoService.getAll().subscribe({
+      next: (data) => {
+        this.gastosOperativos.set(data);
+        this.gastosCargados.set(true);
+      },
+      error: (err) => {
+        console.error(err);
+        this.gastosCargados.set(false);
+      },
+    });
   }
 
   // ---------- Navegación entre meses ----------
   mesAnterior(): void {
     const m = this.mes();
     this.mes.set(new Date(m.getFullYear(), m.getMonth() - 1, 1));
-    this.cargarGastos();
   }
 
   mesSiguiente(): void {
@@ -197,12 +222,33 @@ export class Dashboard implements OnInit {
     }
     const m = this.mes();
     this.mes.set(new Date(m.getFullYear(), m.getMonth() + 1, 1));
-    this.cargarGastos();
   }
 
   // ---------- Utilidades ----------
   private fechaIngreso(p: Pedido): Date {
     return new Date(p.fechaPago ?? p.fechaPedido);
+  }
+
+  /** "2026-10-01" se lee como fecha local (new Date() la corre un día por la zona horaria). */
+  private parseFecha(s: string): Date {
+    const [a, m, d] = (s ?? '').substring(0, 10).split('-').map(Number);
+    return new Date(a, (m || 1) - 1, d || 1);
+  }
+
+  private normalizar(s?: string | null): string {
+    return (s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  }
+
+  private esMaterial(g: GastoOperativo): boolean {
+    return !!g.material;
+  }
+
+  private esEmpleado(g: GastoOperativo): boolean {
+    return /nomina|salario|sueldo|empleado/.test(this.normalizar(g.tipoGasto?.name));
+  }
+
+  private sumarGastos(lista: GastoOperativo[]): number {
+    return lista.reduce((acc, g) => acc + (g.monto ?? 0), 0);
   }
 
   private sumar(lista: Pedido[]): number {
