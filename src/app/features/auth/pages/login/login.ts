@@ -49,9 +49,7 @@ export class Login implements OnInit {
     const { username, password } = this.exampleForm.value;
     this.auth.login(username, password).subscribe({
       next: (response) => {
-        console.log('Login OK', response);
         this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Inicio de sesión correcto',});
-        //this.router.navigate(['/home']); // ahora sí lo usamos
         setTimeout(() => {
           if (this.auth.isCliente()) {
             this.router.navigate(['/mis-pedidos']);
@@ -70,9 +68,5 @@ export class Login implements OnInit {
   isInvalid(controlName: string) {
     const control = this.exampleForm.get(controlName);
     return control?.invalid && (control.touched || this.formSubmitted);
-  }
-
-  testClick() {
-    console.log('Botón clickeado');
   }
 }

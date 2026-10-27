@@ -45,7 +45,41 @@
                 <label for="address">Dirección</label>
             </p-floatlabel>
         </div>
+        @if (tieneCliente) {
+        <div class="col-span-1 sm:col-span-2 mt-3">
+            <h3 class="text-lg font-semibold border-b pb-2">
+                Datos comerciales del cliente
+            </h3>
+        </div>
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <input pInputText formControlName="empresa" class="w-full" />
+                <label>Empresa</label>
+            </p-floatlabel>
+        </div>
 
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <p-select formControlName="tipoCliente" [options]="tipoCliente" optionLabel="label" optionValue="value"
+                    inputId="tipoCliente" styleClass="w-full" appendTo="body" />
+                <label for="tipoCliente">Tipo de cliente</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <input pInputText formControlName="direccionEntrega" id="direccionEntrega" class="w-full" />
+                <label for="direccionEntrega">Dirección de entrega</label>
+            </p-floatlabel>
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <p-floatlabel variant="on">
+                <input pInputText formControlName="ciudad" id="ciudad" class="w-full">
+                <label for="ciudad">Ciudad</label>
+            </p-floatlabel>
+        </div>
+        }
     </form>
 
     <ng-template pTemplate="footer">

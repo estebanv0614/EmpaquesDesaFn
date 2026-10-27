@@ -24,6 +24,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ChartModule } from 'primeng/chart';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [],
@@ -50,7 +51,8 @@ import { ChartModule } from 'primeng/chart';
     DatePickerModule,
     ProgressSpinnerModule,
     FieldsetModule,
-    ChartModule
+    ChartModule,
+    CheckboxModule
   ],
   exports: [
     ButtonModule,
@@ -74,7 +76,8 @@ import { ChartModule } from 'primeng/chart';
     DatePickerModule,
     ProgressSpinnerModule,
     FieldsetModule,
-    ChartModule
+    ChartModule,
+    CheckboxModule
   ]
 })
 export class PrimeImportsModule {}

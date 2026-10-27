@@ -17,7 +17,7 @@ import { DocumentoComercialService } from '../../../../core/services/documento-c
 
 import { SolicitudCotizacionResponse } from '../../../../shared/models/solicitud-cotizacion-request.model';
 import { Person } from '../../../../shared/models/person.model';
-import { Client } from '../../../../shared/models/client.model';
+import { Client, TipoCliente } from '../../../../shared/models/client.model';
 import { Bolsa } from '../../../../shared/models/bolsa.model';
 import { TipoDocumento } from '../../../../shared/models/tipo-documento.model';
 import { MetodoPago } from '../../../../shared/models/metodo-pago.model';
@@ -47,8 +47,13 @@ export class SolicitudConvertir implements OnInit {
   estados = signal<Estado[]>([]);
   usuarios = signal<any[]>([]);
 
+  tipoCliente = [
+    { label: 'Detal', value: 'DETAL' },
+    { label: 'Mayorista', value: 'MAYORISTA' },
+  ];
+
   private readonly TIPOS_COMERCIALES = ['COTIZACION', 'FACTURA'];
-  private readonly ESTADO_DOCUMENTO = ['APROBADA', 'RECHAZADA']
+  private readonly ESTADO_DOCUMENTO = ['APROBADA', 'RECHAZADA'];
 
   tipoDocumentoPersona = computed(() =>
     this.tiposDocumento().filter((t) => !this.TIPOS_COMERCIALES.includes(t.name.toUpperCase())),
@@ -59,8 +64,8 @@ export class SolicitudConvertir implements OnInit {
   );
 
   estadosDocumento = computed(() =>
-  this.estados().filter((e) => this.ESTADO_DOCUMENTO.includes(e.name.toUpperCase())),
-);
+    this.estados().filter((e) => this.ESTADO_DOCUMENTO.includes(e.name.toUpperCase())),
+  );
 
   form: FormGroup;
   clienteForm: FormGroup;
@@ -99,6 +104,10 @@ export class SolicitudConvertir implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       address: [''],
       empresa: [''],
+      tipoCliente: ['DETAL', Validators.required],
+      ciudad: [''],
+      direccionEntrega: [''],
+      observaciones: [''],
     });
   }
 
@@ -302,6 +311,10 @@ export class SolicitudConvertir implements OnInit {
     const payload: any = {
       person: persona,
       empresa: this.clienteForm.value.empresa,
+      tipoCliente: this.clienteForm.value.tipoCliente,
+      ciudad: this.clienteForm.value.ciudad,
+      direccionEntrega: this.clienteForm.value.direccionEntrega,
+      observaciones: this.clienteForm.value.observaciones,
       estado: { id: this.ESTADO_CLIENTE_ACTIVO, name: 'ACTIVO' },
     };
     this.clientService.create(payload).subscribe({

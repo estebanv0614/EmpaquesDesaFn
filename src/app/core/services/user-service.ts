@@ -3,16 +3,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../constants/environment';
-
-export interface Rol {
-  id: number;
-  rol: string;
-}
+import { User, UserCreateRequest } from '../../shared/models/user.model';
+import { Rol } from '../../shared/models/rol.model';
 
 export interface CurrentUser {
   id: number;
   username: string;
-  person: { id: number };
+  person?: { id: number; name: string };
   roles: Rol[];
 }
 
@@ -28,5 +25,9 @@ export class UserService {
 
   getAll(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl);
+  }
+
+  create(user: UserCreateRequest): Observable<User> {
+    return this.http.post<User>(this.baseUrl, user);
   }
 }

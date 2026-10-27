@@ -1,0 +1,38 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '420px' }" header="Crear usuario"
+  (onHide)="closeDialog(false)">
+  <form [formGroup]="form" (ngSubmit)="onSave()" class="flex flex-col gap-5 p-3">
+
+    <p class="text-sm text-gray-600">
+      Persona: <b>{{ person?.name }}</b> ({{ person?.documentNumber }})
+    </p>
+
+    <p-floatlabel variant="on">
+      <input pInputText id="username" formControlName="username" autocomplete="off" class="w-full" />
+      <label for="username">Usuario</label>
+    </p-floatlabel>
+
+    <p-floatlabel variant="on">
+      <input pInputText type="password" id="password" formControlName="password"
+        autocomplete="new-password" class="w-full" />
+      <label for="password">Contraseña (mínimo 6)</label>
+    </p-floatlabel>
+
+    <p-floatlabel variant="on">
+      <p-select formControlName="rol" [options]="roles()" optionLabel="rol" inputId="rol"
+        styleClass="w-full" appendTo="body" />
+      <label for="rol">Rol</label>
+    </p-floatlabel>
+
+    <div class="flex items-center gap-2">
+      <p-checkbox formControlName="activo" [binary]="true" inputId="activo" />
+      <label for="activo">Usuario activo</label>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-center gap-3 w-full">
+      <p-button label="Cancelar" severity="secondary" (onClick)="closeDialog(false)" />
+      <p-button label="Guardar" [loading]="guardando()" (onClick)="onSave()" />
+    </div>
+  </ng-template>
+</p-dialog>
