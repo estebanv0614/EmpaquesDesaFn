@@ -115,8 +115,22 @@ export class PedidoList implements OnInit {
     });
   }
 
+  /** Solo se puede pagar cuando la producción terminó (FINALIZADA) o ya se entregó. */
+  puedePagar(pedido: Pedido): boolean {
+    return pedido.estado?.name === 'FINALIZADA' || !!pedido.entregado || pedido.estado?.name === 'ENTREGADO';
+  }
+
   marcarComoPagado(pedido: Pedido): void {
     if (pedido.pagado) return;
+
+    if (!this.puedePagar(pedido)) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'No se puede pagar todavía',
+        detail: `El pedido ${pedido.numeroPedido} debe estar FINALIZADA antes de marcarlo como pagado`,
+      });
+      return;
+    }
 
     this.pedidoService.marcarComoPagado(pedido.id).subscribe({
       next: (actualizado) => {
