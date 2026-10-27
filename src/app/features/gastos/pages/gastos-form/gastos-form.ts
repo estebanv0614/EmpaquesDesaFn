@@ -52,10 +52,33 @@ export class GastosForm implements OnInit {
       material: [null],
       cantidad: [null],
     });
+
+    // Cuando cambia el tipo de gasto, activa o quita las validaciones
+    this.form.get('tipoGasto')!.valueChanges.subscribe(() => {
+      const material = this.form.get('material')!;
+      const cantidad = this.form.get('cantidad')!;
+
+      if (this.esCompraMaterial) {
+        material.setValidators(Validators.required);
+        cantidad.setValidators([Validators.required, Validators.min(1)]);
+      } else {
+        material.clearValidators();
+        cantidad.clearValidators();
+        material.reset();
+        cantidad.reset();
+      }
+      material.updateValueAndValidity();
+      cantidad.updateValueAndValidity();
+    });
   }
 
+  // Detecta "COMPRA_MATERIALES", "COMPRA DE MATERIAL", "Compra de materiales", etc.
   get esCompraMaterial(): boolean {
-    return this.form.value.tipoGasto?.name === 'COMPRA DE MATERIAL';
+    const nombre = (this.form.get('tipoGasto')?.value?.name ?? '')
+      .toString()
+      .toUpperCase()
+      .replace(/_/g, ' ');
+    return nombre.includes('COMPRA') && nombre.includes('MATERIAL');
   }
 
   ngOnInit(): void {
@@ -88,14 +111,6 @@ export class GastosForm implements OnInit {
     }
 
     const v = this.form.value;
-    if (this.esCompraMaterial && (!v.material || !v.cantidad)) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Falta información',
-        detail: 'Selecciona el material y la cantidad',
-      });
-      return;
-    }
 
     const fd = new FormData();
     fd.append('idTipoGasto', v.tipoGasto.id);
