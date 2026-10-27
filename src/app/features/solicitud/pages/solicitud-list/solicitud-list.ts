@@ -47,9 +47,9 @@ export class SolicitudList implements OnInit {
     });
   });
 
-  readonly ESTADO_PENDIENTE = 2;
-  readonly ESTADO_APROBADA = 3;
-  readonly ESTADO_RECHAZADA = 4;
+  readonly ESTADO_PENDIENTE = 3;
+  readonly ESTADO_APROBADA = 2;
+  readonly ESTADO_RECHAZADA = 6;
 
   constructor(
     private solicitudService: SolicitudCotizacionService,
