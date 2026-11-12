@@ -88,19 +88,22 @@
           <li><a (click)="chatService.open()" class="cursor-pointer text-black transition hover:text-gray-600">Chat en vivo</a></li>
         </ul>
       </div>
-      
       <div>
-        <p class="text-sm font-semibold tracking-widest uppercase footer-heading">
-          Legal
-        </p>
-        <ul class="mt-6 font-semibold space-y-4 text-sm">
-          <a routerLink="/accesibilidad" class="hover:underline">Accesibilidad</a>
-          <li><a href="#" class="text-black transition hover:text-gray-600">Política de devoluciones</a></li>
-          <li><a href="#" class="text-black transition hover:text-gray-600">Política de reembolsos</a></li>
-        </ul>
-      </div>
-
-    </div>
+  <p class="text-sm font-semibold tracking-widest uppercase footer-heading">
+    Legal
+  </p>
+  <ul class="mt-6 font-semibold space-y-4 text-sm flex flex-col">
+    <li>
+      <a routerLink="/accesibilidad" class="text-black transition hover:text-gray-600 hover:underline">Accesibilidad</a>
+    </li>
+    <li>
+      <a routerLink="/politica-devoluciones" class="text-black transition hover:text-gray-600 hover:underline">Política de devoluciones</a>
+    </li>
+    <li>
+      <a routerLink="/politica-reembolsos" class="text-black transition hover:text-gray-600 hover:underline">Política de reembolsos</a>
+    </li>
+  </ul>
+</div>
 
     <div class="mt-12 flex justify-center gap-6 border-t border-gray-300 pt-8 sm:justify-end">
       <a href="#" target="_blank" rel="noreferrer" class="footer-social" aria-label="Instagram">
@@ -126,4 +129,3 @@
     </div>
 
   </div>
-</footer>

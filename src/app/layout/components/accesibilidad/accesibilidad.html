@@ -2,75 +2,42 @@
   <header class="flex flex-col gap-2">
     <h1 class="m-0 text-3xl font-bold text-gray-900">Accesibilidad</h1>
     <p class="m-0 text-base text-gray-700">
-      En Empaques Desa queremos que todas las personas puedan consultar nuestro catálogo, solicitar cotizaciones y comunicarse con nosotros, sin importar sus capacidades o el dispositivo que usen.
+      En Empaques DESA estamos comprometidos con la inclusión digital, asegurando que todas las personas puedan consultar nuestro catálogo, solicitar cotizaciones y gestionar sus procesos sin barreras.
     </p>
   </header>
 
   <section aria-labelledby="features-title" class="flex flex-col gap-4">
-    <h2 id="features-title" class="m-0 text-xl font-semibold text-gray-900">Qué hemos implementado</h2>
-
+    <h2 id="features-title" class="m-0 text-xl font-semibold text-gray-900">Estándares y características implementadas</h2>
+    
     <div class="grid gap-4 sm:grid-cols-2">
-      @for (f of features; track f.title) {
-        <p-card>
-          <div class="flex items-start gap-3">
-            <i [class]="f.icon + ' mt-1 text-xl text-purple-700'" aria-hidden="true"></i>
-            <div class="flex flex-col gap-1">
-              <h3 class="m-0 text-base font-semibold text-gray-900">{{ f.title }}</h3>
-              <p class="m-0 text-sm text-gray-700">{{ f.text }}</p>
-            </div>
-          </div>
-        </p-card>
-      }
+      <div class="p-4 border rounded-lg shadow-sm bg-white flex flex-col gap-2">
+        <h3 class="m-0 text-base font-semibold text-gray-900">Navegación por teclado</h3>
+        <p class="m-0 text-sm text-gray-700">Toda la estructura del sitio web y los menús interactivos permiten la navegación completa mediante el uso de la tecla Tab.</p>
+      </div>
+
+      <div class="p-4 border rounded-lg shadow-sm bg-white flex flex-col gap-2">
+        <h3 class="m-0 text-base font-semibold text-gray-900">Contraste de color adecuado</h3>
+        <p class="m-0 text-sm text-gray-700">Se han seleccionado combinaciones de colores en textos e interfaces que cumplen con los índices de legibilidad recomendados.</p>
+      </div>
+
+      <div class="p-4 border rounded-lg shadow-sm bg-white flex flex-col gap-2">
+        <h3 class="m-0 text-base font-semibold text-gray-900">Compatibilidad con lectores de pantalla</h3>
+        <p class="m-0 text-sm text-gray-700">Incorporación de etiquetas semánticas de HTML5 y atributos ARIA para describir adecuadamente los botones y campos de formulario.</p>
+      </div>
+
+      <div class="p-4 border rounded-lg shadow-sm bg-white flex flex-col gap-2">
+        <h3 class="m-0 text-base font-semibold text-gray-900">Formularios accesibles</h3>
+        <p class="m-0 text-sm text-gray-700">Los campos de cotización y registro cuentan con etiquetas claras, estados de enfoque visibles y mensajes de error comprensibles.</p>
+      </div>
     </div>
   </section>
 
   <p-divider />
 
-  <section aria-labelledby="keys-title" class="flex flex-col gap-4">
-    <h2 id="keys-title" class="m-0 text-xl font-semibold text-gray-900">Atajos de teclado</h2>
-
-    <div class="overflow-x-auto rounded-xl border border-gray-200">
-      <table class="w-full text-left text-sm">
-        <caption class="sr-only">Atajos de teclado disponibles en el sitio</caption>
-        <thead class="bg-purple-50 text-gray-900">
-          <tr>
-            <th scope="col" class="px-4 py-3 font-semibold">Tecla</th>
-            <th scope="col" class="px-4 py-3 font-semibold">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (s of shortcuts; track s.keys) {
-            <tr class="border-t border-gray-200">
-              <td class="px-4 py-3"><kbd class="rounded bg-gray-100 px-2 py-1 font-mono text-gray-900">{{ s.keys }}</kbd></td>
-              <td class="px-4 py-3 text-gray-700">{{ s.action }}</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <p-divider />
-
-  <section aria-labelledby="contact-title" class="flex flex-col gap-3">
-    <h2 id="contact-title" class="m-0 text-xl font-semibold text-gray-900">¿Encontraste una barrera?</h2>
-    <p class="m-0 text-gray-700">
-      Si algo del sitio no funciona bien con tu tecnología de apoyo, cuéntanos y lo corregimos.
+  <section class="flex flex-col gap-2">
+    <h2 class="m-0 text-lg font-semibold text-gray-900">Compromiso continuo y contacto</h2>
+    <p class="m-0 text-sm text-gray-700">
+      Trabajamos de manera constante para mejorar la usabilidad de nuestra plataforma. Si experimentas alguna dificultad de acceso o tienes sugerencias para mejorar, puedes comunicarte con nuestro equipo técnico a través de los canales de atención de Empaques DESA.
     </p>
-    <div class="flex flex-wrap gap-2">
-      <p-button
-        label="Escribir por WhatsApp"
-        icon="pi pi-whatsapp"
-        severity="help"
-        [outlined]="true"
-        ariaLabel="Escribir por WhatsApp, se abre en una nueva pestaña"
-        (onClick)="openLink('https://wa.me/573213826385')" />
-      <p-button
-        label="Enviar correo"
-        icon="pi pi-envelope"
-        severity="help"
-        [outlined]="true"
-        (onClick)="openLink('mailto:empaquesdesa@gmail.com')" />
-    </div>
   </section>
 </main>

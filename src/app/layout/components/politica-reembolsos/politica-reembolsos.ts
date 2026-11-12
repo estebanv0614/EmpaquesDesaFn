@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { CardModule } from 'primeng/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-politica-reembolsos',
   standalone: true,
-  imports: [CardModule],
+  imports: [CommonModule],
   templateUrl: './politica-reembolsos.html',
-  styleUrl: './politica-reembolsos.css',
+  styleUrl: './politica-reembolsos.css'
 })
-export class PoliticaReembolsos {}
+export class PoliticaReembolsosComponent { }
