@@ -91,14 +91,53 @@
 </p-dialog>
 
 <p-dialog [(visible)]="showPagar" [modal]="true" [style]="{ width: '420px' }" header="Registrar pago">
+
     <div class="flex flex-col gap-4 mt-1">
-        <p-select [(ngModel)]="metodoSel" [options]="metodosPago()" optionLabel="name" placeholder="Método de pago"
-            styleClass="w-full" appendTo="body" />
-        <p-select [(ngModel)]="responsableSel" [options]="empleados()" optionLabel="position"
-            placeholder="Quién realiza el pago" styleClass="w-full" appendTo="body" />
+        <p-floatlabel variant="on">
+            <p-select [(ngModel)]="metodoSel" [options]="metodosPago()" optionLabel="name" styleClass="w-full"
+                appendTo="body" />
+            <label for="metodosPago">Método de pago</label>
+        </p-floatlabel>
+
+        <p-floatlabel variant="on">
+            <p-select [(ngModel)]="responsableSel" [options]="responsableAdmin()" optionLabel="name" styleClass="w-full"
+                appendTo="body" />
+            <label for="responsableSel">Quién realiza el pago</label>
+        </p-floatlabel>
+
         <div class="flex flex-col gap-1">
             <label class="text-sm text-gray-600">Comprobante de pago (opcional)</label>
-            <input type="file" accept="image/*" (change)="onFileComprobante($event)" class="text-sm" />
+            <input #fileInput type="file" hidden accept="image/png,image/jpeg,image/webp"
+                (change)="onFileSelected($event)" />
+
+            @if (previewUrl) {
+            <div class="relative rounded-lg border border-gray-200 p-2">
+                <img [src]="previewUrl" alt="Vista previa del comprobante"
+                    class="h-40 w-full rounded-md object-contain" />
+                <button type="button" (click)="quitarImagen()" aria-label="Quitar imagen"
+                    class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 shadow hover:bg-white">
+                    <i class="pi pi-times text-xs"></i>
+                </button>
+                @if (archivoComprobante) {
+                <p class="mt-1 truncate text-xs text-gray-500">{{ archivoComprobante.name }}</p>
+                }
+            </div>
+            } @else {
+            <div role="button" tabindex="0" (click)="fileInput.click()" (keydown.enter)="fileInput.click()"
+                (keydown.space)="fileInput.click(); $event.preventDefault()" (dragover)="onDragOver($event)"
+                (dragleave)="arrastrando.set(false)" (drop)="onDrop($event)"
+                class="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed px-4 py-6 text-center transition-colors"
+                [class.border-blue-500]="arrastrando()" [class.bg-blue-50]="arrastrando()"
+                [class.border-gray-300]="!arrastrando()">
+                <i class="pi pi-cloud-upload text-2xl text-gray-400"></i>
+                <span class="text-sm text-gray-600">Arrastra una imagen o haz clic para seleccionarla</span>
+                <span class="text-xs text-gray-400">JPG, PNG o WEBP · máx. 5 MB</span>
+            </div>
+            }
+
+            @if (errorImagen()) {
+            <small class="text-red-500">{{ errorImagen() }}</small>
+            }
         </div>
     </div>
     <ng-template pTemplate="footer">

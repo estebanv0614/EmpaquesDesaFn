@@ -1,4 +1,12 @@
-import { Component, EventEmitter, OnInit, Output, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+  Output,
+  signal,
+  computed,
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-module';
@@ -19,7 +27,7 @@ import { Material } from '../../../../shared/models/material.model';
   templateUrl: './gastos-form.html',
   styleUrl: './gastos-form.css',
 })
-export class GastosForm implements OnInit {
+export class GastosForm implements OnInit, OnDestroy {
   @Output() closed = new EventEmitter<boolean>();
 
   visible = true;
@@ -29,9 +37,23 @@ export class GastosForm implements OnInit {
   metodosPago = signal<MetodoPago[]>([]);
   empleados = signal<Empleado[]>([]);
   materiales = signal<Material[]>([]);
-
   archivo: File | null = null;
   enviando = signal(false);
+
+  archivoSeleccionado: File | null = null;
+  previewUrl: string | null = null;
+  arrastrando = signal(false);
+  errorImagen = signal<string | null>(null);
+
+  private imagenOriginal: string | null = null;
+  private readonly TIPOS_PERMITIDOS = ['image/jpeg', 'image/png', 'image/webp'];
+  private readonly MAX_BYTES = 5 * 1024 * 1024;
+
+  private readonly RESPONSABLE_COMPRA = ['Supervisor'];
+
+  responsable = computed(() =>
+    this.empleados().filter((m) => !this.RESPONSABLE_COMPRA.includes(m.person.name.toUpperCase())),
+  );
 
   constructor(
     private fb: FormBuilder,
@@ -53,7 +75,6 @@ export class GastosForm implements OnInit {
       cantidad: [null],
     });
 
-    // Cuando cambia el tipo de gasto, activa o quita las validaciones
     this.form.get('tipoGasto')!.valueChanges.subscribe(() => {
       const material = this.form.get('material')!;
       const cantidad = this.form.get('cantidad')!;
@@ -72,7 +93,6 @@ export class GastosForm implements OnInit {
     });
   }
 
-  // Detecta "COMPRA_MATERIALES", "COMPRA DE MATERIAL", "Compra de materiales", etc.
   get esCompraMaterial(): boolean {
     const nombre = (this.form.get('tipoGasto')?.value?.name ?? '')
       .toString()
@@ -96,8 +116,55 @@ export class GastosForm implements OnInit {
       .subscribe({ next: (d) => this.materiales.set(d), error: (e) => console.error(e) });
   }
 
-  onFile(event: any): void {
-    this.archivo = event.target?.files?.[0] ?? null;
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) this.procesarArchivo(file);
+    input.value = '';
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.arrastrando.set(true);
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.arrastrando.set(false);
+    const file = event.dataTransfer?.files?.[0];
+    if (file) this.procesarArchivo(file);
+  }
+
+  quitarImagen(): void {
+    this.liberarPreview();
+    this.archivoSeleccionado = null;
+    this.previewUrl = this.imagenOriginal;
+    this.errorImagen.set(null);
+  }
+
+  private procesarArchivo(file: File): void {
+    if (!this.TIPOS_PERMITIDOS.includes(file.type)) {
+      this.errorImagen.set('Solo se permiten imágenes JPG, PNG o WEBP.');
+      return;
+    }
+    if (file.size > this.MAX_BYTES) {
+      this.errorImagen.set('La imagen no puede superar los 5 MB.');
+      return;
+    }
+    this.errorImagen.set(null);
+    this.liberarPreview();
+    this.archivoSeleccionado = file;
+    this.previewUrl = URL.createObjectURL(file);
+  }
+
+  private liberarPreview(): void {
+    if (this.previewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(this.previewUrl);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.liberarPreview();
   }
 
   private toIso(d: Date): string {
@@ -111,7 +178,6 @@ export class GastosForm implements OnInit {
     }
 
     const v = this.form.value;
-
     const fd = new FormData();
     fd.append('idTipoGasto', v.tipoGasto.id);
     fd.append('monto', String(v.monto));
@@ -123,7 +189,9 @@ export class GastosForm implements OnInit {
       fd.append('idMaterial', v.material.id);
       fd.append('cantidad', String(v.cantidad));
     }
-    if (this.archivo) fd.append('evidencia', this.archivo);
+    if (this.archivoSeleccionado) {
+      fd.append('evidencia', this.archivoSeleccionado);
+    }
 
     this.enviando.set(true);
     this.service.create(fd).subscribe({

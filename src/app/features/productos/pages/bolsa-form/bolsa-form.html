@@ -61,19 +61,56 @@
 
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <p-select formControlName="estado" [options]="estados()" optionLabel="name" inputId="estado"
-                        styleClass="w-full" appendTo="body" />
+                    <p-select formControlName="estado" [options]="estadosFiltrados()" optionLabel="name"
+                        inputId="estado" styleClass="w-full" appendTo="body" />
                     <label for="mail">Estado</label>
                 </p-floatlabel>
             </div>
         </div>
-        <div class="flex flex-col gap-2">
+
+        <!-- <div class="flex flex-col gap-2">
             <label class="text-sm text-gray-600">Imagen del producto</label>
             <input type="file" accept="image/*" (change)="onFileSelected($event)" class="w-full text-sm" />
             @if (previewUrl) {
             <img [src]="previewUrl" class="mt-2 h-32 w-full object-contain rounded-md border" />
             }
+        </div> -->
+
+        <div class="flex flex-col gap-2">
+            <label class="text-sm text-gray-600">Imagen del producto</label>
+
+            <input #fileInput type="file" hidden accept="image/png,image/jpeg,image/webp"
+                (change)="onFileSelected($event)" />
+
+            @if (previewUrl) {
+            <div class="relative rounded-lg border border-gray-200 p-2">
+                <img [src]="previewUrl" alt="Vista previa de la imagen" class="h-40 w-full rounded-md object-contain" />
+                <button type="button" (click)="quitarImagen()" aria-label="Quitar imagen"
+                    class="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 shadow hover:bg-white">
+                    <i class="pi pi-times text-xs"></i>
+                </button>
+                @if (archivoSeleccionado) {
+                <p class="mt-1 truncate text-xs text-gray-500">{{ archivoSeleccionado.name }}</p>
+                }
+            </div>
+            } @else {
+            <div role="button" tabindex="0" (click)="fileInput.click()" (keydown.enter)="fileInput.click()"
+                (keydown.space)="fileInput.click(); $event.preventDefault()" (dragover)="onDragOver($event)"
+                (dragleave)="arrastrando.set(false)" (drop)="onDrop($event)"
+                class="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed px-4 py-6 text-center transition-colors"
+                [class.border-blue-500]="arrastrando()" [class.bg-blue-50]="arrastrando()"
+                [class.border-gray-300]="!arrastrando()">
+                <i class="pi pi-cloud-upload text-2xl text-gray-400"></i>
+                <span class="text-sm text-gray-600">Arrastra una imagen o haz clic para seleccionarla</span>
+                <span class="text-xs text-gray-400">JPG, PNG o WEBP · máx. 5 MB</span>
+            </div>
+            }
+
+            @if (errorImagen()) {
+            <small class="text-red-500">{{ errorImagen() }}</small>
+            }
         </div>
+
         <div class="flex flex-col gap-1">
             <p-floatlabel variant="on">
                 <textarea pInputTextarea autocomplete="off" id="description" formControlName="description" rows="3"
