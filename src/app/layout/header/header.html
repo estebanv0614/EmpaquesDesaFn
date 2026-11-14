@@ -1,116 +1,76 @@
-<header class="sticky top-0 z-50" style="background-color: #FFFFFF;">
-  <div class="mx-auto flex h-24 max-w-7xl items-center gap-8 px-4 sm:px-6 lg:px-8 relative z-10">
-    <a class="block text-teal-600" href="#">
-      <span class="sr-only">Home</span>
-      <img src="assets/images/logos.png" alt="logo" class="h-16 w-auto object-contain">
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+  <div class="mx-auto flex h-20 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+
+    <a routerLink="/home" class="block shrink-0" (click)="cerrarMenu()">
+      <span class="sr-only">Inicio</span>
+      <img src="assets/images/logos.png" alt="logo" class="h-12 w-auto object-contain sm:h-16">
     </a>
 
-    <div class="flex flex-1 items-center justify-end md:justify-between">
-      <nav aria-label="Global" class="hidden md:block">
-        <ul class="flex items-center gap-6 text-sm">
-          @if (auth.isLoggedIn()) {
-          @if (auth.isCliente()) {
-          <li>
-            <a routerLink="/mis-pedidos" class="text-black transition hover:text-green-800"> Mis Pedidos </a>
-          </li>
-          } @else {
-          <li>
-            <a routerLink="/dashboard" class="text-black transition hover:text-green-800" class="pi pi-chart-line">
-              Dashboard </a>
-          </li>
-          <li>
-            <a routerLink="/solicitudes-cotizacion" class="text-black transition hover:text-green-800"><i
-                class="pi pi-file-pdf"></i> Solicitudes</a>
-          </li>
-          <li>
-            <a routerLink="/persons" class="text-black transition hover:text-green-800" class="pi pi-users"> Personas
-            </a>
-          </li>
-          <li>
-            <a routerLink="/bolsas" class="text-black transition hover:text-green-800" class="pi pi-book"> Catálogo </a>
-          </li>
-          <li>
-            <a routerLink="/pedidos" class="text-black transition hover:text-green-800" class="pi pi-shopping-cart">
-              Pedidos </a>
-          </li>
-          <li>
-            <a routerLink="/gastos" class="text-black transition hover:text-green-800" class="pi pi-credit-card"> Gastos
-            </a>
-          </li>
-          <li>
-            <a routerLink="/nomina" class="text-black transition hover:text-green-800" class="pi pi-money-bill"> Nomina
-            </a>
-          </li>
-          <li>
-            <a routerLink="/material" class="text-black transition hover:text-green-800" class="pi pi-tags"> Material
-            </a>
-          </li>
-          }
-          } @else {
-          <li>
-            <a routerLink="/home" class="text-black transition hover:text-green-800" class="pi pi-home"> Inicio</a>
-          </li>
-          <li>
-            <a routerLink="/catalago" class="text-gray-500 transition hover:text-gray-500/75" class="pi pi-book">
-              Catálogo</a>
-          </li>
-          <li>
-            <a routerLink="/solicitud-nueva" class="text-gray-500 transition hover:text-gray-500/75"
-              class="pi pi-file-edit"> Solicitar
-              cotización </a>
-          </li>
-          }
+    <nav aria-label="Global" class="hidden min-w-0 flex-1 xl:block">
+      <ul class="flex items-center gap-6 text-sm">
+        @for (e of enlaces; track e.ruta) {
+        <li>
+          <a [routerLink]="e.ruta"
+            class="flex items-center gap-1.5 whitespace-nowrap text-black transition hover:text-green-800">
+            <i class="pi {{ e.icono }}"></i> {{ e.label }}
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
 
-        </ul>
-      </nav>
-
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-4">
-          @if (auth.isLoggedIn()) {
-          <div class="flex items-center gap-3">
-            <button type="button"
-              class="inline-flex items-center gap-2 rounded-md bg-green-100 px-5 py-2.5 text-sm font-medium text-green-600
-         transition-colors hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
-              <i class="pi pi-user text-lg" style="text-shadow: 0 0 1px currentColor"></i>
-              <span class="font-semibold">{{ auth.username() }}</span>
-            </button>
-            <!-- <span class="inline-flex items-center gap-2 rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-white">
-              <i class="pi pi-user-circle"></i>
-              <span class="font-semibold">{{ auth.username() }}</span>
-            </span> -->
-            <button (click)="logout()"
-              class="hidden items-center gap-2 rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 sm:flex">
-              <i class="pi pi-sign-out"></i>
-              Salir
-            </button>
-          </div>
-          } @else {
-          <div class="sm:flex sm:gap-4">
-            <a routerLink="login"
-              class="block rounded-md bg-green-500 px-5 py-2.5 text-sm font-medium text-black-100 transition hover:bg-green-600">
-              <i class="pi pi-lock"></i> Login</a>
-            <a class="hidden rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 sm:block"
-              href="#"><i class="pi pi-user-plus"></i> Register</a>
-          </div>
-          }
-
-          <button class="block rounded-sm bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
-            <span class="sr-only">Toggle menu</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-              stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          </button>
-        </div>
-
-        <button class="block rounded-sm bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
-          <span class="sr-only">Toggle menu</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
-      </div>
+    <div class="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
+      @if (auth.isLoggedIn()) {
+      <span
+        class="inline-flex items-center gap-2 rounded-md bg-green-100 px-3 py-2 text-sm font-medium text-green-600 sm:px-5 sm:py-2.5">
+        <i class="pi pi-user"></i>
+        <span class="hidden max-w-[10rem] truncate font-semibold sm:inline">{{ auth.username() }}</span>
+      </span>
+      <button type="button" (click)="logout()"
+        class="hidden items-center gap-2 rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 xl:flex">
+        <i class="pi pi-sign-out"></i> Salir
+      </button>
+      } @else {
+      <a routerLink="/login"
+        class="rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-black transition hover:bg-green-600 sm:px-5 sm:py-2.5">
+        <i class="pi pi-lock"></i> Login
+      </a>
+      <a href="#"
+        class="hidden rounded-md bg-purple-100 px-5 py-2.5 text-sm font-medium text-purple-700 transition hover:bg-purple-200 md:block">
+        <i class="pi pi-user-plus"></i> Register
+      </a>
+      }
+      <button type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuAbierto()" aria-label="Abrir o cerrar menú"
+        class="rounded-md bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 xl:hidden">
+        @if (menuAbierto()) {
+        <i class="pi pi-times"></i>
+        } @else {
+        <i class="pi pi-bars"></i>
+        }
+      </button>
     </div>
   </div>
+
+  @if (menuAbierto()) {
+  <nav class="border-t border-gray-200 bg-white xl:hidden">
+    <ul class="mx-auto flex max-w-7xl flex-col px-4 py-2 sm:px-6">
+      @for (e of enlaces; track e.ruta) {
+      <li>
+        <a [routerLink]="e.ruta" (click)="cerrarMenu()"
+          class="flex items-center gap-3 rounded-md px-2 py-3 text-black transition hover:bg-green-50 hover:text-green-800">
+          <i class="pi {{ e.icono }}"></i> {{ e.label }}
+        </a>
+      </li>
+      }
+      @if (auth.isLoggedIn()) {
+      <li class="mt-1 border-t border-gray-100 pt-1">
+        <button type="button" (click)="logout()"
+          class="flex w-full items-center gap-3 rounded-md px-2 py-3 text-left text-purple-700 transition hover:bg-purple-50">
+          <i class="pi pi-sign-out"></i> Salir
+        </button>
+      </li>
+      }
+    </ul>
+  </nav>
+  }
 </header>
