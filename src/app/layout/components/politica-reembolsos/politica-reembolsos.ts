@@ -8,4 +8,4 @@ import { CommonModule } from '@angular/common';
   templateUrl: './politica-reembolsos.html',
   styleUrl: './politica-reembolsos.css'
 })
-export class PoliticaReembolsosComponent { }
+export class PoliticaReembolsos { }

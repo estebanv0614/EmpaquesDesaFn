@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DividerModule } from 'primeng/divider'; // <--- Importa el módulo de PrimeNG
+import { DividerModule } from 'primeng/divider'; 
 
 @Component({
   selector: 'app-politica-devoluciones',
   standalone: true,
-  imports: [CommonModule, DividerModule], // <--- Agrégalo aquí en los imports
+  imports: [CommonModule, DividerModule],
   templateUrl: './politica-devoluciones.html',
   styleUrl: './politica-devoluciones.css'
 })
-export class PoliticaDevolucionesComponent { }
+export class PoliticaDevoluciones { }
