@@ -111,15 +111,17 @@ export class PersonFrom implements OnInit {
     }
 
     const values = this.form.getRawValue();
-    const personPayload: Person = {
-      id: this.person?.id ?? 0,
+    // Al crear NO se envía el id (el servidor lo genera); al editar sí.
+    // Enviar id: 0 hacía que el backend buscara la fila 0 y fallara con error 500.
+    const personPayload = {
+      ...(this.isEditMode ? { id: this.person!.id } : {}),
       tipoDocumento: values.tipoDocumento,
       documentNumber: values.documentNumber,
       name: values.name,
       phone: values.phone,
       email: values.email,
       address: values.address,
-    };
+    } as Person;
 
     const savePerson$ = this.isEditMode
       ? this.personService.update(this.person!.id, personPayload)
