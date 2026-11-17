@@ -44,7 +44,9 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
-      <tr><td colspan="9" class="text-center py-4">No hay órdenes de producción</td></tr>
+      <tr>
+        <td colspan="9" class="text-center py-4">No hay órdenes de producción</td>
+      </tr>
     </ng-template>
   </p-table>
 </div>
@@ -55,7 +57,10 @@
   <table class="w-full text-sm">
     <thead>
       <tr class="text-left border-b">
-        <th class="py-2">Material</th><th>Requerido</th><th>Disponible</th><th>Faltante</th>
+        <th class="py-2">Material</th>
+        <th>Requerido</th>
+        <th>Disponible</th>
+        <th>Faltante</th>
       </tr>
     </thead>
     <tbody>
@@ -71,26 +76,72 @@
   </table>
 </p-dialog>
 
-<!-- Finalizar -->
-<p-dialog [(visible)]="showFinalizar" [modal]="true" [style]="{ width: '450px' }" header="Finalizar orden">
+
+
+<p-dialog [(visible)]="showFinalizar" [modal]="true" [style]="{ width: '640px' }" header="Finalizar orden">
   @if (ordenSeleccionada(); as o) {
   <div class="flex flex-col gap-4 mt-1">
-    <p>Orden #{{ o.id }}: se pidieron <b>{{ o.cantidadProducida }}</b> bolsas.</p>
+    <p>Orden #{{ o.id }}: se pidieron <b>{{ o.cantidadProducir }}</b> bolsas.</p>
 
-    <div class="flex flex-col gap-1">
-      <label class="text-sm font-medium">Cantidad producida</label>
-      <input pInputText type="number" [(ngModel)]="producida" class="w-full" />
+    <div class="grid grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium">Cantidad producida</label>
+        <input pInputText type="number" [ngModel]="producida" (ngModelChange)="onProducida($event)" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium">Merma (desperdicio)</label>
+        <input pInputText type="number" [ngModel]="merma" (ngModelChange)="onMerma($event)" class="w-full" />
+      </div>
     </div>
-    <div class="flex flex-col gap-1">
-      <label class="text-sm font-medium">Merma (desperdicio)</label>
-      <input pInputText type="number" [(ngModel)]="merma" class="w-full" />
-    </div>
+
     <div class="flex flex-col gap-1">
       <label class="text-sm font-medium">Observación</label>
       <textarea pTextarea [(ngModel)]="observacion" rows="2" class="w-full"></textarea>
     </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center justify-between">
+        <label class="text-sm font-medium">Materiales usados</label>
+        <p-button label="Agregar material" icon="pi pi-plus" size="small" [text]="true" (onClick)="agregarMaterial()" />
+      </div>
+
+      @if (cargandoConsumo()) {
+      <small class="text-gray-500">Cargando receta...</small>
+      }
+
+      @for (f of consumos; track $index) {
+      <div class="grid grid-cols-12 items-center gap-2">
+        <div class="col-span-6">
+          @if (f.tipo === 'fijo') {
+          <span class="text-sm">{{ f.nombre }}</span>
+          } @else {
+          <p-select [ngModel]="f.idMaterial" (ngModelChange)="cambiarMaterial(f, $event)" [options]="opciones(f)"
+            optionLabel="name" optionValue="id" [filter]="true"
+            [placeholder]="f.tipo === 'tinta' ? 'Elige el color' : 'Elige el material'" styleClass="w-full"
+            appendTo="body" />
+          }
+          @if (f.idMaterial !== null && stockDe(f.idMaterial) !== null) {
+          <small [class]="sinStock(f) ? 'text-red-600' : 'text-gray-500'">
+            Stock: {{ stockDe(f.idMaterial) }}
+          </small>
+          }
+        </div>
+        <div class="col-span-5">
+          <input pInputText type="number" [(ngModel)]="f.cantidad" (ngModelChange)="f.editada = true" class="w-full"
+            min="0" />
+        </div>
+        <div class="col-span-1 text-right">
+          @if (f.tipo === 'extra') {
+          <p-button icon="pi pi-trash" severity="danger" [text]="true" size="small" (onClick)="quitarFila($index)" />
+          }
+        </div>
+      </div>
+      }
+    </div>
+
     <small class="text-gray-500">
-      Se descontará material por producida + merma ({{ producida + merma }} bolsas).
+      Las cantidades se calculan con la receta por producida + merma ({{ producida + merma }} bolsas).
+      Puedes cambiar el color de la tinta y ajustar cuánto se gastó de verdad.
     </small>
   </div>
   }

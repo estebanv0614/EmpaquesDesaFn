@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../constants/environment';
 import {
   OrdenProduccion,
   MaterialFaltante,
-  FinalizarOrdenRequest,
+  FinalizarOrdenRequest,ConsumoSugerido
 } from '../../shared/models/orden-produccion.model';
 
 @Injectable({ providedIn: 'root' })
@@ -20,6 +20,11 @@ export class OrdenProduccionService {
 
   validarMaterial(id: number): Observable<MaterialFaltante[]> {
     return this.http.get<MaterialFaltante[]>(`${this.baseUrl}/${id}/validar-material`);
+  }
+
+  consumoSugerido(id: number, producida: number, merma: number): Observable<ConsumoSugerido[]> {
+    const params = new HttpParams().set('producida', producida).set('merma', merma);
+    return this.http.get<ConsumoSugerido[]>(`${this.baseUrl}/${id}/consumo-sugerido`, { params });
   }
 
   iniciar(id: number): Observable<OrdenProduccion> {

@@ -37,10 +37,10 @@ export class Nomina implements OnInit, OnDestroy {
 
   private readonly RESPONSABLE_AUTORIZADO = ['DIANA MARCELA PIRAGAUTA GALINDO'];
   responsableAdmin = computed(() =>
-  this.persona().filter((p) => 
-    this.RESPONSABLE_AUTORIZADO.includes((p.name || '').toUpperCase().trim())
-  )
-);
+    this.persona().filter((p) =>
+      this.RESPONSABLE_AUTORIZADO.includes((p.name || '').toUpperCase().trim()),
+    ),
+  );
 
   totalSemana = computed(() => this.pagos().reduce((a, p) => a + p.totalPagar, 0));
   totalPendiente = computed(() =>
@@ -230,12 +230,10 @@ export class Nomina implements OnInit, OnDestroy {
       });
       return;
     }
-
     const fd = new FormData();
     fd.append('idMetodoPago', String(this.metodoSel.id));
     fd.append('idEmpleado', String(this.responsableSel.id));
     if (this.archivoComprobante) fd.append('evidencia', this.archivoComprobante);
-
     this.service.pagar(this.pagando.id, fd).subscribe({
       next: () => {
         this.liberarPreview();

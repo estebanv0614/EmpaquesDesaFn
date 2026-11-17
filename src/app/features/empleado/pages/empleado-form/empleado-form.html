@@ -4,7 +4,8 @@
 
     <div class="flex items-end gap-2">
       <p-floatlabel variant="on" class="flex-1">
-        <p-select formControlName="person" [options]="personas()" optionLabel="name" styleClass="w-full" appendTo="body" />
+        <p-select formControlName="person" [options]="personas()" optionLabel="name" dataKey="id" styleClass="w-full"
+          appendTo="body" />
         <label>Persona *</label>
       </p-floatlabel>
       @if (!isEditMode) {
@@ -23,13 +24,15 @@
         <label>Salario *</label>
       </p-floatlabel>
       <p-floatlabel variant="on">
-        <p-datepicker formControlName="fechaIngreso" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body" styleClass="w-full" />
+        <p-datepicker formControlName="fechaIngreso" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"
+          styleClass="w-full" />
         <label>Fecha de ingreso *</label>
       </p-floatlabel>
     </div>
 
     <p-floatlabel variant="on">
-      <p-select formControlName="estado" [options]="estados()" optionLabel="name" styleClass="w-full" appendTo="body" />
+      <p-select formControlName="estado" [options]="estadosFiltrados()" optionLabel="name" dataKey="id" styleClass="w-full"
+        appendTo="body" />
       <label>Estado *</label>
     </p-floatlabel>
   </form>
@@ -45,7 +48,8 @@
 <p-dialog [(visible)]="mostrarNuevaPersona" [modal]="true" [style]="{ width: '400px' }" header="Nueva persona">
   <form [formGroup]="personaForm" class="flex flex-col gap-4 mt-1">
     <p-floatlabel variant="on">
-      <p-select formControlName="tipoDocumento" [options]="tiposDocumento()" optionLabel="name" styleClass="w-full" appendTo="body" />
+      <p-select formControlName="tipoDocumento" [options]="tipoDocumentoPersona()" optionLabel="name"
+        styleClass="w-full" appendTo="body" />
       <label>Tipo de documento *</label>
     </p-floatlabel>
     <p-floatlabel variant="on">
@@ -73,7 +77,9 @@
   </form>
 
   <ng-template pTemplate="footer">
-    <p-button label="Cancelar" severity="secondary" (onClick)="mostrarNuevaPersona.set(false)" />
-    <p-button label="Crear persona" (onClick)="guardarNuevaPersona()" [loading]="creandoPersona()" />
+    <div class="flex justify-center gap-3 w-full">
+      <p-button label="Cancelar" severity="secondary" (onClick)="mostrarNuevaPersona.set(false)" />
+      <p-button label="Crear persona" (onClick)="guardarNuevaPersona()" [loading]="creandoPersona()" />
+    </div>
   </ng-template>
 </p-dialog>

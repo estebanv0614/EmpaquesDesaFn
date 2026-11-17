@@ -32,7 +32,6 @@ export class PersonFrom implements OnInit {
     this.tiposDocumento().filter((t) => !this.TIPOS_COMERCIALES.includes(t.name.toUpperCase())),
   );
 
-  //Cliente//
   client: Client | null = null;
   tipoCliente = [
     { label: 'Detallista', value: 'DETAL' },
@@ -111,8 +110,6 @@ export class PersonFrom implements OnInit {
     }
 
     const values = this.form.getRawValue();
-    // Al crear NO se envía el id (el servidor lo genera); al editar sí.
-    // Enviar id: 0 hacía que el backend buscara la fila 0 y fallara con error 500.
     const personPayload = {
       ...(this.isEditMode ? { id: this.person!.id } : {}),
       tipoDocumento: values.tipoDocumento,

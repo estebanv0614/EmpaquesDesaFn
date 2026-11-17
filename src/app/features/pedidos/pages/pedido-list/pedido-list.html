@@ -88,7 +88,7 @@
                     <span class="text-sm text-gray-500">-</span>
                     }
                 </td>
-                <td>{{ pedido.fechaEntrega }}</td>
+                <td>{{ pedido.fechaEntrega | date: 'dd/MM/yyyy h:mm a' }}</td>
                 <td class="whitespace-nowrap">
                     @if (pedido.pagado) {
                     <p-tag value="PAGADO" severity="success" />

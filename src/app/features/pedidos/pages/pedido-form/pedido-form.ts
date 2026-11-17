@@ -53,6 +53,7 @@ export class PedidoForm implements OnInit {
       metodoPago: [null],
       fechaEntregaEstimada: [null],
       observacion: [''],
+      conIva: [true],
       detalles: this.fb.array([]),
     });
   }
@@ -111,7 +112,7 @@ export class PedidoForm implements OnInit {
   }
 
   impuestosCalculados(): number {
-    return this.subtotalGeneral() * 0.19;
+    return this.form.value.conIva ? this.subtotalGeneral() * 0.19 : 0;
   }
 
   totalGeneral(): number {

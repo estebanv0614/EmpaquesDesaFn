@@ -27,5 +27,18 @@ export interface MaterialFaltante {
 export interface FinalizarOrdenRequest {
   cantidadProducida: number;
   cantidadMerma: number;
-  observacion: string;
+  observacion?: string;
+  consumos?: ConsumoMaterial[];
+}
+
+export interface ConsumoSugerido {
+  idMaterial: number;
+  nombre: string;
+  unidadMedida: string;
+  cantidad: number;
+}
+
+export interface ConsumoMaterial {
+  idMaterial: number;
+  cantidad: number;
 }

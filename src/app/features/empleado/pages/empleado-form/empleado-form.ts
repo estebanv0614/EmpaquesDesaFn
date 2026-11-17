@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal, computed } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { PrimeImportsModule } from '../../../../prime-imports/prime-imports-module';
@@ -10,7 +10,6 @@ import { Empleado } from '../../../../shared/models/empleado.model';
 import { Person } from '../../../../shared/models/person.model';
 import { Estado } from '../../../../shared/models/estado.model';
 import { TipoDocumento } from '../../../../shared/models/tipo-documento.model';
-
 
 @Component({
   selector: 'app-empleado-form',
@@ -35,6 +34,16 @@ export class EmpleadoForm implements OnInit {
   mostrarNuevaPersona = signal(false);
   creandoPersona = signal(false);
   personaForm: FormGroup;
+
+  private readonly TIPOS_COMERCIALES = ['COTIZACION', 'FACTURA'];
+  tipoDocumentoPersona = computed(() =>
+    this.tiposDocumento().filter((t) => !this.TIPOS_COMERCIALES.includes(t.name.toUpperCase())),
+  );
+
+  private readonly ESTADOS_PERMITIDOS = ['ACTIVO'];
+  estadosFiltrados = computed(() =>
+    this.estados().filter((e) => this.ESTADOS_PERMITIDOS.includes(e.name.toUpperCase())),
+  );
 
   constructor(
     private fb: FormBuilder,
@@ -65,11 +74,16 @@ export class EmpleadoForm implements OnInit {
   ngOnInit(): void {
     this.cargarPersonas();
     this.estadoService.getAll().subscribe({ next: (d: Estado[]) => this.estados.set(d) });
-    this.tipoDocumentoService.getAll().subscribe({ next: (d: TipoDocumento[]) => this.tiposDocumento.set(d) });
+    this.tipoDocumentoService
+      .getAll()
+      .subscribe({ next: (d: TipoDocumento[]) => this.tiposDocumento.set(d) });
 
     if (this.empleado) {
       this.isEditMode = true;
-      this.form.patchValue(this.empleado);
+      this.form.patchValue({
+        ...this.empleado,
+        fechaIngreso: this.parseFecha(this.empleado.fechaIngreso as unknown as string),
+      });
       this.form.get('person')?.disable();
     }
   }
@@ -106,14 +120,28 @@ export class EmpleadoForm implements OnInit {
         this.mostrarNuevaPersona.set(false);
         this.cargarPersonas();
         this.form.get('person')?.setValue(nueva);
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona creada' });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Persona creada',
+        });
       },
       error: (err) => {
         this.creandoPersona.set(false);
         console.error(err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear la persona' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo crear la persona',
+        });
       },
     });
+  }
+
+  private parseFecha(valor: string | Date): Date {
+    if (valor instanceof Date) return valor;
+    const [y, m, d] = valor.split('-').map(Number);
+    return new Date(y, m - 1, d);
   }
 
   private toIso(d: Date): string {
@@ -137,19 +165,27 @@ export class EmpleadoForm implements OnInit {
 
     this.enviando.set(true);
     const request = this.isEditMode
-      ? this.service.update(this.empleado!.id, dto.person.id)
+      ? this.service.update(this.empleado!.id, dto)
       : this.service.create(dto);
 
     request.subscribe({
       next: () => {
         this.enviando.set(false);
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: this.isEditMode ? 'Empleado actualizado' : 'Empleado creado' });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: this.isEditMode ? 'Empleado actualizado' : 'Empleado creado',
+        });
         this.close(true);
       },
       error: (err) => {
         this.enviando.set(false);
         console.error(err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo guardar',
+        });
       },
     });
   }

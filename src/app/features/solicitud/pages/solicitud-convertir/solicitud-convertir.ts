@@ -46,12 +46,16 @@ export class SolicitudConvertir implements OnInit {
   metodosPago = signal<MetodoPago[]>([]);
   estados = signal<Estado[]>([]);
   usuarios = signal<any[]>([]);
+  persona = signal<Person[]>([]);
+  form: FormGroup;
+  clienteForm: FormGroup;
 
   tipoCliente = [
     { label: 'Detal', value: 'DETAL' },
     { label: 'Mayorista', value: 'MAYORISTA' },
   ];
 
+  readonly ESTADO_CLIENTE_ACTIVO = 1;
   private readonly TIPOS_COMERCIALES = ['COTIZACION', 'FACTURA'];
   private readonly ESTADO_DOCUMENTO = ['APROBADA', 'RECHAZADA'];
 
@@ -67,10 +71,13 @@ export class SolicitudConvertir implements OnInit {
     this.estados().filter((e) => this.ESTADO_DOCUMENTO.includes(e.name.toUpperCase())),
   );
 
-  form: FormGroup;
-  clienteForm: FormGroup;
+  private readonly RESPONSABLE_AUTORIZADO = ['DIANA MARCELA PIRAGAUTA GALINDO'];
 
-  readonly ESTADO_CLIENTE_ACTIVO = 1;
+  responsableAdmin = computed(() =>
+    this.usuarios().filter((u) =>
+      this.RESPONSABLE_AUTORIZADO.includes((u.person?.name || '').toUpperCase().trim()),
+    ),
+  );
 
   constructor(
     private route: ActivatedRoute,
@@ -93,6 +100,7 @@ export class SolicitudConvertir implements OnInit {
       metodoPago: [null, Validators.required],
       estado: [null, Validators.required],
       observaciones: [''],
+      conIva: [true],
       detalles: this.fb.array([]),
     });
 
@@ -118,12 +126,10 @@ export class SolicitudConvertir implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.loading.set(true);
-
     this.bolsaService.getAll().subscribe((data) => this.bolsas.set(data));
     this.tipoDocumentoService.getAll().subscribe((data) => this.tiposDocumento.set(data));
     this.metodoPagoService.getAll().subscribe((data) => this.metodosPago.set(data));
     this.estadoService.getAll().subscribe((data) => this.estados.set(data));
-
     this.userService.getAll().subscribe((lista: any[]) => {
       this.usuarios.set(lista);
       this.userService.getMe().subscribe((me: any) => {
@@ -153,7 +159,6 @@ export class SolicitudConvertir implements OnInit {
 
   inicializarDetalles(solicitud: SolicitudCotizacionResponse): void {
     this.form.patchValue({ observaciones: solicitud.observacion });
-
     solicitud.detalles.forEach((detalle) => {
       this.detallesArray.push(
         this.fb.group({
@@ -236,7 +241,7 @@ export class SolicitudConvertir implements OnInit {
   }
 
   ivaCalculado(): number {
-    return this.subtotalGeneral() * 0.19;
+    return this.form.value.conIva ? this.subtotalGeneral() * 0.19 : 0;
   }
 
   totalGeneral(): number {

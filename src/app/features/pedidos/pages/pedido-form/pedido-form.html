@@ -12,9 +12,8 @@
 
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <p-select formControlName="client" [options]="clientes()" optionLabel="empresa"
-                    [filter]="true" filterBy="empresa" appendTo="body"
-                    styleClass="w-full" />
+                    <p-select formControlName="client" [options]="clientes()" optionLabel="empresa" [filter]="true"
+                        filterBy="empresa" appendTo="body" styleClass="w-full" />
                     <label for="mail">Cliente *</label>
                 </p-floatlabel>
             </div>
@@ -23,15 +22,15 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
-                    <p-select formControlName="metodoPago" [options]="metodosPago()" optionLabel="name"
-                    appendTo="body" styleClass="w-full" />
+                    <p-select formControlName="metodoPago" [options]="metodosPago()" optionLabel="name" appendTo="body"
+                        styleClass="w-full" />
                     <label for="mail">Método de pago</label>
                 </p-floatlabel>
             </div>
             <div class="flex flex-col gap-1">
                 <p-floatlabel variant="on">
                     <p-datepicker formControlName="fechaEntregaEstimada" dateFormat="dd/mm/yy" appendTo="body"
-                    styleClass="w-full" />
+                        styleClass="w-full" />
                     <label>Entrega estimada</label>
                 </p-floatlabel>
             </div>
@@ -44,9 +43,9 @@
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-start">
                     <div class="flex flex-col gap-1 sm:col-span-2">
                         <p-floatlabel variant="on">
-                            <p-select formControlName="bolsa" [options]="bolsas()" optionLabel="tipo"
-                            [filter]="true" filterBy="tipo" appendTo="body"
-                            styleClass="w-full" (onChange)="onBolsaSeleccionada($index)" />
+                            <p-select formControlName="bolsa" [options]="bolsas()" optionLabel="tipo" [filter]="true"
+                                filterBy="tipo" appendTo="body" styleClass="w-full"
+                                (onChange)="onBolsaSeleccionada($index)" />
                             <label>Bolsa</label>
                         </p-floatlabel>
                     </div>
@@ -86,9 +85,16 @@
             </p-floatlabel>
         </div>
 
+        <div class="flex items-center gap-2">
+            <p-checkbox formControlName="conIva" [binary]="true" inputId="conIva" />
+            <label for="conIva" class="text-sm">Incluir IVA (19%)</label>
+        </div>
+
         <div class="border-t pt-3 flex flex-col items-end gap-1 text-sm">
             <p>Subtotal: {{ subtotalGeneral() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
-            <p>Impuestos (19%): {{ impuestosCalculados() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+            @if (form.value.conIva) {
+            <p>IVA (19%): {{ impuestosCalculados() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+            }
             <p class="font-bold text-lg">Total: {{ totalGeneral() | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
         </div>
 
